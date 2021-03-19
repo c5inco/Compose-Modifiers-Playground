@@ -1,5 +1,4 @@
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,11 +28,12 @@ fun main() = Window(
     size = IntSize(width = 850, height = 700)
 ) {
     val defaultModifiers = listOf(
-        Pair(Modifier.size(200.dp), SizeModifierData(200)),
-        Pair(Modifier.background(Color.Magenta), BackgroundModifierData(color = Color.Magenta, corner = 0)),
-        Pair(Modifier.padding(10.dp), PaddingModifierData(10)),
-        Pair(Modifier.background(Color.Gray), BackgroundModifierData(color = Color.Gray, corner = 0)),
-        Pair(Modifier, ShadowModifierData(0)),
+        Pair(Modifier.size(400.dp), SizeModifierData(400)),
+        Pair(Modifier.background(Color.Magenta), BackgroundModifierData(color = Color.Magenta)),
+        Pair(Modifier.padding(20.dp), PaddingModifierData(20)),
+        Pair(Modifier.background(Color.Gray), BackgroundModifierData(color = Color.Gray)),
+        Pair(Modifier, ShadowModifierData()),
+        Pair(Modifier, BorderModifierData(color = Color.Blue)),
     )
 
     var modifiersList = remember {
@@ -81,7 +81,7 @@ fun main() = Window(
                                     is SizeModifierData -> {
                                         val data = m.second as SizeModifierData
                                         SizeModifier(
-                                            value = data.size,
+                                            sizeValue = data.size,
                                             onChange = { size ->
                                                 modifiersList.set(i, Pair(Modifier.size(size.dp), SizeModifierData(size)))
                                             }
@@ -104,10 +104,29 @@ fun main() = Window(
                                             }
                                         )
                                     }
+                                    is BorderModifierData -> {
+                                        val data = m.second as BorderModifierData
+                                        BorderModifier(
+                                            widthValue = data.width,
+                                            colorValue = data.color,
+                                            shapeValue = data.shape,
+                                            cornerValue = data.corner,
+                                            onChange = {
+                                                modifiersList.set(i,
+                                                    Pair(Modifier.border(
+                                                        width = (it.width).dp,
+                                                        color = it.color,
+                                                        shape = getShape(it.shape, it.corner)
+                                                    ),
+                                                    it.copy())
+                                                )
+                                            }
+                                        )
+                                    }
                                     is PaddingModifierData -> {
                                         val data = m.second as PaddingModifierData
                                         PaddingModifier(
-                                            value = data.all,
+                                            allValue = data.all,
                                             onChange = { all ->
                                                 modifiersList.set(i, Pair(Modifier.padding(all.dp), PaddingModifierData(all)))
                                             }
@@ -116,9 +135,17 @@ fun main() = Window(
                                     is ShadowModifierData -> {
                                         val data = m.second as ShadowModifierData
                                         ShadowModifier(
-                                            value = data.elevation,
-                                            onChange = { elevation ->
-                                                modifiersList.set(i, Pair(Modifier.shadow(elevation.dp), ShadowModifierData(elevation)))
+                                            elevationValue = data.elevation,
+                                            shapeValue = data.shape,
+                                            cornerValue = data.corner,
+                                            onChange = {
+                                                modifiersList.set(i,
+                                                    Pair(Modifier.shadow(
+                                                        elevation = it.elevation.dp,
+                                                        shape = getShape(it.shape, it.corner)
+                                                    ),
+                                                    it.copy())
+                                                )
                                             }
                                         )
                                     }
@@ -151,46 +178,6 @@ fun main() = Window(
                         Divider()
                     }
 
-//                    PaddingModifier(onChange = { padding ->
-//                        modifiersList.set(2, Modifier.padding(padding.dp))
-//                    })
-//
-//                    ShadowModifier(onChange = { elevation ->
-//                        modifiersList.set(4, Modifier.shadow(elevation.dp))
-//                    })
-//
-//                    Button(onClick = {
-//                        modifiersList.set(1, Modifier.background(Color.Red))
-//                    }) {
-//                        Text("Add red background")
-//                    }
-//
-//                    Button(onClick = {
-//                        modifiersList.set(3, Modifier.background(Color.Blue))
-//                    }) {
-//                        Text("Add blue background")
-//                    }
-//
-//                    Button(onClick = {
-//                        modifiersList.add(Modifier.border(width = 4.dp, color = Color.Magenta))
-//                    }) {
-//                        Text("Add border")
-//                    }
-//                    DropdownMenu(
-//                        expanded = expanded,
-//                        onDismissRequest = { expanded = false }
-//                    ) {
-//                        DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
-//                            Text("Refresh")
-//                        }
-//                        DropdownMenuItem(onClick = { /* Handle settings! */ }) {
-//                            Text("Settings")
-//                        }
-//                        Divider()
-//                        DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
-//                            Text("Send Feedback")
-//                        }
-//                    }
                     Button(onClick = {
                         modifiersList.clear()
                         modifiersList.addAll(defaultModifiers)
@@ -216,7 +203,7 @@ fun getShape(shape: AvailableShapes, corner: Int): Shape {
 }
 
 data class SizeModifierData(
-    val size: Int
+    val size: Int = 0
 )
 
 enum class AvailableShapes {
@@ -229,35 +216,71 @@ enum class AvailableShapes {
 data class BackgroundModifierData(
     val color: Color,
     val shape: AvailableShapes = AvailableShapes.Rectangle,
-    val corner: Int
+    val corner: Int = 0
+)
+
+data class BorderModifierData(
+    val width: Int = 0,
+    val color: Color,
+    val shape: AvailableShapes = AvailableShapes.Rectangle,
+    val corner: Int = 0
 )
 
 data class PaddingModifierData(
-    val all: Int
+    val all: Int = 0
 )
 
 data class ShadowModifierData(
-    val elevation: Int
+    val elevation: Int = 0,
+    val shape: AvailableShapes = AvailableShapes.Rectangle,
+    val corner: Int = 0
 )
 
 @Composable
-fun ShadowModifier(value: Int, onChange: (Int) -> Unit) {
+fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue: Int, onChange: (ShadowModifierData) -> Unit) {
     Column {
         Text("Shadow", style = MaterialTheme.typography.overline)
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            DpInput(value, onValueChange = {
-                onChange(it)
+        Row {
+            DpInput(elevationValue, onValueChange = {
+                onChange(ShadowModifierData(it, shapeValue, cornerValue))
+            })
+            Spacer(Modifier.width(16.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "Rect",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.clickable { onChange(ShadowModifierData(elevationValue, AvailableShapes.Rectangle, cornerValue)) }
+                )
+                Text(
+                    text = "Circle",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.clickable { onChange(ShadowModifierData(elevationValue, AvailableShapes.Circle, cornerValue)) }
+                )
+                Text(
+                    text = "Round",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.clickable { onChange(ShadowModifierData(elevationValue, AvailableShapes.RoundedCorner, cornerValue)) }
+                )
+                Text(
+                    text = "Cut",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.clickable { onChange(ShadowModifierData(elevationValue, AvailableShapes.CutCorner, cornerValue)) }
+                )
+            }
+            Spacer(Modifier.width(8.dp))
+            DpInput(cornerValue, onValueChange = {
+                onChange(ShadowModifierData(elevationValue, shapeValue, it))
             })
         }
     }
 }
 
 @Composable
-fun SizeModifier(value: Int, onChange: (Int) -> Unit) {
+fun SizeModifier(sizeValue: Int, onChange: (Int) -> Unit) {
     Column {
         Text("Size", style = MaterialTheme.typography.overline)
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            DpInput(value, onValueChange = {
+            DpInput(sizeValue, onValueChange = {
                 onChange(it)
             })
         }
@@ -305,11 +328,55 @@ fun BackgroundModifier(colorValue: Color, shapeValue: AvailableShapes, cornerVal
 }
 
 @Composable
-fun PaddingModifier(value: Int, onChange: (Int) -> Unit) {
+fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShapes, cornerValue: Int, onChange: (BorderModifierData) -> Unit) {
+    Column {
+        Text("Border", style = MaterialTheme.typography.overline)
+        Row {
+            DpInput(widthValue, onValueChange = {
+                onChange(BorderModifierData(it, colorValue, shapeValue, cornerValue))
+            })
+            Spacer(Modifier.width(16.dp))
+            Box(Modifier
+                .size(20.dp)
+                .background(colorValue)
+            )
+            Spacer(Modifier.width(16.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "Rect",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.clickable { onChange(BorderModifierData(widthValue, colorValue, AvailableShapes.Rectangle, cornerValue)) }
+                )
+                Text(
+                    text = "Circle",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.clickable { onChange(BorderModifierData(widthValue, colorValue, AvailableShapes.Circle, cornerValue)) }
+                )
+                Text(
+                    text = "Round",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.clickable { onChange(BorderModifierData(widthValue, colorValue, AvailableShapes.RoundedCorner, cornerValue)) }
+                )
+                Text(
+                    text = "Cut",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.clickable { onChange(BorderModifierData(widthValue, colorValue, AvailableShapes.CutCorner, cornerValue)) }
+                )
+            }
+            Spacer(Modifier.width(8.dp))
+            DpInput(cornerValue, onValueChange = {
+                onChange(BorderModifierData(widthValue, colorValue, shapeValue, it))
+            })
+        }
+    }
+}
+
+@Composable
+fun PaddingModifier(allValue: Int, onChange: (Int) -> Unit) {
     Column {
         Text("Padding", style = MaterialTheme.typography.overline)
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            DpInput(value, onValueChange = {
+            DpInput(allValue, onValueChange = {
                 onChange(it)
             })
         }
@@ -323,7 +390,7 @@ fun buildModifiers(modifiersList: SnapshotStateList<Pair<Modifier, Any>>): Modif
         modifier = modifier.then(it.first)
     }
 
-    return modifier.animateContentSize()
+    return modifier
 }
 
 @Composable
@@ -331,10 +398,10 @@ fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
     var hasError by remember { mutableStateOf(false) }
 
     BasicTextField(
-        value = value.toString(),
+        value = if (value == 0) "" else value.toString(),
         onValueChange = {
             if (it.isBlank()) {
-                //onValueChange(0)
+                onValueChange(0)
                 hasError = false
             } else {
                 val convertedValue = it.toIntOrNull()
@@ -342,6 +409,7 @@ fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
                     onValueChange(convertedValue)
                     hasError = false
                 } else {
+                    onValueChange(0)
                     hasError = true
                 }
             }
@@ -355,7 +423,10 @@ fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
                     .padding(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                innerTextField()
+                Box {
+                    innerTextField()
+                    if (value == 0) Text("0", color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
+                }
             }
         },
         modifier = Modifier.width(40.dp),
