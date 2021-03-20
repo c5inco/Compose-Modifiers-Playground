@@ -2,6 +2,7 @@ package ui
 
 import BackgroundModifier
 import BorderModifier
+import OffsetDesignModifier
 import PaddingModifier
 import ShadowModifier
 import SizeModifier
@@ -148,12 +149,12 @@ fun ModifierEntry(
                         val data = modifierData.second as PaddingModifierData
                         PaddingModifier(
                             allValue = data.all,
-                            onChange = { all ->
+                            onChange = {
                                 onModifierChange(
                                     order,
                                     Triple(
-                                        androidx.compose.ui.Modifier.padding(all.dp),
-                                        PaddingModifierData(all),
+                                        Modifier.padding((it.all).dp),
+                                        it.copy(),
                                         visible
                                     )
                                 )
@@ -173,6 +174,26 @@ fun ModifierEntry(
                                         Modifier.shadow(
                                             elevation = it.elevation.dp,
                                             shape = getShape(it.shape, it.corner)
+                                        ),
+                                        it.copy(),
+                                        visible
+                                    )
+                                )
+                            }
+                        )
+                    }
+                    is OffsetDesignModifierData -> {
+                        val data = modifierData.second as OffsetDesignModifierData
+                        OffsetDesignModifier(
+                            xValue = data.x,
+                            yValue = data.y,
+                            onChange = {
+                                onModifierChange(
+                                    order,
+                                    Triple(
+                                        Modifier.offset(
+                                            x = (it.x).dp,
+                                            y = (it.y).dp
                                         ),
                                         it.copy(),
                                         visible

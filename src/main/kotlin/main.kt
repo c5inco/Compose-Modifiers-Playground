@@ -137,6 +137,9 @@ private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
         ModifierEntry.Shadow -> {
             newModifier = Pair(Modifier, ShadowModifierData())
         }
+        ModifierEntry.Offset -> {
+            newModifier = Pair(Modifier.offset(), OffsetDesignModifierData())
+        }
     }
 
     return newModifier
@@ -147,7 +150,8 @@ enum class ModifierEntry {
     Padding,
     Border,
     Background,
-    Shadow
+    Shadow,
+    Offset
 }
 
 @Composable
@@ -186,6 +190,9 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
             }
             DropdownMenuItem(onClick = { select(ModifierEntry.Shadow) }) {
                 Text("Shadow")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.Offset) }) {
+                Text("Offset")
             }
         }
     }
@@ -296,12 +303,27 @@ fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShap
 }
 
 @Composable
-fun PaddingModifier(allValue: Int, onChange: (Int) -> Unit) {
+fun PaddingModifier(allValue: Int, onChange: (PaddingModifierData) -> Unit) {
     Column {
         Text("Padding", style = MaterialTheme.typography.overline)
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             DpInput(allValue, onValueChange = {
-                onChange(it)
+                onChange(PaddingModifierData(it))
+            })
+        }
+    }
+}
+
+@Composable
+fun OffsetDesignModifier(xValue: Int, yValue: Int, onChange: (OffsetDesignModifierData) -> Unit) {
+    Column {
+        Text("Offset", style = MaterialTheme.typography.overline)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            DpInput(xValue, onValueChange = {
+                onChange(OffsetDesignModifierData(it, yValue))
+            })
+            DpInput(yValue, onValueChange = {
+                onChange(OffsetDesignModifierData(xValue, it))
             })
         }
     }

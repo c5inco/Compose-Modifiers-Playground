@@ -35,3 +35,8 @@ data class ShadowModifierData(
     val shape: AvailableShapes = AvailableShapes.Rectangle,
     val corner: Int = 0
 )
+
+data class OffsetDesignModifierData(
+    val x: Int = 0,
+    val y: Int = 0
+)
