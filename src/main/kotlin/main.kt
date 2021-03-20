@@ -7,25 +7,27 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.pointer.pointerMoveFilter
-import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import data.*
+import ui.ColorInput
+import ui.DpInput
+import ui.ShapeInput
 
 fun main() = Window(
     title = "Modifiers Playground",
@@ -206,40 +208,6 @@ fun getShape(shape: AvailableShapes, corner: Int): Shape {
     return realShape
 }
 
-data class SizeModifierData(
-    val size: Int = 0
-)
-
-enum class AvailableShapes {
-    Circle,
-    RoundedCorner,
-    CutCorner,
-    Rectangle
-}
-
-data class BackgroundModifierData(
-    val color: Color,
-    val shape: AvailableShapes = AvailableShapes.Rectangle,
-    val corner: Int = 0
-)
-
-data class BorderModifierData(
-    val width: Int = 0,
-    val color: Color,
-    val shape: AvailableShapes = AvailableShapes.Rectangle,
-    val corner: Int = 0
-)
-
-data class PaddingModifierData(
-    val all: Int = 0
-)
-
-data class ShadowModifierData(
-    val elevation: Int = 0,
-    val shape: AvailableShapes = AvailableShapes.Rectangle,
-    val corner: Int = 0
-)
-
 @Composable
 fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue: Int, onChange: (ShadowModifierData) -> Unit) {
     Column {
@@ -273,10 +241,9 @@ fun BackgroundModifier(colorValue: Color, shapeValue: AvailableShapes, cornerVal
     Column {
         Text("Background", style = MaterialTheme.typography.overline)
         Row {
-            Box(Modifier
-                .size(20.dp)
-                .background(colorValue)
-            )
+            ColorInput(colorValue, onValueChange = { color ->
+                onChange(BackgroundModifierData(color, shapeValue, cornerValue))
+            })
             Spacer(Modifier.width(16.dp))
             ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
                 onChange(BackgroundModifierData(colorValue, shape, corner))
@@ -294,69 +261,15 @@ fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShap
                 onChange(BorderModifierData(it, colorValue, shapeValue, cornerValue))
             })
             Spacer(Modifier.width(16.dp))
-            Box(Modifier
-                .size(20.dp)
-                .clip(CircleShape)
-                .background(colorValue)
-                .border(width = 1.dp, color = Color.Black.copy(alpha = 0.25f), shape = CircleShape)
-            )
+            ColorInput(colorValue, onValueChange = { color ->
+                onChange(BorderModifierData(widthValue, color, shapeValue, cornerValue))
+            })
             Spacer(Modifier.width(16.dp))
             ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
                 onChange(BorderModifierData(widthValue, colorValue, shape, corner))
             })
         }
     }
-}
-
-@Composable
-fun ShapeInput(
-    shapeValue: AvailableShapes,
-    cornerValue: Int,
-    onValueChange: (shape: AvailableShapes, corner: Int) -> Unit,
-) {
-    val shapesList = listOf(
-        Pair("rectangle", AvailableShapes.Rectangle),
-        Pair("circle", AvailableShapes.Circle),
-        Pair("rounded-corner", AvailableShapes.RoundedCorner),
-        Pair("cut-corner", AvailableShapes.CutCorner),
-    )
-    var hovered = remember { mutableStateOf(false) }
-
-    Row(
-        modifier = Modifier
-            .pointerMoveFilter(
-                onEnter = {
-                    hovered.value = true
-                    false
-                },
-                onExit = {
-                    hovered.value = false
-                    false
-                }
-            )
-            .border(
-                width = 1.dp,
-                color = if(hovered.value) Color.LightGray else Color.Transparent,
-                shape = RoundedCornerShape(4.dp)
-            ),
-    ) {
-        for (pair in shapesList) {
-            var mod = Modifier.clip(shape = RoundedCornerShape(4.dp))
-            if (shapeValue == pair.second) mod = mod.background(MaterialTheme.colors.secondary)
-
-            Icon(
-                painter = svgResource("icons/${pair.first}.svg"),
-                contentDescription = "${pair.first} shape button",
-                modifier = mod.clickable {
-                    onValueChange(pair.second, cornerValue)
-                }
-            )
-        }
-    }
-    Spacer(Modifier.width(8.dp))
-    DpInput(cornerValue, onValueChange = {
-        onValueChange(shapeValue, it)
-    })
 }
 
 @Composable
@@ -381,43 +294,3 @@ fun buildModifiers(modifiersList: SnapshotStateList<Pair<Modifier, Any>>): Modif
     return modifier
 }
 
-@Composable
-fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
-    var hasError by remember { mutableStateOf(false) }
-
-    BasicTextField(
-        value = if (value == 0) "" else value.toString(),
-        onValueChange = {
-            if (it.isBlank()) {
-                onValueChange(0)
-                hasError = false
-            } else {
-                val convertedValue = it.toIntOrNull()
-                if (convertedValue != null) {
-                    onValueChange(convertedValue)
-                    hasError = false
-                } else {
-                    onValueChange(0)
-                    hasError = true
-                }
-            }
-        },
-        singleLine = true,
-        decorationBox = { innerTextField ->
-            Row(
-                modifier = Modifier
-                    .background(MaterialTheme.colors.surface)
-                    .border(width = 1.dp, color = if (hasError) MaterialTheme.colors.error else Color.LightGray)
-                    .padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box {
-                    innerTextField()
-                    if (value == 0) Text("0", color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
-                }
-            }
-        },
-        modifier = Modifier.width(40.dp),
-        textStyle = MaterialTheme.typography.body2
-    )
-}
