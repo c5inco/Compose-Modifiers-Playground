@@ -10,15 +10,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -245,31 +249,8 @@ fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue
                 onChange(ShadowModifierData(it, shapeValue, cornerValue))
             })
             Spacer(Modifier.width(16.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = "Rect",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(ShadowModifierData(elevationValue, AvailableShapes.Rectangle, cornerValue)) }
-                )
-                Text(
-                    text = "Circle",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(ShadowModifierData(elevationValue, AvailableShapes.Circle, cornerValue)) }
-                )
-                Text(
-                    text = "Round",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(ShadowModifierData(elevationValue, AvailableShapes.RoundedCorner, cornerValue)) }
-                )
-                Text(
-                    text = "Cut",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(ShadowModifierData(elevationValue, AvailableShapes.CutCorner, cornerValue)) }
-                )
-            }
-            Spacer(Modifier.width(8.dp))
-            DpInput(cornerValue, onValueChange = {
-                onChange(ShadowModifierData(elevationValue, shapeValue, it))
+            ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
+                onChange(ShadowModifierData(elevationValue, shape, corner))
             })
         }
     }
@@ -297,31 +278,8 @@ fun BackgroundModifier(colorValue: Color, shapeValue: AvailableShapes, cornerVal
                 .background(colorValue)
             )
             Spacer(Modifier.width(16.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = "Rect",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(BackgroundModifierData(colorValue, AvailableShapes.Rectangle, cornerValue)) }
-                )
-                Text(
-                    text = "Circle",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(BackgroundModifierData(colorValue, AvailableShapes.Circle, cornerValue)) }
-                )
-                Text(
-                    text = "Round",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(BackgroundModifierData(colorValue, AvailableShapes.RoundedCorner, cornerValue)) }
-                )
-                Text(
-                    text = "Cut",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(BackgroundModifierData(colorValue, AvailableShapes.CutCorner, cornerValue)) }
-                )
-            }
-            Spacer(Modifier.width(8.dp))
-            DpInput(cornerValue, onValueChange = {
-                onChange(BackgroundModifierData(colorValue, shapeValue, it))
+            ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
+                onChange(BackgroundModifierData(colorValue, shape, corner))
             })
         }
     }
@@ -338,37 +296,67 @@ fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShap
             Spacer(Modifier.width(16.dp))
             Box(Modifier
                 .size(20.dp)
+                .clip(CircleShape)
                 .background(colorValue)
+                .border(width = 1.dp, color = Color.Black.copy(alpha = 0.25f), shape = CircleShape)
             )
             Spacer(Modifier.width(16.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = "Rect",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(BorderModifierData(widthValue, colorValue, AvailableShapes.Rectangle, cornerValue)) }
-                )
-                Text(
-                    text = "Circle",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(BorderModifierData(widthValue, colorValue, AvailableShapes.Circle, cornerValue)) }
-                )
-                Text(
-                    text = "Round",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(BorderModifierData(widthValue, colorValue, AvailableShapes.RoundedCorner, cornerValue)) }
-                )
-                Text(
-                    text = "Cut",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.clickable { onChange(BorderModifierData(widthValue, colorValue, AvailableShapes.CutCorner, cornerValue)) }
-                )
-            }
-            Spacer(Modifier.width(8.dp))
-            DpInput(cornerValue, onValueChange = {
-                onChange(BorderModifierData(widthValue, colorValue, shapeValue, it))
+            ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
+                onChange(BorderModifierData(widthValue, colorValue, shape, corner))
             })
         }
     }
+}
+
+@Composable
+fun ShapeInput(
+    shapeValue: AvailableShapes,
+    cornerValue: Int,
+    onValueChange: (shape: AvailableShapes, corner: Int) -> Unit,
+) {
+    val shapesList = listOf(
+        Pair("rectangle", AvailableShapes.Rectangle),
+        Pair("circle", AvailableShapes.Circle),
+        Pair("rounded-corner", AvailableShapes.RoundedCorner),
+        Pair("cut-corner", AvailableShapes.CutCorner),
+    )
+    var hovered = remember { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier
+            .pointerMoveFilter(
+                onEnter = {
+                    hovered.value = true
+                    false
+                },
+                onExit = {
+                    hovered.value = false
+                    false
+                }
+            )
+            .border(
+                width = 1.dp,
+                color = if(hovered.value) Color.LightGray else Color.Transparent,
+                shape = RoundedCornerShape(4.dp)
+            ),
+    ) {
+        for (pair in shapesList) {
+            var mod = Modifier.clip(shape = RoundedCornerShape(4.dp))
+            if (shapeValue == pair.second) mod = mod.background(MaterialTheme.colors.secondary)
+
+            Icon(
+                painter = svgResource("icons/${pair.first}.svg"),
+                contentDescription = "${pair.first} shape button",
+                modifier = mod.clickable {
+                    onValueChange(pair.second, cornerValue)
+                }
+            )
+        }
+    }
+    Spacer(Modifier.width(8.dp))
+    DpInput(cornerValue, onValueChange = {
+        onValueChange(shapeValue, it)
+    })
 }
 
 @Composable
