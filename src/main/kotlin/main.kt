@@ -9,21 +9,14 @@ import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -31,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import data.*
 import ui.ColorInput
 import ui.DpInput
+import ui.ModifierEntry
 import ui.ShapeInput
 
 fun main() = Window(
@@ -80,7 +74,14 @@ fun main() = Window(
                         modifier = Modifier
                             .padding(bottom = 16.dp)
                             .fillMaxHeight(),
-                        name = "Modifiers"
+                        name = "Modifiers",
+                        actions = {
+                            AddModifierAction(
+                                onSelect = {
+                                    val newModifier = getModifier(it)
+                                    modifiersList.add(Triple(newModifier.first, newModifier.second, true))
+                                })
+                        }
                     ) {
                         for (i in 0 until modifiersList.size) {
                             ModifierEntry(
@@ -120,195 +121,98 @@ fun main() = Window(
     }
 }
 
-@Composable
-fun ModifierEntry(
-    modifierData: Triple<Modifier, Any, Boolean>,
-    order: Int,
-    size: Int,
-    move: (index: Int, up: Boolean) -> Unit,
-    onModifierChange: (Int, Triple<Modifier, Any, Boolean>) -> Unit,
-    onRemove: (Int) -> Unit,
-) {
-    var rowHovered by remember { mutableStateOf(false) }
-    val visible = modifierData.third
+private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
+    var newModifier: Pair<Modifier, Any> = Pair(Modifier.size(0.dp), SizeModifierData())
 
-    Box(
-        modifier = Modifier
-            .pointerMoveFilter(
-                onEnter = {
-                    rowHovered = true
-                    false
-                },
-                onExit = {
-                    rowHovered = false
-                    false
-                }
-            )
-            .height(48.dp)
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        if (rowHovered) {
-            Column(
-                modifier = Modifier
-                    .offset(x = (-18).dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
-                    contentDescription = "Move modifier up",
-                    tint = LocalContentColor.current.copy(alpha = if (order != 0) 1f else ContentAlpha.disabled),
-                    modifier = Modifier
-                        .size(18.dp)
-                        .clickable(enabled = order != 0) {
-                            move(order, true)
-                        })
-                Spacer(Modifier.width(4.dp))
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Move modifier down",
-                    tint = LocalContentColor.current.copy(alpha = if (order < size - 1) 1f else ContentAlpha.disabled),
-                    modifier = Modifier
-                        .size(18.dp)
-                        .clickable(enabled = order < size - 1) {
-                            move(order, false)
-                        }
-                )
-            }
+    when (modifierType) {
+        ModifierEntry.Padding -> {
+            newModifier = Pair(Modifier.padding(0.dp), PaddingModifierData())
         }
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Box(Modifier.alpha(if (visible) 1f else 0.4f)) {
-                when (modifierData.second) {
-                    is SizeModifierData -> {
-                        val data = modifierData.second as SizeModifierData
-                        SizeModifier(
-                            sizeValue = data.size,
-                            onChange = { size ->
-                                onModifierChange(order, Triple(Modifier.size(size.dp), SizeModifierData(size), visible))
-                            }
-                        )
-                    }
-                    is BackgroundModifierData -> {
-                        val data = modifierData.second as BackgroundModifierData
-                        BackgroundModifier(
-                            colorValue = data.color,
-                            shapeValue = data.shape,
-                            cornerValue = data.corner,
-                            onChange = {
-                                onModifierChange(
-                                    order,
-                                    Triple(
-                                        Modifier.background(
-                                            color = it.color,
-                                            shape = getShape(it.shape, it.corner)
-                                        ),
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
-                            }
-                        )
-                    }
-                    is BorderModifierData -> {
-                        val data = modifierData.second as BorderModifierData
-                        BorderModifier(
-                            widthValue = data.width,
-                            colorValue = data.color,
-                            shapeValue = data.shape,
-                            cornerValue = data.corner,
-                            onChange = {
-                                onModifierChange(
-                                    order,
-                                    Triple(
-                                        Modifier.border(
-                                            width = (it.width).dp,
-                                            color = it.color,
-                                            shape = getShape(it.shape, it.corner)
-                                        ),
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
-                            }
-                        )
-                    }
-                    is PaddingModifierData -> {
-                        val data = modifierData.second as PaddingModifierData
-                        PaddingModifier(
-                            allValue = data.all,
-                            onChange = { all ->
-                                onModifierChange(
-                                    order,
-                                    Triple(Modifier.padding(all.dp), PaddingModifierData(all), visible)
-                                )
-                            }
-                        )
-                    }
-                    is ShadowModifierData -> {
-                        val data = modifierData.second as ShadowModifierData
-                        ShadowModifier(
-                            elevationValue = data.elevation,
-                            shapeValue = data.shape,
-                            cornerValue = data.corner,
-                            onChange = {
-                                onModifierChange(
-                                    order,
-                                    Triple(
-                                        Modifier.shadow(
-                                            elevation = it.elevation.dp,
-                                            shape = getShape(it.shape, it.corner)
-                                        ),
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
-                            }
-                        )
-                    }
+        ModifierEntry.Background -> {
+            newModifier = Pair(Modifier.background(Color.Yellow), BackgroundModifierData())
+        }
+        ModifierEntry.Border -> {
+            newModifier = Pair(Modifier.border(width = 10.dp, color = Color.Cyan), BorderModifierData(width = 10))
+        }
+        ModifierEntry.Shadow -> {
+            newModifier = Pair(Modifier, ShadowModifierData())
+        }
+    }
+
+    return newModifier
+}
+
+enum class ModifierEntry {
+    Size,
+    Padding,
+    Border,
+    Background,
+    Shadow
+}
+
+@Composable
+private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        Icon(
+            imageVector = Icons.Outlined.Add,
+            contentDescription = "Add modifier",
+            modifier = Modifier
+                .size(18.dp)
+                .clickable {
+                    expanded = true
                 }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            val select: (ModifierEntry) -> Unit = {
+                onSelect(it)
+                expanded = false
             }
 
-            Spacer(Modifier.width(16.dp))
-            Row {
-                Icon(
-                    imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
-                    contentDescription = "Toggle visibility",
-                    modifier = Modifier
-                        .size(18.dp)
-                        .clickable {
-                            onModifierChange(order, Triple(modifierData.first, modifierData.second, !visible))
-                        }
-                )
-                Spacer(Modifier.width(4.dp))
-                Icon(
-                    imageVector = Icons.Outlined.Remove,
-                    contentDescription = "Remove modifier",
-                    modifier = Modifier
-                        .size(18.dp)
-                        .clickable { onRemove(order) }
-                )
+            DropdownMenuItem(onClick = { select(ModifierEntry.Size) }) {
+                Text("Size")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.Padding) }) {
+                Text("Padding")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.Border) }) {
+                Text("Border")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.Background) }) {
+                Text("Background")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.Shadow) }) {
+                Text("Shadow")
             }
         }
     }
-    Divider()
 }
 
 @Composable
 fun PropertiesSection(
     modifier: Modifier = Modifier.padding(16.dp),
     name: String = "<section>",
+    actions: @Composable () -> Unit = { },
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column {
-        Text(
-            text = name,
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.subtitle2,
-            modifier = Modifier.padding(16.dp)
-        )
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = name,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.subtitle2,
+            )
+            actions()
+        }
         Column(modifier) {
             content()
         }

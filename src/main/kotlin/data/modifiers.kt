@@ -14,14 +14,14 @@ enum class AvailableShapes {
 }
 
 data class BackgroundModifierData(
-    val color: Color,
+    val color: Color = Color.Yellow,
     val shape: AvailableShapes = AvailableShapes.Rectangle,
     val corner: Int = 0
 )
 
 data class BorderModifierData(
     val width: Int = 0,
-    val color: Color,
+    val color: Color = Color.Cyan,
     val shape: AvailableShapes = AvailableShapes.Rectangle,
     val corner: Int = 0
 )
