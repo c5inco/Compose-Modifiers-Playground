@@ -216,7 +216,7 @@ fun ModifierEntry(
                             onModifierChange(order, Triple(modifierData.first, modifierData.second, !visible))
                         }
                 )
-                Spacer(androidx.compose.ui.Modifier.width(4.dp))
+                Spacer(androidx.compose.ui.Modifier.width(8.dp))
                 Icon(
                     imageVector = Icons.Outlined.Remove,
                     contentDescription = "Remove modifier",

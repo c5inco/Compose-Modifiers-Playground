@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -81,6 +82,12 @@ fun main() = Window(
                                     val newModifier = getModifier(it)
                                     modifiersList.add(Triple(newModifier.first, newModifier.second, true))
                                 })
+                            ResetDefaultModifiersAction(
+                                onClick = {
+                                    modifiersList.clear()
+                                    modifiersList.addAll(defaultModifiers)
+                                }
+                            )
                         }
                     ) {
                         for (i in 0 until modifiersList.size) {
@@ -106,13 +113,6 @@ fun main() = Window(
                                     modifiersList.removeAt(order)
                                 }
                             )
-                        }
-
-                        Button(onClick = {
-                            modifiersList.clear()
-                            modifiersList.addAll(defaultModifiers)
-                        }) {
-                            Text("Reset")
                         }
                     }
                 }
@@ -152,6 +152,17 @@ enum class ModifierEntry {
     Background,
     Shadow,
     Offset
+}
+
+@Composable
+private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
+    Icon(
+        imageVector = Icons.Outlined.RestartAlt,
+        contentDescription = "Reset default modifiers",
+        modifier = Modifier
+            .size(18.dp)
+            .clickable { onClick() }
+    )
 }
 
 @Composable
@@ -202,7 +213,7 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
 fun PropertiesSection(
     modifier: Modifier = Modifier.padding(16.dp),
     name: String = "<section>",
-    actions: @Composable () -> Unit = { },
+    actions: @Composable RowScope.() -> Unit = { },
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column {
@@ -218,7 +229,12 @@ fun PropertiesSection(
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.subtitle2,
             )
-            actions()
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                actions()
+            }
         }
         Column(modifier) {
             content()
