@@ -11,16 +11,16 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,120 +78,170 @@ fun main() = Window(
                 }
 
                 Column {
-                    for (i in 0 until modifiersList.size) {
-                        val m = modifiersList[i]
+                    PropertiesSection(name = "Base element") {
+                        Text("put selection here")
+                    }
+                    Divider(Modifier.height(8.dp))
+                    PropertiesSection(
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
+                            .fillMaxHeight(),
+                        name = "Modifiers"
+                    ) {
+                        for (i in 0 until modifiersList.size) {
+                            val m = modifiersList[i]
+                            var rowHovered by remember { mutableStateOf(false) }
 
-                        Row(Modifier.padding(4.dp)) {
-                            Row(Modifier.weight(1f)) {
-                                when (m.second) {
-                                    is SizeModifierData -> {
-                                        val data = m.second as SizeModifierData
-                                        SizeModifier(
-                                            sizeValue = data.size,
-                                            onChange = { size ->
-                                                modifiersList.set(i, Pair(Modifier.size(size.dp), SizeModifierData(size)))
-                                            }
-                                        )
-                                    }
-                                    is BackgroundModifierData -> {
-                                        val data = m.second as BackgroundModifierData
-                                        BackgroundModifier(
-                                            colorValue = data.color,
-                                            shapeValue = data.shape,
-                                            cornerValue = data.corner,
-                                            onChange = {
-                                                modifiersList.set(i,
-                                                    Pair(Modifier.background(
-                                                        color = it.color,
-                                                        shape = getShape(it.shape, it.corner)
-                                                    ),
-                                                    it.copy())
-                                                )
-                                            }
-                                        )
-                                    }
-                                    is BorderModifierData -> {
-                                        val data = m.second as BorderModifierData
-                                        BorderModifier(
-                                            widthValue = data.width,
-                                            colorValue = data.color,
-                                            shapeValue = data.shape,
-                                            cornerValue = data.corner,
-                                            onChange = {
-                                                modifiersList.set(i,
-                                                    Pair(Modifier.border(
-                                                        width = (it.width).dp,
-                                                        color = it.color,
-                                                        shape = getShape(it.shape, it.corner)
-                                                    ),
-                                                    it.copy())
-                                                )
-                                            }
-                                        )
-                                    }
-                                    is PaddingModifierData -> {
-                                        val data = m.second as PaddingModifierData
-                                        PaddingModifier(
-                                            allValue = data.all,
-                                            onChange = { all ->
-                                                modifiersList.set(i, Pair(Modifier.padding(all.dp), PaddingModifierData(all)))
-                                            }
-                                        )
-                                    }
-                                    is ShadowModifierData -> {
-                                        val data = m.second as ShadowModifierData
-                                        ShadowModifier(
-                                            elevationValue = data.elevation,
-                                            shapeValue = data.shape,
-                                            cornerValue = data.corner,
-                                            onChange = {
-                                                modifiersList.set(i,
-                                                    Pair(Modifier.shadow(
-                                                        elevation = it.elevation.dp,
-                                                        shape = getShape(it.shape, it.corner)
-                                                    ),
-                                                    it.copy())
-                                                )
-                                            }
+                            Box(
+                                modifier = Modifier
+                                    .pointerMoveFilter(
+                                        onEnter = {
+                                            rowHovered = true
+                                            false
+                                        },
+                                        onExit = {
+                                            rowHovered = false
+                                            false
+                                        }
+                                    )
+                                    .height(48.dp)
+                                    .padding(horizontal = 16.dp),
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                if (rowHovered) {
+                                    Column(modifier = Modifier
+                                        .offset(x = (-18).dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.KeyboardArrowUp,
+                                            contentDescription = "Move modifier up",
+                                            tint = LocalContentColor.current.copy(alpha = if (i != 0) 1f else ContentAlpha.disabled),
+                                            modifier = Modifier
+                                                .size(18.dp)
+                                                .clickable(enabled = i != 0) {
+                                                    move(i, true)
+                                                })
+                                        Spacer(Modifier.width(4.dp))
+                                        Icon(
+                                            imageVector = Icons.Default.KeyboardArrowDown,
+                                            contentDescription = "Move modifier down",
+                                            tint = LocalContentColor.current.copy(alpha = if (i < modifiersList.size - 1) 1f else ContentAlpha.disabled),
+                                            modifier = Modifier
+                                                .size(18.dp)
+                                                .clickable(enabled = i < modifiersList.size - 1) {
+                                                    move(i, false)
+                                                }
                                         )
                                     }
                                 }
-                            }
-                            Spacer(Modifier.width(16.dp))
-                            Column {
-                                Icon(
-                                    imageVector = Icons.Default.KeyboardArrowUp,
-                                    contentDescription = "Move modifier up",
-                                    tint = LocalContentColor.current.copy(alpha = if (i != 0) 1f else ContentAlpha.disabled),
-                                    modifier = Modifier
-                                        .size(18.dp)
-                                        .clickable(enabled = i != 0) {
-                                            move(i, true)
-                                        })
-                                Spacer(Modifier.width(4.dp))
-                                Icon(
-                                    imageVector = Icons.Default.KeyboardArrowDown,
-                                    contentDescription = "Move modifier down",
-                                    tint = LocalContentColor.current.copy(alpha = if (i < modifiersList.size - 1) 1f else ContentAlpha.disabled),
-                                    modifier = Modifier
-                                        .size(18.dp)
-                                        .clickable(enabled = i < modifiersList.size - 1) {
-                                            move(i, false)
+                                Row(Modifier.fillMaxWidth()) {
+                                    when (m.second) {
+                                        is SizeModifierData -> {
+                                            val data = m.second as SizeModifierData
+                                            SizeModifier(
+                                                sizeValue = data.size,
+                                                onChange = { size ->
+                                                    modifiersList.set(i, Pair(Modifier.size(size.dp), SizeModifierData(size)))
+                                                }
+                                            )
                                         }
-                                )
+                                        is BackgroundModifierData -> {
+                                            val data = m.second as BackgroundModifierData
+                                            BackgroundModifier(
+                                                colorValue = data.color,
+                                                shapeValue = data.shape,
+                                                cornerValue = data.corner,
+                                                onChange = {
+                                                    modifiersList.set(i,
+                                                        Pair(Modifier.background(
+                                                            color = it.color,
+                                                            shape = getShape(it.shape, it.corner)
+                                                        ),
+                                                            it.copy())
+                                                    )
+                                                }
+                                            )
+                                        }
+                                        is BorderModifierData -> {
+                                            val data = m.second as BorderModifierData
+                                            BorderModifier(
+                                                widthValue = data.width,
+                                                colorValue = data.color,
+                                                shapeValue = data.shape,
+                                                cornerValue = data.corner,
+                                                onChange = {
+                                                    modifiersList.set(i,
+                                                        Pair(Modifier.border(
+                                                            width = (it.width).dp,
+                                                            color = it.color,
+                                                            shape = getShape(it.shape, it.corner)
+                                                        ),
+                                                            it.copy())
+                                                    )
+                                                }
+                                            )
+                                        }
+                                        is PaddingModifierData -> {
+                                            val data = m.second as PaddingModifierData
+                                            PaddingModifier(
+                                                allValue = data.all,
+                                                onChange = { all ->
+                                                    modifiersList.set(i, Pair(Modifier.padding(all.dp), PaddingModifierData(all)))
+                                                }
+                                            )
+                                        }
+                                        is ShadowModifierData -> {
+                                            val data = m.second as ShadowModifierData
+                                            ShadowModifier(
+                                                elevationValue = data.elevation,
+                                                shapeValue = data.shape,
+                                                cornerValue = data.corner,
+                                                onChange = {
+                                                    modifiersList.set(i,
+                                                        Pair(Modifier.shadow(
+                                                            elevation = it.elevation.dp,
+                                                            shape = getShape(it.shape, it.corner)
+                                                        ),
+                                                            it.copy())
+                                                    )
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                                Spacer(Modifier.width(16.dp))
                             }
+                            Divider()
                         }
-                        Divider()
-                    }
 
-                    Button(onClick = {
-                        modifiersList.clear()
-                        modifiersList.addAll(defaultModifiers)
-                    }) {
-                        Text("Reset")
+                        Button(onClick = {
+                            modifiersList.clear()
+                            modifiersList.addAll(defaultModifiers)
+                        }) {
+                            Text("Reset")
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun PropertiesSection(
+    modifier: Modifier = Modifier.padding(16.dp),
+    name: String = "<section>",
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column {
+        Text(
+            text = name,
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.subtitle2,
+            modifier = Modifier.padding(16.dp)
+        )
+        Column(modifier) {
+            content()
         }
     }
 }
