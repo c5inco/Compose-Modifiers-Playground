@@ -23,23 +23,26 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.*
-import ui.ColorInput
-import ui.DpInput
+import ui.AvailableElements
+import ui.ElementRow
 import ui.ModifierEntry
-import ui.ShapeInput
 
 fun main() = Window(
     title = "Modifiers Playground",
     size = IntSize(width = 900, height = 750)
 ) {
     val defaultModifiers = listOf(
-        Triple(Modifier.size(400.dp), SizeModifierData(400), true),
+        //Triple(Modifier.size(400.dp), SizeModifierData(400), true),
         Triple(Modifier.background(Color.Magenta), BackgroundModifierData(color = Color.Magenta), true),
         Triple(Modifier.padding(20.dp), PaddingModifierData(20), true),
         Triple(Modifier.background(Color.Gray), BackgroundModifierData(color = Color.Gray), true),
         Triple(Modifier, ShadowModifierData(), true),
         Triple(Modifier, BorderModifierData(color = Color.Blue), true),
     )
+
+    var baseElement by remember {
+        mutableStateOf(BaseElementData(element = AvailableElements.Box, width = 400, height = 400))
+    }
 
     var modifiersList = remember {
         defaultModifiers.toMutableStateList()
@@ -55,11 +58,39 @@ fun main() = Window(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        modifier = buildModifiers(modifiersList),
-                        contentAlignment = Alignment.Center
-                    ) {
+                    val content: @Composable () -> Unit = {
                         Text("🥑", fontSize = 48.sp)
+                    }
+                    val modifiersChain = Modifier
+                        .size(
+                            width = (baseElement.width).dp,
+                            height = (baseElement.height).dp
+                        )
+                        .then(buildModifiers(modifiersList))
+
+                    when (baseElement.element) {
+                        AvailableElements.Box -> {
+                            Box(
+                                modifier = modifiersChain,
+                                contentAlignment = Alignment.Center
+                            ) {
+                                content()
+                            }
+                        }
+                        AvailableElements.Column -> {
+                            Column(
+                                modifier = modifiersChain,
+                            ) {
+                                content()
+                            }
+                        }
+                        AvailableElements.Row -> {
+                            Row(
+                                modifier = modifiersChain,
+                            ) {
+                                content()
+                            }
+                        }
                     }
                 }
             }
@@ -67,8 +98,15 @@ fun main() = Window(
                 Modifier.width(350.dp)
             ) {
                 Column {
-                    PropertiesSection(name = "Base element") {
-                        Text("put selection here")
+                    PropertiesSection(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+                        name = "Base element"
+                    ) {
+                        ElementRow(
+                            elementValue = baseElement.element,
+                            widthValue = baseElement.width,
+                            heightValue = baseElement.height,
+                            onValueChange = { baseElement = it })
                     }
                     Divider(Modifier.height(8.dp))
                     PropertiesSection(
@@ -120,6 +158,12 @@ fun main() = Window(
         }
     }
 }
+
+data class BaseElementData(
+    val element: AvailableElements = AvailableElements.Box,
+    val width: Int,
+    val height: Int
+)
 
 private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
     var newModifier: Pair<Modifier, Any> = Pair(Modifier.size(0.dp), SizeModifierData())
@@ -252,97 +296,6 @@ fun getShape(shape: AvailableShapes, corner: Int): Shape {
     }
 
     return realShape
-}
-
-@Composable
-fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue: Int, onChange: (ShadowModifierData) -> Unit) {
-    Column {
-        Text("Shadow", style = MaterialTheme.typography.overline)
-        Row {
-            DpInput(elevationValue, onValueChange = {
-                onChange(ShadowModifierData(it, shapeValue, cornerValue))
-            })
-            Spacer(Modifier.width(16.dp))
-            ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
-                onChange(ShadowModifierData(elevationValue, shape, corner))
-            })
-        }
-    }
-}
-
-@Composable
-fun SizeModifier(sizeValue: Int, onChange: (Int) -> Unit) {
-    Column {
-        Text("Size", style = MaterialTheme.typography.overline)
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            DpInput(sizeValue, onValueChange = {
-                onChange(it)
-            })
-        }
-    }
-}
-
-@Composable
-fun BackgroundModifier(colorValue: Color, shapeValue: AvailableShapes, cornerValue: Int, onChange: (BackgroundModifierData) -> Unit) {
-    Column {
-        Text("Background", style = MaterialTheme.typography.overline)
-        Row {
-            ColorInput(colorValue, onValueChange = { color ->
-                onChange(BackgroundModifierData(color, shapeValue, cornerValue))
-            })
-            Spacer(Modifier.width(16.dp))
-            ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
-                onChange(BackgroundModifierData(colorValue, shape, corner))
-            })
-        }
-    }
-}
-
-@Composable
-fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShapes, cornerValue: Int, onChange: (BorderModifierData) -> Unit) {
-    Column {
-        Text("Border", style = MaterialTheme.typography.overline)
-        Row {
-            DpInput(widthValue, onValueChange = {
-                onChange(BorderModifierData(it, colorValue, shapeValue, cornerValue))
-            })
-            Spacer(Modifier.width(16.dp))
-            ColorInput(colorValue, onValueChange = { color ->
-                onChange(BorderModifierData(widthValue, color, shapeValue, cornerValue))
-            })
-            Spacer(Modifier.width(16.dp))
-            ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
-                onChange(BorderModifierData(widthValue, colorValue, shape, corner))
-            })
-        }
-    }
-}
-
-@Composable
-fun PaddingModifier(allValue: Int, onChange: (PaddingModifierData) -> Unit) {
-    Column {
-        Text("Padding", style = MaterialTheme.typography.overline)
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            DpInput(allValue, onValueChange = {
-                onChange(PaddingModifierData(it))
-            })
-        }
-    }
-}
-
-@Composable
-fun OffsetDesignModifier(xValue: Int, yValue: Int, onChange: (OffsetDesignModifierData) -> Unit) {
-    Column {
-        Text("Offset", style = MaterialTheme.typography.overline)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            DpInput(xValue, onValueChange = {
-                onChange(OffsetDesignModifierData(it, yValue))
-            })
-            DpInput(yValue, onValueChange = {
-                onChange(OffsetDesignModifierData(xValue, it))
-            })
-        }
-    }
 }
 
 fun buildModifiers(modifiersList: SnapshotStateList<Triple<Modifier, Any, Boolean>>): Modifier {
