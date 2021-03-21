@@ -42,14 +42,7 @@ fun ColorInput(colorValue: Color, onValueChange: (Color) -> Unit) {
     val horizontalPadding = 6
 
     Box() {
-        Box(
-            Modifier
-                .size(swatchSize.dp)
-                .clip(CircleShape)
-                .background(colorValue)
-                .border(width = 1.dp, color = Color.Black.copy(alpha = 0.25f), shape = CircleShape)
-                .clickable { expanded = true }
-        )
+        ColorSwatch(swatchSize, colorValue, onClick = { expanded = true })
         DropdownMenu(
             modifier = Modifier.padding(horizontal = horizontalPadding.dp),
             expanded = expanded,
@@ -69,38 +62,52 @@ fun ColorInput(colorValue: Color, onValueChange: (Color) -> Unit) {
                         horizontalArrangement = Arrangement.spacedBy(spacerSize.dp)
                     ) {
                         colors.forEach {
-                            Box(Modifier
-                                    .size(swatchSize.dp)
-                                    .clip(CircleShape)
-                                    .background(it)
-                                    .border(width = 1.dp, color = Color.Black.copy(alpha = 0.25f), shape = CircleShape)
-                                    .clickable {
-                                        onValueChange(it)
-                                        expanded = false
-                                    }
-                            ) {
-                                if (it == Color.Transparent) {
-                                    Canvas(modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(Color.White)
-                                    ) {
-                                        val canvasWidth = size.width
-                                        val canvasHeight = size.height
-
-                                        drawLine(
-                                            start = Offset(x = canvasWidth, y = 0f),
-                                            end = Offset(x = 0f, y = canvasHeight),
-                                            color = Color.Red.copy(alpha = 0.7f),
-                                            strokeWidth = 3f
-                                        )
-                                    }
-                                }
-                            }
+                            ColorSwatch(swatchSize, it, onClick = {
+                                onValueChange(it)
+                                expanded = false
+                            })
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ColorSwatch(
+    swatchSize: Int,
+    colorValue: Color,
+    onClick: () -> Unit
+) {
+    Box(Modifier
+        .size(swatchSize.dp)
+        .clip(CircleShape)
+        .background(colorValue)
+        .border(width = 1.dp, color = Color.Black.copy(alpha = 0.25f), shape = CircleShape)
+        .clickable { onClick() }
+    ) {
+        if (colorValue == Color.Transparent) {
+            TransparentBackground()
+        }
+    }
+}
+
+@Composable
+private fun TransparentBackground() {
+    Canvas(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)
+    ) {
+        val canvasWidth = size.width
+        val canvasHeight = size.height
+
+        drawLine(
+            start = Offset(x = canvasWidth, y = 0f),
+            end = Offset(x = 0f, y = canvasHeight),
+            color = Color.Red.copy(alpha = 0.7f),
+            strokeWidth = 3f
+        )
     }
 }
 
