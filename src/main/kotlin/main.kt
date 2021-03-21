@@ -37,7 +37,7 @@ fun main() = Window(
         Triple(Modifier.padding(20.dp), PaddingModifierData(20), true),
         Triple(Modifier.background(Color.Gray), BackgroundModifierData(color = Color.Gray), true),
         Triple(Modifier, ShadowModifierData(), true),
-        Triple(Modifier, BorderModifierData(color = Color.Blue), true),
+        Triple(Modifier.border(width = 2.dp, color = Color.Blue), BorderModifierData(), true),
     )
 
     var baseElement by remember {
@@ -176,7 +176,7 @@ private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
             newModifier = Pair(Modifier.background(Color.Yellow), BackgroundModifierData())
         }
         ModifierEntry.Border -> {
-            newModifier = Pair(Modifier.border(width = 10.dp, color = Color.Cyan), BorderModifierData(width = 10))
+            newModifier = Pair(Modifier.border(width = 2.dp, color = Color.Blue), BorderModifierData())
         }
         ModifierEntry.Shadow -> {
             newModifier = Pair(Modifier, ShadowModifierData())

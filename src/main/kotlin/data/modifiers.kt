@@ -20,8 +20,8 @@ data class BackgroundModifierData(
 )
 
 data class BorderModifierData(
-    val width: Int = 0,
-    val color: Color = Color.Cyan,
+    val width: Int = 2,
+    val color: Color = Color.Blue,
     val shape: AvailableShapes = AvailableShapes.Rectangle,
     val corner: Int = 0
 )

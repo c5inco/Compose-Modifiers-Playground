@@ -4,10 +4,7 @@ import BaseElementData
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.runtime.*
@@ -21,7 +18,7 @@ import androidx.compose.ui.unit.dp
 fun ElementRow(elementValue: AvailableElements, widthValue: Int, heightValue: Int, onValueChange: (BaseElementData) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-    Row {
+    Row(Modifier.fillMaxWidth()) {
         Box {
             var hovered by remember { mutableStateOf(false) }
 
@@ -45,7 +42,7 @@ fun ElementRow(elementValue: AvailableElements, widthValue: Int, heightValue: In
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = if (hovered) Arrangement.SpaceBetween else Arrangement.Start
             ) {
-                Text("$elementValue")
+                Text("$elementValue", style = MaterialTheme.typography.body2)
                 Icon(
                     imageVector = Icons.Outlined.KeyboardArrowDown,
                     contentDescription = "Dropdown icon",
@@ -62,18 +59,14 @@ fun ElementRow(elementValue: AvailableElements, widthValue: Int, heightValue: In
                 expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                DropdownMenuItem(onClick = { select(AvailableElements.Box) }) {
-                    Text("Box")
-                }
-                DropdownMenuItem(onClick = { select(AvailableElements.Column) }) {
-                    Text("Column")
-                }
-                DropdownMenuItem(onClick = { select(AvailableElements.Row) }) {
-                    Text("Row")
+                AvailableElements.values().forEach {
+                    DropdownMenuItem(onClick = { select(it) }) {
+                        Text("$it")
+                    }
                 }
             }
         }
-        Spacer(Modifier.width(16.dp))
+        Spacer(Modifier.weight(1f))
         DpInput(widthValue, onValueChange = {
             onValueChange(BaseElementData(elementValue, it, heightValue))
         })
