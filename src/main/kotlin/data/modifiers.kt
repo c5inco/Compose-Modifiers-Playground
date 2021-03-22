@@ -1,5 +1,7 @@
 package data
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 
 data class SizeModifierData(
@@ -12,6 +14,42 @@ enum class AvailableShapes {
     CutCorner,
     Rectangle
 }
+
+val AvailableHorizontalArrangements: Map<Arrangement.Horizontal, String> = mapOf(
+    Arrangement.Start to "Top",
+    Arrangement.End to "Bottom",
+    Arrangement.Center to "Center",
+)
+
+val AvailableVerticalArrangements: Map<Arrangement.Vertical, String> = mapOf(
+    Arrangement.Top to "Top",
+    Arrangement.Bottom to "Bottom",
+    Arrangement.Center to "Center",
+)
+
+val AvailableHorizontalAlignments: Map<Alignment.Horizontal, String> = mapOf(
+    Alignment.Start to "Start",
+    Alignment.End to "End",
+    Alignment.CenterHorizontally to "CenterHorizontally",
+)
+
+val AvailableVerticalAlignments: Map<Alignment.Vertical, String> = mapOf(
+    Alignment.Top to "Top",
+    Alignment.Bottom to "Bottom",
+    Alignment.CenterVertically to "CenterVertically",
+)
+
+val AvailableContentAlignments: Map<Alignment, String> = mapOf(
+    Alignment.TopStart to "TopStart",
+    Alignment.TopEnd to "TopEnd",
+    Alignment.TopCenter to "TopCenter",
+    Alignment.CenterStart to "CenterStart",
+    Alignment.CenterEnd to "CenterEnd",
+    Alignment.Center to "Center",
+    Alignment.BottomStart to "BottomStart",
+    Alignment.BottomEnd to "BottomEnd",
+    Alignment.BottomCenter to "BottomCenter"
+)
 
 data class BackgroundModifierData(
     val color: Color = Color.Yellow,

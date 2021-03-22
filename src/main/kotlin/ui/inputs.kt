@@ -9,6 +9,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +21,7 @@ import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import data.AvailableShapes
+import data.*
 import utils.chunk
 
 @Composable
@@ -163,6 +165,86 @@ fun ShapeInput(
 }
 
 @Composable
+fun HorizontalArrangementInput(
+    arrangementValue: Arrangement.Horizontal = Arrangement.Start,
+    spacingValue: Int = 0,
+    onValueChange: (arrangement: Arrangement.Horizontal, spacing: Int) -> Unit,
+) {
+    DropdownInput(
+        items = AvailableHorizontalArrangements,
+        activeItem = AvailableHorizontalArrangements[arrangementValue]!!,
+        onSelect = {
+            onValueChange(it, spacingValue)
+        }
+    )
+    Spacer(Modifier.width(8.dp))
+    DpInput(spacingValue, onValueChange = {
+        onValueChange(arrangementValue, it)
+    })
+}
+
+@Composable
+fun VerticalArrangementInput(
+    arrangementValue: Arrangement.Vertical = Arrangement.Top,
+    spacingValue: Int = 0,
+    onValueChange: (arrangement: Arrangement.Vertical, spacing: Int) -> Unit,
+) {
+    DropdownInput(
+        items = AvailableVerticalArrangements,
+        activeItem = AvailableVerticalArrangements[arrangementValue]!!,
+        onSelect = {
+            onValueChange(it, spacingValue)
+        }
+    )
+    Spacer(Modifier.width(8.dp))
+    DpInput(spacingValue, onValueChange = {
+        onValueChange(arrangementValue, it)
+    })
+}
+
+@Composable
+fun HorizontalAlignmentInput(
+    alignmentValue: Alignment.Horizontal = Alignment.Start,
+    onValueChange: (alignment: Alignment.Horizontal) -> Unit,
+) {
+    DropdownInput(
+        items = AvailableHorizontalAlignments,
+        activeItem = AvailableHorizontalAlignments[alignmentValue]!!,
+        onSelect = {
+            onValueChange(it)
+        }
+    )
+}
+
+@Composable
+fun VerticalAlignmentInput(
+    alignmentValue: Alignment.Vertical = Alignment.Top,
+    onValueChange: (alignment: Alignment.Vertical) -> Unit,
+) {
+    DropdownInput(
+        items = AvailableVerticalAlignments,
+        activeItem = AvailableVerticalAlignments[alignmentValue]!!,
+        onSelect = {
+            onValueChange(it)
+        }
+    )
+}
+
+@Composable
+fun ContentAlignmentInput(
+    alignmentValue: Alignment = Alignment.TopStart,
+    onValueChange: (alignment: Alignment) -> Unit,
+) {
+    DropdownInput(
+        items = AvailableContentAlignments,
+        activeItem = AvailableContentAlignments[alignmentValue]!!,
+        onSelect = {
+            onValueChange(it)
+        }
+    )
+}
+
+@Composable
 fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
     var hasError by remember { mutableStateOf(false) }
 
@@ -201,4 +283,54 @@ fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
         modifier = Modifier.width(40.dp),
         textStyle = MaterialTheme.typography.body2
     )
+}
+
+@Composable
+fun <T> DropdownInput(items: Map<T, String>, activeItem: String, onSelect: (T) -> Unit) {
+    Box {
+        var hovered by remember { mutableStateOf(false) }
+        var expanded by remember { mutableStateOf(false) }
+
+        Row(
+            Modifier
+                .clickable { expanded = true }
+                .pointerMoveFilter(
+                    onEnter = {
+                        hovered = true
+                        false
+                    },
+                    onExit = {
+                        hovered = false
+                        false
+                    }
+                )
+                .height(24.dp)
+                .width(120.dp)
+                .border(width = 1.dp, color = if (hovered) Color.LightGray else Color.Transparent)
+                .padding(vertical = 4.dp, horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = if (hovered) Arrangement.SpaceBetween else Arrangement.Start
+        ) {
+            Text(activeItem, style = MaterialTheme.typography.body2)
+            Icon(
+                imageVector = Icons.Outlined.KeyboardArrowDown,
+                contentDescription = "Dropdown icon",
+                modifier = Modifier.size(18.dp)
+            )
+        }
+
+        DropdownMenu(
+            expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            items.forEach { (key, it) ->
+                DropdownMenuItem(onClick = {
+                    onSelect(key)
+                    expanded = false
+                }) {
+                    Text(it)
+                }
+            }
+        }
+    }
 }

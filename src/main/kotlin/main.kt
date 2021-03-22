@@ -23,9 +23,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.*
-import ui.AvailableElements
-import ui.ElementRow
-import ui.ModifierEntry
+import ui.*
 
 fun main() = Window(
     title = "Modifiers Playground",
@@ -41,7 +39,12 @@ fun main() = Window(
     )
 
     var baseElement by remember {
-        mutableStateOf(BaseElementData(element = AvailableElements.Box, width = 400, height = 400))
+        mutableStateOf<Pair<BaseElementData, Any>>(
+            Pair(
+                BaseElementData(element = AvailableElements.Box, width = 400, height = 400),
+                BoxElementData()
+            )
+        )
     }
 
     var modifiersList = remember {
@@ -58,35 +61,42 @@ fun main() = Window(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
+                    val (element, width, height) = baseElement.first
+
                     val content: @Composable () -> Unit = {
                         Text("🥑", fontSize = 48.sp)
                     }
                     val modifiersChain = Modifier
                         .size(
-                            width = (baseElement.width).dp,
-                            height = (baseElement.height).dp
+                            width = (width).dp,
+                            height = (height).dp
                         )
                         .then(buildModifiers(modifiersList))
 
-                    when (baseElement.element) {
+                    when (element) {
                         AvailableElements.Box -> {
+                            val data = baseElement.second as BoxElementData
                             Box(
                                 modifier = modifiersChain,
-                                contentAlignment = Alignment.Center
+                                contentAlignment = data.contentAlignment
                             ) {
                                 content()
                             }
                         }
                         AvailableElements.Column -> {
+                            val data = baseElement.second as ColumnElementData
                             Column(
                                 modifier = modifiersChain,
+                                horizontalAlignment = data.horizontalAlignment
                             ) {
                                 content()
                             }
                         }
                         AvailableElements.Row -> {
+                            val data = baseElement.second as RowElementData
                             Row(
                                 modifier = modifiersChain,
+                                verticalAlignment = data.verticalAlignment
                             ) {
                                 content()
                             }
@@ -103,10 +113,11 @@ fun main() = Window(
                         name = "Base element"
                     ) {
                         ElementRow(
-                            elementValue = baseElement.element,
-                            widthValue = baseElement.width,
-                            heightValue = baseElement.height,
-                            onValueChange = { baseElement = it })
+                            elementValue = baseElement,
+                            onValueChange = {
+                                baseElement = it
+                            }
+                        )
                     }
                     Divider(Modifier.height(8.dp))
                     PropertiesSection(
