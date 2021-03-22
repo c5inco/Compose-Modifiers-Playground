@@ -91,16 +91,14 @@ fun ElementRow(
         when (element) {
             AvailableElements.Box -> {
                 val data = elementData as BoxElementData
-                Row(
-                    Modifier.padding(horizontal = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+                Column(Modifier.padding(vertical = 8.dp)) {
                     Text(
                         "contentAlignment",
+                        modifier = Modifier.padding(start = 8.dp),
                         fontSize = 12.sp,
                         color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                     )
-                    Spacer(Modifier.weight(1f))
+                    Spacer(Modifier.height(4.dp))
                     ContentAlignmentInput(data.contentAlignment, onValueChange = { it ->
                         onValueChange(Pair(elementValue.first, BoxElementData(it)))
                     })
@@ -108,27 +106,31 @@ fun ElementRow(
             }
             AvailableElements.Column -> {
                 val data = elementData as ColumnElementData
-                Column {
-                    Row(
-                        Modifier.padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                Row(Modifier.padding(vertical = 8.dp)) {
+                    Column(
+                        Modifier.weight(1f)
                     ) {
                         Text(
                             "verticalArrangement",
+                            modifier = Modifier.padding(start = 8.dp),
                             fontSize = 12.sp,
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         )
-                        Spacer(Modifier.weight(1f))
+                        Spacer(Modifier.height(4.dp))
                         VerticalArrangementInput(onValueChange = { arrangement, spacing ->
                             onValueChange(Pair(elementValue.first, ColumnElementData(arrangement, spacing, data.horizontalAlignment)))
                         })
                     }
-                    Row(
-                        Modifier.padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    Column(
+                        Modifier.weight(1f)
                     ) {
-                        Text("horizontalAlignment", fontSize = 12.sp, color = LocalContentColor.current.copy(alpha = ContentAlpha.medium))
-                        Spacer(Modifier.weight(1f))
+                        Text(
+                            "horizontalAlignment",
+                            modifier = Modifier.padding(start = 8.dp),
+                            fontSize = 12.sp,
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                        )
+                        Spacer(Modifier.height(4.dp))
                         HorizontalAlignmentInput(onValueChange = {
                             onValueChange(Pair(elementValue.first, ColumnElementData(elementData.verticalArrangement, elementData.verticalSpacing, it)))
                         })
@@ -137,27 +139,29 @@ fun ElementRow(
             }
             AvailableElements.Row -> {
                 val data = elementData as RowElementData
-                Column {
-                    Row(
-                        Modifier.padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                Row(Modifier.padding(vertical = 8.dp)) {
+                    Column(
+                        Modifier.weight(1f)
                     ) {
                         Text(
                             "horizontalArrangement",
                             fontSize = 12.sp,
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         )
-                        Spacer(Modifier.weight(1f))
+                        Spacer(Modifier.height(4.dp))
                         HorizontalArrangementInput(onValueChange = { arrangement, spacing ->
                             onValueChange(Pair(elementValue.first, RowElementData(arrangement, spacing, data.verticalAlignment)))
                         })
                     }
-                    Row(
-                        Modifier.padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    Column(
+                        Modifier.weight(1f)
                     ) {
-                        Text("verticalAlignment", fontSize = 12.sp, color = LocalContentColor.current.copy(alpha = ContentAlpha.medium))
-                        Spacer(Modifier.weight(1f))
+                        Text(
+                            "verticalAlignment",
+                            fontSize = 12.sp,
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                        )
+                        Spacer(Modifier.height(4.dp))
                         VerticalAlignmentInput(onValueChange = {
                             onValueChange(Pair(elementValue.first, RowElementData(elementData.horizontalArrangement, elementData.horizontalSpacing, it)))
                         })

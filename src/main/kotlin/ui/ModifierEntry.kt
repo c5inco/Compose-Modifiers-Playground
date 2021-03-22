@@ -48,8 +48,8 @@ fun ModifierEntry(
                     false
                 }
             )
-            .height(48.dp)
-            .padding(horizontal = 16.dp),
+            //.height(48.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         if (rowHovered) {
