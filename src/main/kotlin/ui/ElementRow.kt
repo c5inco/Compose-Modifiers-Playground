@@ -14,6 +14,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import data.AvailableElements
+import data.BoxElementData
+import data.ColumnElementData
+import data.RowElementData
 
 @Composable
 fun ElementRow(
@@ -178,25 +182,3 @@ fun ElementRow(
         }
     }
 }
-
-enum class AvailableElements {
-    Box,
-    Column,
-    Row,
-}
-
-data class BoxElementData(
-    val contentAlignment: Alignment = Alignment.TopStart,
-)
-
-data class ColumnElementData(
-    val verticalArrangement: Arrangement.Vertical = Arrangement.Top,
-    val verticalSpacing: Int = 0,
-    val horizontalAlignment: Alignment.Horizontal = Alignment.Start
-)
-
-data class RowElementData(
-    val horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-    val horizontalSpacing: Int = 0,
-    val verticalAlignment: Alignment.Vertical = Alignment.Top
-)
