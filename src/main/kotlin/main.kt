@@ -4,9 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -16,8 +13,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -190,19 +185,6 @@ private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
     return newModifier
 }
 
-enum class ModifierEntry {
-    Size,
-    FillMaxWidth,
-    FillMaxHeight,
-    FillMaxSize,
-    Padding,
-    Border,
-    Background,
-    Shadow,
-    Offset,
-    Clip,
-}
-
 @Composable
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
     Icon(
@@ -289,18 +271,6 @@ fun PropertiesSection(
             content()
         }
     }
-}
-
-fun getShape(shape: AvailableShapes, corner: Int): Shape {
-    var realShape: Shape = RectangleShape
-
-    when (shape) {
-        AvailableShapes.Circle -> realShape = CircleShape
-        AvailableShapes.RoundedCorner -> realShape = RoundedCornerShape(size = corner.dp)
-        AvailableShapes.CutCorner -> realShape = CutCornerShape(size = corner.dp)
-    }
-
-    return realShape
 }
 
 fun buildModifiers(modifiersList: SnapshotStateList<Triple<Modifier, Any, Boolean>>): Modifier {

@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -19,10 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import data.*
-import getShape
 
 @Composable
 fun ModifierEntry(
@@ -231,4 +235,29 @@ fun ModifierEntry(
         }
     }
     Divider()
+}
+
+enum class ModifierEntry {
+    Size,
+    FillMaxWidth,
+    FillMaxHeight,
+    FillMaxSize,
+    Padding,
+    Border,
+    Background,
+    Shadow,
+    Offset,
+    Clip,
+}
+
+fun getShape(shape: AvailableShapes, corner: Int): Shape {
+    var realShape: Shape = RectangleShape
+
+    when (shape) {
+        AvailableShapes.Circle -> realShape = CircleShape
+        AvailableShapes.RoundedCorner -> realShape = RoundedCornerShape(size = corner.dp)
+        AvailableShapes.CutCorner -> realShape = CutCornerShape(size = corner.dp)
+    }
+
+    return realShape
 }
