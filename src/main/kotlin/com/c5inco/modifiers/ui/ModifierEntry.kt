@@ -1,4 +1,4 @@
-package ui
+package com.c5inco.modifiers.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
-import data.*
+import com.c5inco.modifiers.data.*
 
 @Composable
 fun ModifierEntry(

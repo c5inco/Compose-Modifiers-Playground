@@ -1,8 +1,8 @@
+package com.c5inco.modifiers
 
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,10 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.*
-import ui.ElementRow
-import ui.ModifierEntry
-import ui.SmallIconButton
+import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.ui.*
 
 fun main() = Window(
     title = "Modifiers Playground",

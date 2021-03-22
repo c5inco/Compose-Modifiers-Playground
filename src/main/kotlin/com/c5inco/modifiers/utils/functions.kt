@@ -1,4 +1,4 @@
-package utils
+package com.c5inco.modifiers.utils
 
 fun <T> chunk(list: List<T>, size: Int): List<List<T>> {
     val chunkedList = mutableListOf<List<T>>()

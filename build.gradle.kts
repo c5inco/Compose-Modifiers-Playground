@@ -28,7 +28,7 @@ tasks.withType<KotlinCompile>() {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "com.c5inco.modifiers.MainKt"
     }
 }
 

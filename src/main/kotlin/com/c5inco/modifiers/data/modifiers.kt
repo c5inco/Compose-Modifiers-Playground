@@ -1,4 +1,4 @@
-package data
+package com.c5inco.modifiers.data
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment

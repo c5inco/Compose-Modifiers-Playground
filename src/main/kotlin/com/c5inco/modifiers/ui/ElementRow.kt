@@ -1,4 +1,4 @@
-package ui
+package com.c5inco.modifiers.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.*
+import com.c5inco.modifiers.data.*
 
 @Composable
 fun ElementRow(

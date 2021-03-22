@@ -1,4 +1,4 @@
-package ui
+package com.c5inco.modifiers.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -21,8 +21,8 @@ import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import data.*
-import utils.chunk
+import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.utils.chunk
 
 @Composable
 fun ColorInput(colorValue: Color, onValueChange: (Color) -> Unit) {
