@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Divider
+import androidx.compose.material.*
 import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -214,23 +212,25 @@ fun ModifierEntry(
 
             Spacer(androidx.compose.ui.Modifier.width(16.dp))
             Row {
-                Icon(
-                    imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
-                    contentDescription = "Toggle visibility",
-                    modifier = Modifier
-                        .size(18.dp)
-                        .clickable {
-                            onModifierChange(order, Triple(modifierData.first, modifierData.second, !visible))
-                        }
-                )
+                SmallIconButton(onClick = {
+                    onModifierChange(order, Triple(modifierData.first, modifierData.second, !visible))
+                }) {
+                    Icon(
+                        imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                        contentDescription = "Toggle visibility",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
                 Spacer(androidx.compose.ui.Modifier.width(8.dp))
-                Icon(
-                    imageVector = Icons.Outlined.Remove,
-                    contentDescription = "Remove modifier",
-                    modifier = Modifier
-                        .size(18.dp)
-                        .clickable { onRemove(order) }
-                )
+                SmallIconButton(onClick = {
+                    onRemove(order)
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Remove,
+                        contentDescription = "Remove modifier",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
         }
     }

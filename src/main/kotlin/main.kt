@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import data.*
 import ui.ElementRow
 import ui.ModifierEntry
+import ui.SmallIconButton
 
 fun main() = Window(
     title = "Modifiers Playground",
@@ -110,7 +111,7 @@ fun main() = Window(
                             }
                         )
                     }
-                    Divider(Modifier.height(8.dp))
+                    Divider(Modifier.height(1.dp))
                     PropertiesSection(
                         modifier = Modifier
                             .padding(bottom = 16.dp)
@@ -187,28 +188,26 @@ private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
 
 @Composable
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
-    Icon(
-        imageVector = Icons.Outlined.RestartAlt,
-        contentDescription = "Reset default modifiers",
-        modifier = Modifier
-            .size(18.dp)
-            .clickable { onClick() }
-    )
+    SmallIconButton(onClick = { onClick() }) {
+        Icon(
+            imageVector = Icons.Outlined.RestartAlt,
+            contentDescription = "Reset default modifiers",
+            modifier = Modifier.size(18.dp)
+        )
+    }
 }
 
 @Composable
 private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     Box {
-        Icon(
-            imageVector = Icons.Outlined.Add,
-            contentDescription = "Add modifier",
-            modifier = Modifier
-                .size(18.dp)
-                .clickable {
-                    expanded = true
-                }
-        )
+        SmallIconButton(onClick = { expanded = true }) {
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = "Add modifier",
+                modifier = Modifier.size(18.dp)
+            )
+        }
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
