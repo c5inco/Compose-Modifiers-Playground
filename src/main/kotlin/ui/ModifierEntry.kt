@@ -89,9 +89,18 @@ fun ModifierEntry(
                     is SizeModifierData -> {
                         val data = modifierData.second as SizeModifierData
                         SizeModifier(
-                            sizeValue = data.size,
-                            onChange = { size ->
-                                onModifierChange(order, Triple(Modifier.size(size.dp), SizeModifierData(size), visible))
+                            widthValue = data.width,
+                            heightValue = data.height,
+                            onChange = {
+                                val (width, height) = it
+                                onModifierChange(
+                                    order,
+                                    Triple(
+                                        Modifier.size(width = width.dp, height = height.dp),
+                                        it,
+                                        visible
+                                    )
+                                )
                             }
                         )
                     }

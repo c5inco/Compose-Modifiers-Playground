@@ -5,7 +5,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 
 data class SizeModifierData(
-    val size: Int = 0
+    val width: Int = 0,
+    val height: Int = 0
 )
 
 enum class AvailableShapes {

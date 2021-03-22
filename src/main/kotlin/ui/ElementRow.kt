@@ -1,6 +1,5 @@
 package ui
 
-import BaseElementData
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,11 +20,11 @@ import data.RowElementData
 
 @Composable
 fun ElementRow(
-    elementValue: Pair<BaseElementData, Any>,
-    onValueChange: (Pair<BaseElementData, Any>) -> Unit
+    elementValue: Pair<AvailableElements, Any>,
+    onValueChange: (Pair<AvailableElements, Any>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val (element, width, height) = elementValue.first
+    val element = elementValue.first
     val elementData: Any = elementValue.second
 
     Column(Modifier.fillMaxWidth()) {
@@ -71,7 +70,7 @@ fun ElementRow(
                     }
 
                     onValueChange(Pair(
-                        BaseElementData(it, width, height),
+                        it,
                         newElementData
                     ))
                 }
@@ -87,20 +86,6 @@ fun ElementRow(
                     }
                 }
             }
-            Spacer(Modifier.weight(1f))
-            DpInput(width, onValueChange = {
-                onValueChange(Pair(
-                    BaseElementData(element, it, height),
-                    elementData
-                ))
-            })
-            Spacer(Modifier.width(8.dp))
-            DpInput(height, onValueChange = {
-                onValueChange(Pair(
-                    BaseElementData(element, width, it),
-                    elementData
-                ))
-            })
         }
 
         when (element) {

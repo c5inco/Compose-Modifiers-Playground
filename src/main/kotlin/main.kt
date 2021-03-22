@@ -23,14 +23,15 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.*
-import ui.*
+import ui.ElementRow
+import ui.ModifierEntry
 
 fun main() = Window(
     title = "Modifiers Playground",
     size = IntSize(width = 900, height = 750)
 ) {
     val defaultModifiers = listOf(
-        //Triple(Modifier.size(400.dp), SizeModifierData(400), true),
+        Triple(Modifier.size(400.dp), SizeModifierData(width = 400, height = 400), true),
         Triple(Modifier.background(Color.Magenta), BackgroundModifierData(color = Color.Magenta), true),
         Triple(Modifier.padding(20.dp), PaddingModifierData(20), true),
         Triple(Modifier.background(Color.Gray), BackgroundModifierData(color = Color.Gray), true),
@@ -39,9 +40,9 @@ fun main() = Window(
     )
 
     var baseElement by remember {
-        mutableStateOf<Pair<BaseElementData, Any>>(
+        mutableStateOf<Pair<AvailableElements, Any>>(
             Pair(
-                BaseElementData(element = AvailableElements.Box, width = 400, height = 400),
+                AvailableElements.Box,
                 BoxElementData()
             )
         )
@@ -61,17 +62,12 @@ fun main() = Window(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    val (element, width, height) = baseElement.first
+                    val element = baseElement.first
 
                     val content: @Composable () -> Unit = {
                         Text("🥑", fontSize = 48.sp)
                     }
-                    val modifiersChain = Modifier
-                        .size(
-                            width = (width).dp,
-                            height = (height).dp
-                        )
-                        .then(buildModifiers(modifiersList))
+                    val modifiersChain = buildModifiers(modifiersList)
 
                     when (element) {
                         AvailableElements.Box -> {
@@ -169,12 +165,6 @@ fun main() = Window(
         }
     }
 }
-
-data class BaseElementData(
-    val element: AvailableElements = AvailableElements.Box,
-    val width: Int,
-    val height: Int
-)
 
 private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
     var newModifier: Pair<Modifier, Any> = Pair(Modifier.size(0.dp), SizeModifierData())

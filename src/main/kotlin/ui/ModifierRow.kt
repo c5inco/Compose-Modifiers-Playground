@@ -26,12 +26,15 @@ fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue
 }
 
 @Composable
-fun SizeModifier(sizeValue: Int, onChange: (Int) -> Unit) {
+fun SizeModifier(widthValue: Int, heightValue: Int, onChange: (SizeModifierData) -> Unit) {
     Column {
         Text("Size", style = MaterialTheme.typography.overline)
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            DpInput(sizeValue, onValueChange = {
-                onChange(it)
+            DpInput(widthValue, onValueChange = {
+                onChange(SizeModifierData(it, heightValue))
+            })
+            DpInput(heightValue, onValueChange = {
+                onChange(SizeModifierData(widthValue, it))
             })
         }
     }
