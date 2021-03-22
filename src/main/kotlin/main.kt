@@ -62,6 +62,8 @@ fun main() = Window(
 
                     val content: @Composable () -> Unit = {
                         Text("🥑", fontSize = 48.sp)
+                        Text("🥑", fontSize = 48.sp)
+                        Text("🥑", fontSize = 48.sp)
                     }
                     val modifiersChain = buildModifiers(modifiersList)
 
@@ -79,6 +81,7 @@ fun main() = Window(
                             val data = baseElement.second as ColumnElementData
                             Column(
                                 modifier = modifiersChain,
+                                verticalArrangement = getVerticalArrangementObject(data.verticalArrangement, data.verticalSpacing),
                                 horizontalAlignment = data.horizontalAlignment
                             ) {
                                 content()
@@ -88,6 +91,7 @@ fun main() = Window(
                             val data = baseElement.second as RowElementData
                             Row(
                                 modifier = modifiersChain,
+                                horizontalArrangement = getHorizontalArrangementObject(data.horizontalArrangement, data.horizontalSpacing),
                                 verticalAlignment = data.verticalAlignment
                             ) {
                                 content()

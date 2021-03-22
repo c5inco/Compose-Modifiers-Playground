@@ -14,13 +14,13 @@ data class BoxElementData(
 )
 
 data class ColumnElementData(
-    val verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    val verticalArrangement: AvailableVerticalArrangements = AvailableVerticalArrangements.Top,
     val verticalSpacing: Int = 0,
     val horizontalAlignment: Alignment.Horizontal = Alignment.Start
 )
 
 data class RowElementData(
-    val horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    val horizontalArrangement: AvailableHorizontalArrangements = AvailableHorizontalArrangements.Start,
     val horizontalSpacing: Int = 0,
     val verticalAlignment: Alignment.Vertical = Alignment.Top
 )

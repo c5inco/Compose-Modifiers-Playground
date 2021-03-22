@@ -13,10 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.AvailableElements
-import data.BoxElementData
-import data.ColumnElementData
-import data.RowElementData
+import data.*
 
 @Composable
 fun ElementRow(
@@ -117,9 +114,22 @@ fun ElementRow(
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         )
                         Spacer(Modifier.height(4.dp))
-                        VerticalArrangementInput(onValueChange = { arrangement, spacing ->
-                            onValueChange(Pair(elementValue.first, ColumnElementData(arrangement, spacing, data.horizontalAlignment)))
-                        })
+                        VerticalArrangementInput(
+                            data.verticalArrangement,
+                            data.verticalSpacing,
+                            onValueChange = { arrangement, spacing ->
+                                onValueChange(
+                                    Pair(
+                                        elementValue.first,
+                                        ColumnElementData(
+                                            arrangement,
+                                            spacing,
+                                            data.horizontalAlignment
+                                        )
+                                    )
+                                )
+                            }
+                        )
                     }
                     Column(
                         Modifier.weight(1f)
@@ -131,8 +141,17 @@ fun ElementRow(
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         )
                         Spacer(Modifier.height(4.dp))
-                        HorizontalAlignmentInput(onValueChange = {
-                            onValueChange(Pair(elementValue.first, ColumnElementData(elementData.verticalArrangement, elementData.verticalSpacing, it)))
+                        HorizontalAlignmentInput(data.horizontalAlignment, onValueChange = {
+                            onValueChange(
+                                Pair(
+                                    elementValue.first,
+                                    ColumnElementData(
+                                        data.verticalArrangement,
+                                        data.verticalSpacing,
+                                        it
+                                    )
+                                )
+                            )
                         })
                     }
                 }
@@ -149,9 +168,22 @@ fun ElementRow(
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         )
                         Spacer(Modifier.height(4.dp))
-                        HorizontalArrangementInput(onValueChange = { arrangement, spacing ->
-                            onValueChange(Pair(elementValue.first, RowElementData(arrangement, spacing, data.verticalAlignment)))
-                        })
+                        HorizontalArrangementInput(
+                            data.horizontalArrangement,
+                            data.horizontalSpacing,
+                            onValueChange = { arrangement, spacing ->
+                                onValueChange(
+                                    Pair(
+                                        elementValue.first,
+                                        RowElementData(
+                                            arrangement,
+                                            spacing,
+                                            data.verticalAlignment
+                                        )
+                                    )
+                                )
+                            }
+                        )
                     }
                     Column(
                         Modifier.weight(1f)
@@ -162,8 +194,17 @@ fun ElementRow(
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         )
                         Spacer(Modifier.height(4.dp))
-                        VerticalAlignmentInput(onValueChange = {
-                            onValueChange(Pair(elementValue.first, RowElementData(elementData.horizontalArrangement, elementData.horizontalSpacing, it)))
+                        VerticalAlignmentInput(data.verticalAlignment, onValueChange = {
+                            onValueChange(
+                                Pair(
+                                    elementValue.first,
+                                    RowElementData(
+                                        elementData.horizontalArrangement,
+                                        elementData.horizontalSpacing,
+                                        it
+                                    )
+                                )
+                            )
                         })
                     }
                 }

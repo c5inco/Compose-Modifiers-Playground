@@ -3,6 +3,7 @@ package data
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 enum class AvailableShapes {
     Circle,
@@ -11,17 +12,55 @@ enum class AvailableShapes {
     Rectangle
 }
 
-val AvailableHorizontalArrangements: Map<Arrangement.Horizontal, String> = mapOf(
-    Arrangement.Start to "Top",
-    Arrangement.End to "Bottom",
-    Arrangement.Center to "Center",
-)
+enum class AvailableHorizontalArrangements {
+    Start,
+    End,
+    Center,
+    SpacedEvenly,
+    SpacedAround,
+    SpacedBetween,
+    SpacedBy
+}
 
-val AvailableVerticalArrangements: Map<Arrangement.Vertical, String> = mapOf(
-    Arrangement.Top to "Top",
-    Arrangement.Bottom to "Bottom",
-    Arrangement.Center to "Center",
-)
+fun getHorizontalArrangementObject(arrangement: AvailableHorizontalArrangements, spacing: Int): Arrangement.Horizontal {
+    var ha: Arrangement.Horizontal = Arrangement.Start
+
+    when (arrangement) {
+        AvailableHorizontalArrangements.End -> ha = Arrangement.End
+        AvailableHorizontalArrangements.Center -> ha = Arrangement.Center
+        AvailableHorizontalArrangements.SpacedEvenly -> ha = Arrangement.SpaceEvenly
+        AvailableHorizontalArrangements.SpacedAround -> ha = Arrangement.SpaceAround
+        AvailableHorizontalArrangements.SpacedBetween -> ha = Arrangement.SpaceBetween
+        AvailableHorizontalArrangements.SpacedBy -> ha = Arrangement.spacedBy(spacing.dp)
+    }
+
+    return ha
+}
+
+enum class AvailableVerticalArrangements {
+    Top,
+    Bottom,
+    Center,
+    SpacedEvenly,
+    SpacedAround,
+    SpacedBetween,
+    SpacedBy
+}
+
+fun getVerticalArrangementObject(arrangement: AvailableVerticalArrangements, spacing: Int): Arrangement.Vertical {
+    var va: Arrangement.Vertical = Arrangement.Top
+
+    when (arrangement) {
+        AvailableVerticalArrangements.Bottom -> va = Arrangement.Bottom
+        AvailableVerticalArrangements.Center -> va = Arrangement.Center
+        AvailableVerticalArrangements.SpacedEvenly -> va = Arrangement.SpaceEvenly
+        AvailableVerticalArrangements.SpacedAround -> va = Arrangement.SpaceAround
+        AvailableVerticalArrangements.SpacedBetween -> va = Arrangement.SpaceBetween
+        AvailableVerticalArrangements.SpacedBy -> va = Arrangement.spacedBy(spacing.dp)
+    }
+
+    return va
+}
 
 val AvailableHorizontalAlignments: Map<Alignment.Horizontal, String> = mapOf(
     Alignment.Start to "Start",
@@ -45,6 +84,16 @@ val AvailableContentAlignments: Map<Alignment, String> = mapOf(
     Alignment.BottomStart to "BottomStart",
     Alignment.BottomEnd to "BottomEnd",
     Alignment.BottomCenter to "BottomCenter"
+)
+
+data class HorizontalArrangementData(
+    val arrangement: AvailableHorizontalArrangements = AvailableHorizontalArrangements.Start,
+    val spacing: Int = 0
+)
+
+data class VerticalArrangementData(
+    val arrangement: AvailableVerticalArrangements = AvailableVerticalArrangements.Top,
+    val spacing: Int = 0
 )
 
 data class SizeModifierData(
