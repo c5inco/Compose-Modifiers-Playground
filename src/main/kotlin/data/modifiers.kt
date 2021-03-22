@@ -4,11 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 
-data class SizeModifierData(
-    val width: Int = 0,
-    val height: Int = 0
-)
-
 enum class AvailableShapes {
     Circle,
     RoundedCorner,
@@ -52,6 +47,23 @@ val AvailableContentAlignments: Map<Alignment, String> = mapOf(
     Alignment.BottomCenter to "BottomCenter"
 )
 
+data class SizeModifierData(
+    val width: Int = 0,
+    val height: Int = 0
+)
+
+data class FillMaxWidthModifierData(
+    val fraction: Float = 1f
+)
+
+data class FillMaxHeightModifierData(
+    val fraction: Float = 1f
+)
+
+data class FillMaxSizeModifierData(
+    val fraction: Float = 1f
+)
+
 data class BackgroundModifierData(
     val color: Color = Color.Yellow,
     val shape: AvailableShapes = AvailableShapes.Rectangle,
@@ -78,4 +90,9 @@ data class ShadowModifierData(
 data class OffsetDesignModifierData(
     val x: Int = 0,
     val y: Int = 0
+)
+
+data class ClipModifierData(
+    val shape: AvailableShapes = AvailableShapes.Rectangle,
+    val corner: Int = 0
 )

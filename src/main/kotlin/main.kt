@@ -192,11 +192,15 @@ private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
 
 enum class ModifierEntry {
     Size,
+    FillMaxWidth,
+    FillMaxHeight,
+    FillMaxSize,
     Padding,
     Border,
     Background,
     Shadow,
-    Offset
+    Offset,
+    Clip,
 }
 
 @Composable
