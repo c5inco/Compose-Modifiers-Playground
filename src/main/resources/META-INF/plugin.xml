@@ -1,10 +1,10 @@
 <idea-plugin>
-    <id>com.jetbrains.ComposeDemoPlugin</id>
-    <name>Jetpack Compose for Desktop Demo</name>
-    <vendor email="support@jetbrains.com" url="http://www.jetbrains.com">JetBrains</vendor>
+    <id>com.c5inco.ModifiersPlaygroundPlugin</id>
+    <name>Modifiers Playground</name>
+    <vendor email="csinco@google.com" url="http://www.jetbrains.com">c5inco</vendor>
 
     <description><![CDATA[
-A plugin demonstrates Jetpack compose capabilities on IntelliJ Platform
+A plugin to help learn how to use Jetpack Compose Modifiers
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -17,7 +17,7 @@ A plugin demonstrates Jetpack compose capabilities on IntelliJ Platform
 
     <actions>
         <!-- Add your actions here -->
-        <action id="com.c5inco.modifiers.plugin" class="com.c5inco.modifiers.plugin.PluginAction"
+        <action id="com.c5inco.modifiers" class="com.c5inco.modifiers.plugin.PluginAction"
                 text="Show Compose Demo...">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>

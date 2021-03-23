@@ -24,6 +24,11 @@ fun main() = Window(
     title = "Modifiers Playground",
     size = IntSize(width = 900, height = 750)
 ) {
+    Playground()
+}
+
+@Composable
+fun Playground() {
     val defaultModifiers = listOf(
         Triple(Modifier.size(400.dp), SizeModifierData(width = 400, height = 400), true),
         Triple(Modifier.background(Color.Magenta), BackgroundModifierData(color = Color.Magenta), true),
@@ -79,7 +84,10 @@ fun main() = Window(
                             val data = baseElement.second as ColumnElementData
                             Column(
                                 modifier = modifiersChain,
-                                verticalArrangement = getVerticalArrangementObject(data.verticalArrangement, data.verticalSpacing),
+                                verticalArrangement = getVerticalArrangementObject(
+                                    data.verticalArrangement,
+                                    data.verticalSpacing
+                                ),
                                 horizontalAlignment = data.horizontalAlignment
                             ) {
                                 content()
@@ -89,7 +97,10 @@ fun main() = Window(
                             val data = baseElement.second as RowElementData
                             Row(
                                 modifier = modifiersChain,
-                                horizontalArrangement = getHorizontalArrangementObject(data.horizontalArrangement, data.horizontalSpacing),
+                                horizontalArrangement = getHorizontalArrangementObject(
+                                    data.horizontalArrangement,
+                                    data.horizontalSpacing
+                                ),
                                 verticalAlignment = data.verticalAlignment
                             ) {
                                 content()
