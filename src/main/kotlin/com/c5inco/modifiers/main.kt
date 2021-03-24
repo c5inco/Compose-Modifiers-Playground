@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
-import com.c5inco.modifiers.ui.*
+import com.c5inco.modifiers.ui.ElementRow
+import com.c5inco.modifiers.ui.ModifierEntry
+import com.c5inco.modifiers.ui.SmallIconButton
 
 fun main() = Window(
     title = "Modifiers Playground",
@@ -107,6 +109,24 @@ fun Playground() {
                             }
                         }
                     }
+
+                    // Code preview
+                    /*
+                    Column(Modifier
+                        .align(Alignment.BottomCenter)
+                        .background(EditorTheme.colors.backgroundDark)
+                    ) {
+                        MaterialTheme(
+                            typography = Typography(
+                                body1 = MaterialTheme.typography.body1.copy(fontFamily = Fonts.jetbrainsMono())
+                            )
+                        ) {
+                            Text(codeString("Modifier"))
+                            Text(codeString("   .fillMaxSize()"))
+                            Text(codeString("   .height(4.dp)"))
+                        }
+                    }
+                    */
                 }
             }
             Surface(
