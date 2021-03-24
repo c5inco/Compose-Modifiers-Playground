@@ -119,7 +119,6 @@ fun ShapeInput(
     cornerValue: Int,
     onValueChange: (shape: AvailableShapes, corner: Int) -> Unit,
 ) {
-    /*
     val shapesList = listOf(
         Pair("rectangle", AvailableShapes.Rectangle),
         Pair("circle", AvailableShapes.Circle),
@@ -159,15 +158,7 @@ fun ShapeInput(
             )
         }
     }
-    */
 
-    DropdownInput2(
-        items = AvailableShapes.values().toList(),
-        activeItem = shapeValue,
-        onSelect = {
-            onValueChange(it, cornerValue)
-        }
-    )
     Spacer(Modifier.width(8.dp))
     DpInput(cornerValue, onValueChange = {
         onValueChange(shapeValue, it)

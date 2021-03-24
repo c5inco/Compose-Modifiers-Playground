@@ -40,6 +40,7 @@ class PluginAction : DumbAwareAction() {
                         panel = this,
                         preferredSize = IntSize(900, 750)
                     ) {
+                        Thread.currentThread().contextClassLoader = PluginAction::class.java.classLoader
                         Surface(modifier = Modifier.fillMaxSize()) {
                             Playground()
                         }
