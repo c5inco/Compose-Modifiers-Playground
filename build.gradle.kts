@@ -1,6 +1,6 @@
 import org.jetbrains.compose.compose
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.intellij.tasks.PatchPluginXmlTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.jetbrains.intellij") version "0.6.5"
@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "1.0"
+version = "0.1.0"
 
 repositories {
     jcenter()
@@ -34,11 +34,10 @@ compose.desktop {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2020.3.2"
+    version = "2020.1.4"
 }
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>""")
+      Initial release of the plugin.""")
 }
