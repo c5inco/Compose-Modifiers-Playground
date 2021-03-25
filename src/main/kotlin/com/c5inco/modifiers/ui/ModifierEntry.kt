@@ -68,7 +68,7 @@ fun ModifierEntry(
                         .clickable(enabled = order != 0) {
                             move(order, true)
                         })
-                Spacer(androidx.compose.ui.Modifier.width(4.dp))
+                Spacer(Modifier.width(4.dp))
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = "Move modifier down",
@@ -210,7 +210,7 @@ fun ModifierEntry(
                 }
             }
 
-            Spacer(androidx.compose.ui.Modifier.width(16.dp))
+            Spacer(Modifier.width(16.dp))
             Row {
                 SmallIconButton(onClick = {
                     onModifierChange(order, Triple(modifierData.first, modifierData.second, !visible))
@@ -221,7 +221,7 @@ fun ModifierEntry(
                         modifier = Modifier.size(18.dp)
                     )
                 }
-                Spacer(androidx.compose.ui.Modifier.width(8.dp))
+                Spacer(Modifier.width(8.dp))
                 SmallIconButton(onClick = {
                     onRemove(order)
                 }) {

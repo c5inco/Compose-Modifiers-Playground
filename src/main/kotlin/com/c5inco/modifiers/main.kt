@@ -59,74 +59,69 @@ fun Playground() {
                 modifier = Modifier.weight(1f),
                 color = Color(0xffe5e5e5)
             ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    val element = baseElement.first
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .weight(2f)
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        val element = baseElement.first
 
-                    val content: @Composable () -> Unit = {
-                        Text("🥑", fontSize = 48.sp)
-                        Text("🥑", fontSize = 48.sp)
-                        Text("🥑", fontSize = 48.sp)
-                    }
-                    val modifiersChain = buildModifiers(modifiersList)
+                        val content: @Composable () -> Unit = {
+                            Text("🥑", fontSize = 48.sp)
+                            Text("☕", fontSize = 48.sp)
+                            Text("🤖", fontSize = 48.sp)
+                        }
+                        val modifiersChain = buildModifiers(modifiersList)
 
-                    when (element) {
-                        AvailableElements.Box -> {
-                            val data = baseElement.second as BoxElementData
-                            Box(
-                                modifier = modifiersChain,
-                                contentAlignment = data.contentAlignment
-                            ) {
-                                content()
+                        when (element) {
+                            AvailableElements.Box -> {
+                                val data = baseElement.second as BoxElementData
+                                Box(
+                                    modifier = modifiersChain,
+                                    contentAlignment = data.contentAlignment
+                                ) {
+                                    content()
+                                }
                             }
-                        }
-                        AvailableElements.Column -> {
-                            val data = baseElement.second as ColumnElementData
-                            Column(
-                                modifier = modifiersChain,
-                                verticalArrangement = getVerticalArrangementObject(
-                                    data.verticalArrangement,
-                                    data.verticalSpacing
-                                ),
-                                horizontalAlignment = data.horizontalAlignment
-                            ) {
-                                content()
+                            AvailableElements.Column -> {
+                                val data = baseElement.second as ColumnElementData
+                                Column(
+                                    modifier = modifiersChain,
+                                    verticalArrangement = getVerticalArrangementObject(
+                                        data.verticalArrangement,
+                                        data.verticalSpacing
+                                    ),
+                                    horizontalAlignment = data.horizontalAlignment
+                                ) {
+                                    content()
+                                }
                             }
-                        }
-                        AvailableElements.Row -> {
-                            val data = baseElement.second as RowElementData
-                            Row(
-                                modifier = modifiersChain,
-                                horizontalArrangement = getHorizontalArrangementObject(
-                                    data.horizontalArrangement,
-                                    data.horizontalSpacing
-                                ),
-                                verticalAlignment = data.verticalAlignment
-                            ) {
-                                content()
+                            AvailableElements.Row -> {
+                                val data = baseElement.second as RowElementData
+                                Row(
+                                    modifier = modifiersChain,
+                                    horizontalArrangement = getHorizontalArrangementObject(
+                                        data.horizontalArrangement,
+                                        data.horizontalSpacing
+                                    ),
+                                    verticalAlignment = data.verticalAlignment
+                                ) {
+                                    content()
+                                }
                             }
                         }
                     }
 
                     // Code preview
-                    /*
-                    Column(Modifier
-                        .align(Alignment.BottomCenter)
-                        .background(EditorTheme.colors.backgroundDark)
-                    ) {
-                        MaterialTheme(
-                            typography = Typography(
-                                body1 = MaterialTheme.typography.body1.copy(fontFamily = Fonts.jetbrainsMono())
-                            )
-                        ) {
-                            Text(codeString("Modifier"))
-                            Text(codeString("   .fillMaxSize()"))
-                            Text(codeString("   .height(4.dp)"))
-                        }
-                    }
-                    */
+//                    CodeView(
+//                        Modifier
+//                            .weight(1f)
+//                            .fillMaxSize(),
+//                        baseElement,
+//                        modifiersList
+//                    )
                 }
             }
             Surface(
