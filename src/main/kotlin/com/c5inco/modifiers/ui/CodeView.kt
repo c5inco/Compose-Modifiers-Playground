@@ -1,15 +1,15 @@
 package com.c5inco.modifiers.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -24,49 +24,74 @@ fun CodeView(
     element: Pair<AvailableElements, Any>,
     modifiers: List<Triple<Modifier, Any, Boolean>>
 ) {
-    SelectionContainer(modifier) {
-        Column(
-            Modifier
-                .background(EditorTheme.colors.backgroundDark)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            var code = ""
+    var editorHovered by remember { mutableStateOf( false) }
+    SelectionContainer(modifier
+        .pointerMoveFilter(
+            onEnter = {
+                editorHovered = true
+                false
+            },
+            onExit = {
+                editorHovered = false
+                false
+            }
+        )
+        .width(350.dp)
+        .shadow(4.dp)
+    ) {
+        Box {
+            var verticalScrollState = rememberScrollState(0)
+            Column(
+                Modifier
+                    .background(EditorTheme.colors.backgroundDark)
+                    .padding(16.dp)
+                    .verticalScroll(verticalScrollState)
+            ) {
+                var code = ""
 
-            when (element.first) {
-                AvailableElements.Box -> {
-                    val data = element.second as BoxElementData
-                    code += "Box(\n"
-                    code += "\tcontentAlignment = Alignment.${AvailableContentAlignments[data.contentAlignment]},\n"
-                }
-                AvailableElements.Column -> {
-                    val data = element.second as ColumnElementData
-                    code += "Column(\n"
-                    code += "\tverticalArrangement = Arrangement.${getArrangementString(data.verticalArrangement, data.verticalSpacing)},\n"
-                    code += "\thorizontalAlignment = Alignment.${AvailableHorizontalAlignments[data.horizontalAlignment]},\n"
+                when (element.first) {
+                    AvailableElements.Box -> {
+                        val data = element.second as BoxElementData
+                        code += "Box(\n"
+                        code += "\tcontentAlignment = Alignment.${AvailableContentAlignments[data.contentAlignment]},\n"
+                    }
+                    AvailableElements.Column -> {
+                        val data = element.second as ColumnElementData
+                        code += "Column(\n"
+                        code += "\tverticalArrangement = Arrangement.${getArrangementString(data.verticalArrangement, data.verticalSpacing)},\n"
+                        code += "\thorizontalAlignment = Alignment.${AvailableHorizontalAlignments[data.horizontalAlignment]},\n"
+                    }
+
+                    AvailableElements.Row -> {
+                        val data = element.second as RowElementData
+                        code += "Row(\n"
+                        code += "\thorizontalArrangement = Arrangement.${getArrangementString(data.horizontalArrangement, data.horizontalSpacing)},\n"
+                        code += "\tverticalAlignment = Alignment.${AvailableVerticalAlignments[data.verticalAlignment]},\n"
+                    }
                 }
 
-                AvailableElements.Row -> {
-                    val data = element.second as RowElementData
-                    code += "Row(\n"
-                    code += "\thorizontalArrangement = Arrangement.${getArrangementString(data.horizontalArrangement, data.horizontalSpacing)},\n"
-                    code += "\tverticalAlignment = Alignment.${AvailableVerticalAlignments[data.verticalAlignment]},\n"
-                }
+                code += generateModifiers(modifiers)
+                code += ") {\n"
+
+                code += "\tText(\"🥑\", fontSize = 48.sp)\n"
+                code += "\tText(\"☕️\", fontSize = 48.sp)\n"
+                code += "\tText(\"🤖\", fontSize = 48.sp)\n"
+                code += "}"
+
+                Text(
+                    formatCode(code),
+                    fontSize = 14.sp,
+                    fontFamily = Fonts.jetbrainsMono()
+                )
             }
 
-            code += generateModifiers(modifiers)
-            code += ") {\n"
-
-            code += "\tText(\"🥑\", fontSize = 48.sp)\n"
-            code += "\tText(\"☕️\", fontSize = 48.sp)\n"
-            code += "\tText(\"🤖\", fontSize = 48.sp)\n"
-            code += "}"
-
-            Text(
-                formatCode(code),
-                fontSize = 14.sp,
-                fontFamily = Fonts.jetbrainsMono()
-            )
+            if (editorHovered) {
+                VerticalScrollbar(
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                        .fillMaxHeight(),
+                    adapter = rememberScrollbarAdapter(verticalScrollState),
+                )
+            }
         }
     }
 }

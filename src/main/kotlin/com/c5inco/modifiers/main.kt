@@ -1,8 +1,8 @@
 package com.c5inco.modifiers
 
+import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.desktop.Window
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -63,7 +64,7 @@ fun Playground() {
 
     var showCode by remember { mutableStateOf(false) }
 
-    MaterialTheme {
+    DesktopMaterialTheme {
         Row {
             Surface(
                 modifier = Modifier.weight(1f),
@@ -149,65 +150,90 @@ fun Playground() {
                 }
             }
 
+            var propertiesHovered by remember { mutableStateOf(false) }
             Surface(
-                Modifier.width(350.dp).shadow(4.dp)
+                Modifier
+                    .pointerMoveFilter(
+                        onEnter = {
+                            propertiesHovered = true
+                            false
+                        },
+                        onExit = {
+                            propertiesHovered = false
+                            false
+                        }
+                    )
+                    .width(350.dp)
+                    .shadow(4.dp)
             ) {
-                Column {
-                    PropertiesSection(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
-                        name = "Base element"
-                    ) {
-                        ElementRow(
-                            elementValue = baseElement,
-                            onValueChange = {
-                                baseElement = it
-                            }
-                        )
-                    }
-                    Divider(Modifier.height(1.dp))
-                    PropertiesSection(
-                        modifier = Modifier
-                            .padding(bottom = 16.dp)
-                            .fillMaxHeight(),
-                        name = "Modifiers",
-                        actions = {
-                            AddModifierAction(
-                                onSelect = {
-                                    val newModifier = getModifier(it)
-                                    modifiersList.add(Triple(newModifier.first, newModifier.second, true))
-                                })
-                            ResetDefaultModifiersAction(
-                                onClick = {
-                                    modifiersList.clear()
-                                    modifiersList.addAll(defaultModifiers)
+                Box {
+                    val verticalScrollState = rememberScrollState(0)
+
+                    Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
+                        PropertiesSection(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+                            name = "Base element"
+                        ) {
+                            ElementRow(
+                                elementValue = baseElement,
+                                onValueChange = {
+                                    baseElement = it
                                 }
                             )
                         }
-                    ) {
-                        for (i in 0 until modifiersList.size) {
-                            ModifierEntry(
-                                modifierData = modifiersList[i],
-                                order = i,
-                                size = modifiersList.size,
-                                move = { index, up ->
-                                    val curr = modifiersList[index]
-                                    val targetIndex = if (up) index - 1 else index + 1
-
-                                    val prev = modifiersList.getOrNull(targetIndex)
-
-                                    if (prev != null) {
-                                        modifiersList.set(targetIndex, curr)
-                                        modifiersList.set(index, prev)
+                        Divider(Modifier.height(1.dp))
+                        PropertiesSection(
+                            modifier = Modifier
+                                .padding(bottom = 16.dp)
+                                .fillMaxHeight(),
+                            name = "Modifiers",
+                            actions = {
+                                AddModifierAction(
+                                    onSelect = {
+                                        val newModifier = getModifier(it)
+                                        modifiersList.add(Triple(newModifier.first, newModifier.second, true))
+                                    })
+                                ResetDefaultModifiersAction(
+                                    onClick = {
+                                        modifiersList.clear()
+                                        modifiersList.addAll(defaultModifiers)
                                     }
-                                },
-                                onModifierChange = { order, data ->
-                                    modifiersList.set(order, data)
-                                },
-                                onRemove = { order ->
-                                    modifiersList.removeAt(order)
-                                }
-                            )
+                                )
+                            }
+                        ) {
+                            for (i in 0 until modifiersList.size) {
+                                ModifierEntry(
+                                    modifierData = modifiersList[i],
+                                    order = i,
+                                    size = modifiersList.size,
+                                    move = { index, up ->
+                                        val curr = modifiersList[index]
+                                        val targetIndex = if (up) index - 1 else index + 1
+
+                                        val prev = modifiersList.getOrNull(targetIndex)
+
+                                        if (prev != null) {
+                                            modifiersList.set(targetIndex, curr)
+                                            modifiersList.set(index, prev)
+                                        }
+                                    },
+                                    onModifierChange = { order, data ->
+                                        modifiersList.set(order, data)
+                                    },
+                                    onRemove = { order ->
+                                        modifiersList.removeAt(order)
+                                    }
+                                )
+                            }
                         }
+                    }
+
+                    if (propertiesHovered) {
+                        VerticalScrollbar(
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                                .fillMaxHeight(),
+                            adapter = rememberScrollbarAdapter(verticalScrollState),
+                        )
                     }
                 }
             }
