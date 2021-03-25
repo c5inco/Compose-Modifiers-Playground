@@ -1,5 +1,6 @@
 package com.c5inco.modifiers.ui
 
+import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.utils.chunk
+import java.awt.Cursor
 
 @Composable
 fun ColorInput(colorValue: Color, onValueChange: (Color) -> Unit) {
@@ -384,4 +387,20 @@ fun <T> DropdownInput(items: Map<T, String>, activeItem: String, onSelect: (T) -
             }
         }
     }
+}
+
+private fun Modifier.cursorForHorizontalResize(
+): Modifier = composed {
+    var isHover by remember { mutableStateOf(false) }
+
+    if (isHover) {
+        LocalAppWindow.current.window.cursor = Cursor(Cursor.E_RESIZE_CURSOR)
+    } else {
+        LocalAppWindow.current.window.cursor = Cursor.getDefaultCursor()
+    }
+
+    pointerMoveFilter(
+        onEnter = { isHover = true; true },
+        onExit = { isHover = false; true }
+    )
 }
