@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.CodeOff
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.ui.CodeView
 import com.c5inco.modifiers.ui.ElementRow
 import com.c5inco.modifiers.ui.ModifierEntry
 import com.c5inco.modifiers.ui.SmallIconButton
@@ -52,6 +55,8 @@ fun Playground() {
     var modifiersList = remember {
         defaultModifiers.toMutableStateList()
     }
+
+    var showCode by remember { mutableStateOf(false) }
 
     MaterialTheme {
         Row {
@@ -112,18 +117,33 @@ fun Playground() {
                                 }
                             }
                         }
+
+                        IconButton(
+                            onClick = { showCode = !showCode },
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(end = 8.dp, bottom = 8.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (showCode) Icons.Outlined.CodeOff else Icons.Outlined.Code,
+                                contentDescription = "Toggle code on or off",
+                                tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                            )
+                        }
                     }
 
-                    // Code preview
-//                    CodeView(
-//                        Modifier
-//                            .weight(1f)
-//                            .fillMaxSize(),
-//                        baseElement,
-//                        modifiersList
-//                    )
+                    if (showCode) {
+                        CodeView(
+                            Modifier
+                                .weight(1f)
+                                .fillMaxSize(),
+                            baseElement,
+                            modifiersList
+                        )
+                    }
                 }
             }
+
             Surface(
                 Modifier.width(350.dp)
             ) {
