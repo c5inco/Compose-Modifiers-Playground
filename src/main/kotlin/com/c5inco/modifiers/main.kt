@@ -15,8 +15,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
@@ -260,6 +264,15 @@ private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
         ModifierEntry.Offset -> {
             newModifier = Pair(Modifier.offset(), OffsetDesignModifierData())
         }
+        ModifierEntry.Clip -> {
+            newModifier = Pair(Modifier.clip(RectangleShape), ClipModifierData())
+        }
+        ModifierEntry.Rotate -> {
+            newModifier = Pair(Modifier.rotate(0f), RotateModifierData())
+        }
+        ModifierEntry.Scale -> {
+            newModifier = Pair(Modifier.scale(1f), ScaleModifierData())
+        }
     }
 
     return newModifier
@@ -313,6 +326,15 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
             }
             DropdownMenuItem(onClick = { select(ModifierEntry.Offset) }) {
                 Text("Offset")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.Clip) }) {
+                Text("Clip")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.Rotate) }) {
+                Text("Rotate")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.Scale) }) {
+                Text("Scale")
             }
         }
     }

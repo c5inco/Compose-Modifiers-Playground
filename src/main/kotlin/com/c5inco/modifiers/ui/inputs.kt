@@ -290,6 +290,49 @@ fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
 }
 
 @Composable
+fun FloatInput(value: Float, onValueChange: (Float) -> Unit) {
+    var hasError by remember { mutableStateOf(false) }
+
+    BasicTextField(
+        value = value.toString(),
+        onValueChange = {
+            if (it.isBlank()) {
+                //onValueChange(0)
+                //hasError = false
+            } else {
+                val convertedValue = it.toFloatOrNull()
+                if (convertedValue != null) {
+                    onValueChange(convertedValue)
+                    hasError = false
+                } else {
+                    onValueChange(0f)
+                    hasError = true
+                }
+            }
+        },
+        singleLine = true,
+        decorationBox = { innerTextField ->
+            Row(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.surface)
+                    .border(width = 1.dp, color = if (hasError) MaterialTheme.colors.error else Color.LightGray)
+                    .padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box {
+                    innerTextField()
+                    if (value == 0f) Text("0", color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
+                }
+            }
+        },
+        modifier = Modifier
+            .width(48.dp)
+        ,
+        textStyle = MaterialTheme.typography.body2
+    )
+}
+
+@Composable
 fun <T> DropdownInput2(items: List<T>, activeItem: T, onSelect: (T) -> Unit) {
     Box {
         var hovered by remember { mutableStateOf(false) }

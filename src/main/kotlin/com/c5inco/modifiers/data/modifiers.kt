@@ -145,3 +145,11 @@ data class ClipModifierData(
     val shape: AvailableShapes = AvailableShapes.Rectangle,
     val corner: Int = 0
 )
+
+data class RotateModifierData(
+    val degrees: Float = 0f
+)
+
+data class ScaleModifierData(
+    val scale: Float = 1f
+)

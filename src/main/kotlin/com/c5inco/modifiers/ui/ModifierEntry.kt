@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -18,8 +20,7 @@ import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerMoveFilter
@@ -207,6 +208,56 @@ fun ModifierEntry(
                             }
                         )
                     }
+                    is ClipModifierData -> {
+                        val (shape, corner) = modifierData.second as ClipModifierData
+                        ClipModifier(
+                            shapeValue = shape,
+                            cornerValue = corner,
+                            onChange = {
+                                println("$it.shape, $it.corner")
+                                onModifierChange(
+                                    order,
+                                    Triple(
+                                        Modifier.clip(getShape(it.shape, it.corner)),
+                                        it.copy(),
+                                        visible
+                                    )
+                                )
+                            }
+                        )
+                    }
+                    is RotateModifierData -> {
+                        val (degrees) = modifierData.second as RotateModifierData
+                        RotateModifier(
+                            degreesValue = degrees,
+                            onChange = {
+                                onModifierChange(
+                                    order,
+                                    Triple(
+                                        Modifier.rotate(it.degrees),
+                                        it.copy(),
+                                        visible
+                                    )
+                                )
+                            }
+                        )
+                    }
+                    is ScaleModifierData -> {
+                        val (scale) = modifierData.second as ScaleModifierData
+                        ScaleModifier(
+                            scaleValue = scale,
+                            onChange = {
+                                onModifierChange(
+                                    order,
+                                    Triple(
+                                        Modifier.scale(it.scale),
+                                        it.copy(),
+                                        visible
+                                    )
+                                )
+                            }
+                        )
+                    }
                 }
             }
 
@@ -248,6 +299,8 @@ enum class ModifierEntry {
     Shadow,
     Offset,
     Clip,
+    Rotate,
+    Scale,
 }
 
 fun getShape(shape: AvailableShapes, corner: Int): Shape {

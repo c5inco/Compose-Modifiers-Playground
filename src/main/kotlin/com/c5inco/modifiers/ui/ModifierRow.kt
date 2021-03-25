@@ -106,6 +106,42 @@ fun OffsetDesignModifier(xValue: Int, yValue: Int, onChange: (OffsetDesignModifi
 }
 
 @Composable
+fun ClipModifier(shapeValue: AvailableShapes, cornerValue: Int, onChange: (ClipModifierData) -> Unit) {
+    Column {
+        ModifierLabel("clip")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
+                onChange(ClipModifierData(shape, corner))
+            })
+        }
+    }
+}
+
+@Composable
+fun RotateModifier(degreesValue: Float, onChange: (RotateModifierData) -> Unit) {
+    Column {
+        ModifierLabel("rotate")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            FloatInput(degreesValue, onValueChange = {
+                onChange(RotateModifierData(it))
+            })
+        }
+    }
+}
+
+@Composable
+fun ScaleModifier(scaleValue: Float, onChange: (ScaleModifierData) -> Unit) {
+    Column {
+        ModifierLabel("scale")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            FloatInput(scaleValue, onValueChange = {
+                onChange(ScaleModifierData(it))
+            })
+        }
+    }
+}
+
+@Composable
 private fun ModifierLabel(text: String) {
     Text(
         text,
