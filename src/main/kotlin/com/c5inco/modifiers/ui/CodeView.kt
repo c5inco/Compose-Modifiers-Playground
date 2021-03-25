@@ -149,6 +149,18 @@ private fun lookupModifier(modifier: Any): String {
             val (x, y) = modifier
             str = "offset(x = ($x).dp, y = ($y).dp)"
         }
+        is ClipModifierData -> {
+            val (shape, corner) = modifier
+            str = "clip(${generateShapeString(shape, corner)})"
+        }
+        is RotateModifierData -> {
+            val (degrees) = modifier
+            str = "rotate(${degrees}f)"
+        }
+        is ScaleModifierData -> {
+            val (scale) = modifier
+            str = "scale(${scale}f)"
+        }
     }
 
     return str
