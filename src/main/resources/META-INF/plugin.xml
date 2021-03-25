@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.c5inco.ModifiersPlaygroundPlugin</id>
     <name>Modifiers Playground</name>
-    <vendor email="csinco@google.com" url="http://www.jetbrains.com">c5inco</vendor>
+    <vendor email="csinco.design@gmail.com" url="csinco.com">Chris Sinco</vendor>
 
     <description><![CDATA[
 A plugin to help learn how to use Jetpack Compose Modifiers
@@ -18,7 +18,7 @@ A plugin to help learn how to use Jetpack Compose Modifiers
     <actions>
         <!-- Add your actions here -->
         <action id="com.c5inco.modifiers" class="com.c5inco.modifiers.plugin.PluginAction"
-                text="Show Compose Demo...">
+                text="Compose Modifiers Playground">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
     </actions>
