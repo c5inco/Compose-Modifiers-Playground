@@ -4,6 +4,7 @@ import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
@@ -35,19 +37,22 @@ fun main() = Window(
 @Composable
 fun Playground() {
     val defaultModifiers = listOf(
-        Triple(Modifier.size(400.dp), SizeModifierData(width = 400, height = 400), true),
+        Triple(Modifier.shadow(elevation = 20.dp, shape = RoundedCornerShape(60.dp)), ShadowModifierData(elevation = 20, shape = AvailableShapes.RoundedCorner, corner = 60), true),
+        Triple(Modifier.size(360.dp), SizeModifierData(width = 360, height = 360), true),
         Triple(Modifier.background(Color.Magenta), BackgroundModifierData(color = Color.Magenta), true),
+        Triple(Modifier.padding(40.dp), PaddingModifierData(40), true),
+        Triple(Modifier.border(width = 20.dp, color = Color.Cyan, shape = RoundedCornerShape(40.dp)), BorderModifierData(width = 20, color = Color.Cyan, shape = AvailableShapes.RoundedCorner, corner = 40), true),
         Triple(Modifier.padding(20.dp), PaddingModifierData(20), true),
-        Triple(Modifier.background(Color.Gray), BackgroundModifierData(color = Color.Gray), true),
-        Triple(Modifier, ShadowModifierData(), true),
-        Triple(Modifier.border(width = 2.dp, color = Color.Blue), BorderModifierData(), true),
+        Triple(Modifier.background(Color.White), BackgroundModifierData(color = Color.White), true),
     )
 
     var baseElement by remember {
         mutableStateOf<Pair<AvailableElements, Any>>(
             Pair(
-                AvailableElements.Box,
-                BoxElementData()
+                AvailableElements.Row,
+                RowElementData(
+                    horizontalArrangement = AvailableHorizontalArrangements.SpacedAround,
+                    verticalAlignment = Alignment.CenterVertically)
             )
         )
     }
@@ -145,7 +150,7 @@ fun Playground() {
             }
 
             Surface(
-                Modifier.width(350.dp)
+                Modifier.width(350.dp).shadow(4.dp)
             ) {
                 Column {
                     PropertiesSection(
