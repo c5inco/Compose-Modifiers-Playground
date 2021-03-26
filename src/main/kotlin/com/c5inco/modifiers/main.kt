@@ -45,7 +45,7 @@ fun Playground() {
         Pair(BackgroundModifierData(color = Color.White), true),
     )
 
-    var defaultChildModifiers = listOf(
+    val defaultChildModifiers = listOf<Pair<Any, Boolean>>(
         Pair(BackgroundModifierData(color = Color.Red), true),
     )
 
@@ -60,8 +60,12 @@ fun Playground() {
         )
     }
 
-    var modifiersList = remember {
+    var elementModifiersList = remember {
         defaultParentModifiers.toMutableStateList()
+    }
+
+    var childModifiersList = remember {
+        defaultChildModifiers.toMutableStateList()
     }
 
     var showCode by remember { mutableStateOf(false) }
@@ -82,17 +86,17 @@ fun Playground() {
                         val element = parentElement.type
 
                         val content: @Composable () -> Unit = {
-                            Text("🥑", fontSize = 48.sp)
-                            Text("☕", fontSize = 48.sp)
-                            Text("🤖", fontSize = 48.sp, modifier = buildModifiers(defaultChildModifiers))
+                            Text("🥑", fontSize = 48.sp, modifier = buildModifiers(childModifiersList))
+                            Text("☕", fontSize = 48.sp, modifier = buildModifiers(childModifiersList))
+                            Text("🤖", fontSize = 48.sp, modifier = buildModifiers(childModifiersList))
                         }
-                        val modifiersChain = buildModifiers(modifiersList)
+                        val elementModifiersChain = buildModifiers(elementModifiersList)
 
                         when (element) {
                             AvailableElements.Box -> {
                                 val data = parentElement.data as BoxElementData
                                 Box(
-                                    modifier = modifiersChain,
+                                    modifier = elementModifiersChain,
                                     contentAlignment = data.contentAlignment
                                 ) {
                                     content()
@@ -101,7 +105,7 @@ fun Playground() {
                             AvailableElements.Column -> {
                                 val data = parentElement.data as ColumnElementData
                                 Column(
-                                    modifier = modifiersChain,
+                                    modifier = elementModifiersChain,
                                     verticalArrangement = getVerticalArrangementObject(
                                         data.verticalArrangement,
                                         data.verticalSpacing
@@ -114,7 +118,7 @@ fun Playground() {
                             AvailableElements.Row -> {
                                 val data = parentElement.data as RowElementData
                                 Row(
-                                    modifier = modifiersChain,
+                                    modifier = elementModifiersChain,
                                     horizontalArrangement = getHorizontalArrangementObject(
                                         data.horizontalArrangement,
                                         data.horizontalSpacing
@@ -146,7 +150,7 @@ fun Playground() {
                                 .weight(1f)
                                 .fillMaxSize(),
                             parentElement,
-                            modifiersList
+                            elementModifiersList
                         )
                     }
                 }
@@ -172,14 +176,23 @@ fun Playground() {
                     val verticalScrollState = rememberScrollState(0)
 
                     Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
-                        ParentGroup(parentElement, modifiersList, onChange = { element, modifiers ->
+                        ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
                             parentElement = element
-                            modifiersList.clear()
-                            modifiersList.addAll(modifiers)
+                            elementModifiersList.clear()
+                            elementModifiersList.addAll(modifiers)
                         })
-                        ChildGroup("🥑", defaultChildModifiers)
-                        ChildGroup("☕", defaultChildModifiers)
-                        ChildGroup("🤖", defaultChildModifiers)
+                        ChildGroup("🥑", childModifiersList, onChange = {
+                            childModifiersList.clear()
+                            childModifiersList.addAll(it)
+                        })
+                        ChildGroup("☕", childModifiersList, onChange = {
+                            childModifiersList.clear()
+                            childModifiersList.addAll(it)
+                        })
+                        ChildGroup("🤖", childModifiersList, onChange = {
+                            childModifiersList.clear()
+                            childModifiersList.addAll(it)
+                        })
                     }
 
                     if (propertiesHovered) {
@@ -263,7 +276,8 @@ fun ParentGroup(
 @Composable
 fun ChildGroup(
     name: String,
-    modifiersList: List<Pair<Any, Boolean>>
+    modifiersList: MutableList<Pair<Any, Boolean>>,
+    onChange: (List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
     ComponentHeader("$name element", expanded, onExpand = { expanded = !expanded })
@@ -284,13 +298,36 @@ fun ChildGroup(
             actions = {
                 AddModifierAction(
                     onSelect = {
-                        val newModifier = getNewModifierData(it)
-                        //modifiersList.add(Triple(newModifier.first, newModifier.second, true))
+                        modifiersList.add(Pair(getNewModifierData(it), true))
+                        onChange(modifiersList.toList())
                     })
             }
         ) {
             for (i in 0 until modifiersList.size) {
+                ModifierEntry(
+                    modifierData = modifiersList[i],
+                    order = i,
+                    size = modifiersList.size,
+                    move = { index, up ->
+                        val curr = modifiersList[index]
+                        val targetIndex = if (up) index - 1 else index + 1
 
+                        val prev = modifiersList.getOrNull(targetIndex)
+
+                        if (prev != null) {
+                            modifiersList.set(targetIndex, curr)
+                            modifiersList.set(index, prev)
+                        }
+                    },
+                    onModifierChange = { order, data ->
+                        modifiersList.set(order, data)
+                        onChange(modifiersList.toList())
+                    },
+                    onRemove = { order ->
+                        modifiersList.removeAt(order)
+                        onChange(modifiersList.toList())
+                    }
+                )
             }
         }
     }
