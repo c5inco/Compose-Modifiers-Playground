@@ -21,9 +21,11 @@ import com.c5inco.modifiers.data.*
 fun CodeView(
     modifier: Modifier = Modifier,
     elementModel: ElementModel,
-    modifiers: List<Pair<Any, Boolean>>
+    elementModifiers: List<Pair<Any, Boolean>>,
+    childModifiersList: List<MutableList<Pair<Any, Boolean>>>
 ) {
     var editorHovered by remember { mutableStateOf( false) }
+
     SelectionContainer(modifier
         .pointerMoveFilter(
             onEnter = {
@@ -68,12 +70,18 @@ fun CodeView(
                     }
                 }
 
-                code += generateModifiers(modifiers)
+                code += generateModifiers(elementModifiers, 1)
                 code += ") {\n"
 
-                code += "\tText(\"🥑\", fontSize = 48.sp)\n"
-                code += "\tText(\"☕️\", fontSize = 48.sp)\n"
-                code += "\tText(\"🤖\", fontSize = 48.sp)\n"
+                val emojis = listOf("🥑", "☕", "🤖")
+                emojis.forEachIndexed { idx, emoji ->
+                    code += "\tText(\n"
+                    code += "\t\t\"$emoji\",\n"
+                    code += "\t\tfontSize = 48.sp,\n"
+                    code += generateModifiers(childModifiersList[idx], indent = 2)
+                    code += "\t)\n"
+                }
+
                 code += "}"
 
                 Text(
@@ -101,17 +109,23 @@ private fun getArrangementString(arrangement: Any, spacing: Int): String {
     return arrangement.toString()
 }
 
-private fun generateModifiers(modifiers: List<Pair<Any, Boolean>>): String {
+private fun generateModifiers(modifiers: List<Pair<Any, Boolean>>, indent: Int): String {
     val toPrint = modifiers.filter { (_, visible) -> visible }
     var str = ""
 
+    val prependIndent: (Int) -> Unit = {
+        for (i in 0 until it) { str += "\t" }
+    }
+
     if (toPrint.isNotEmpty()) {
-        str += "\tmodifier = Modifier\n"
+        prependIndent(indent)
+        str += "modifier = Modifier\n"
         toPrint.forEach {
             val (data, visible) = it
 
             if (visible) {
-                str += "\t\t.${lookupModifier(data)}\n"
+                prependIndent(indent + 1)
+                str += ".${lookupModifier(data)}\n"
             }
         }
     }

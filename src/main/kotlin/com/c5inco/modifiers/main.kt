@@ -135,7 +135,8 @@ fun Playground() {
                                 .weight(1f)
                                 .fillMaxSize(),
                             parentElement,
-                            elementModifiersList
+                            elementModifiersList,
+                            childModifiersList
                         )
                     }
                 }
