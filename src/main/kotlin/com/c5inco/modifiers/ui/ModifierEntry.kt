@@ -1,7 +1,5 @@
 package com.c5inco.modifiers.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -20,7 +18,7 @@ import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.*
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerMoveFilter
@@ -29,15 +27,15 @@ import com.c5inco.modifiers.data.*
 
 @Composable
 fun ModifierEntry(
-    modifierData: Triple<Modifier, Any, Boolean>,
+    modifierData: Pair<Any, Boolean>,
     order: Int,
     size: Int,
     move: (index: Int, up: Boolean) -> Unit,
-    onModifierChange: (Int, Triple<Modifier, Any, Boolean>) -> Unit,
+    onModifierChange: (Int, Pair<Any, Boolean>) -> Unit,
     onRemove: (Int) -> Unit,
 ) {
     var rowHovered by remember { mutableStateOf(false) }
-    val visible = modifierData.third
+    val visible = modifierData.second
 
     Box(
         modifier = Modifier
@@ -88,9 +86,9 @@ fun ModifierEntry(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Box(Modifier.alpha(if (visible) 1f else 0.4f)) {
-                when (modifierData.second) {
+                when (modifierData.first) {
                     is SizeModifierData -> {
-                        val data = modifierData.second as SizeModifierData
+                        val data = modifierData.first as SizeModifierData
                         SizeModifier(
                             widthValue = data.width,
                             heightValue = data.height,
@@ -98,8 +96,7 @@ fun ModifierEntry(
                                 val (width, height) = it
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.size(width = width.dp, height = height.dp),
+                                    Pair(
                                         it,
                                         visible
                                     )
@@ -108,7 +105,7 @@ fun ModifierEntry(
                         )
                     }
                     is BackgroundModifierData -> {
-                        val data = modifierData.second as BackgroundModifierData
+                        val data = modifierData.first as BackgroundModifierData
                         BackgroundModifier(
                             colorValue = data.color,
                             shapeValue = data.shape,
@@ -116,11 +113,7 @@ fun ModifierEntry(
                             onChange = {
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.background(
-                                            color = it.color,
-                                            shape = getShape(it.shape, it.corner)
-                                        ),
+                                    Pair(
                                         it.copy(),
                                         visible
                                     )
@@ -129,7 +122,7 @@ fun ModifierEntry(
                         )
                     }
                     is BorderModifierData -> {
-                        val data = modifierData.second as BorderModifierData
+                        val data = modifierData.first as BorderModifierData
                         BorderModifier(
                             widthValue = data.width,
                             colorValue = data.color,
@@ -138,12 +131,7 @@ fun ModifierEntry(
                             onChange = {
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.border(
-                                            width = (it.width).dp,
-                                            color = it.color,
-                                            shape = getShape(it.shape, it.corner)
-                                        ),
+                                    Pair(
                                         it.copy(),
                                         visible
                                     )
@@ -152,14 +140,13 @@ fun ModifierEntry(
                         )
                     }
                     is PaddingModifierData -> {
-                        val data = modifierData.second as PaddingModifierData
+                        val data = modifierData.first as PaddingModifierData
                         PaddingModifier(
                             allValue = data.all,
                             onChange = {
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.padding((it.all).dp),
+                                    Pair(
                                         it.copy(),
                                         visible
                                     )
@@ -168,7 +155,7 @@ fun ModifierEntry(
                         )
                     }
                     is ShadowModifierData -> {
-                        val data = modifierData.second as ShadowModifierData
+                        val data = modifierData.first as ShadowModifierData
                         ShadowModifier(
                             elevationValue = data.elevation,
                             shapeValue = data.shape,
@@ -176,11 +163,7 @@ fun ModifierEntry(
                             onChange = {
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.shadow(
-                                            elevation = it.elevation.dp,
-                                            shape = getShape(it.shape, it.corner)
-                                        ),
+                                    Pair(
                                         it.copy(),
                                         visible
                                     )
@@ -189,18 +172,14 @@ fun ModifierEntry(
                         )
                     }
                     is OffsetDesignModifierData -> {
-                        val data = modifierData.second as OffsetDesignModifierData
+                        val data = modifierData.first as OffsetDesignModifierData
                         OffsetDesignModifier(
                             xValue = data.x,
                             yValue = data.y,
                             onChange = {
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.offset(
-                                            x = (it.x).dp,
-                                            y = (it.y).dp
-                                        ),
+                                    Pair(
                                         it.copy(),
                                         visible
                                     )
@@ -209,7 +188,7 @@ fun ModifierEntry(
                         )
                     }
                     is ClipModifierData -> {
-                        val (shape, corner) = modifierData.second as ClipModifierData
+                        val (shape, corner) = modifierData.first as ClipModifierData
                         ClipModifier(
                             shapeValue = shape,
                             cornerValue = corner,
@@ -217,8 +196,7 @@ fun ModifierEntry(
                                 println("$it.shape, $it.corner")
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.clip(getShape(it.shape, it.corner)),
+                                    Pair(
                                         it.copy(),
                                         visible
                                     )
@@ -227,14 +205,13 @@ fun ModifierEntry(
                         )
                     }
                     is RotateModifierData -> {
-                        val (degrees) = modifierData.second as RotateModifierData
+                        val (degrees) = modifierData.first as RotateModifierData
                         RotateModifier(
                             degreesValue = degrees,
                             onChange = {
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.rotate(it.degrees),
+                                    Pair(
                                         it.copy(),
                                         visible
                                     )
@@ -243,14 +220,13 @@ fun ModifierEntry(
                         )
                     }
                     is ScaleModifierData -> {
-                        val (scale) = modifierData.second as ScaleModifierData
+                        val (scale) = modifierData.first as ScaleModifierData
                         ScaleModifier(
                             scaleValue = scale,
                             onChange = {
                                 onModifierChange(
                                     order,
-                                    Triple(
-                                        Modifier.scale(it.scale),
+                                    Pair(
                                         it.copy(),
                                         visible
                                     )
@@ -264,7 +240,7 @@ fun ModifierEntry(
             Spacer(Modifier.width(16.dp))
             Row {
                 SmallIconButton(onClick = {
-                    onModifierChange(order, Triple(modifierData.first, modifierData.second, !visible))
+                    onModifierChange(order, Pair(modifierData.first, !visible))
                 }) {
                     Icon(
                         imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
@@ -285,7 +261,7 @@ fun ModifierEntry(
             }
         }
     }
-    Divider()
+    Divider(Modifier.padding(horizontal = 16.dp))
 }
 
 enum class ModifierEntry {
@@ -301,6 +277,7 @@ enum class ModifierEntry {
     Clip,
     Rotate,
     Scale,
+    Weight,
 }
 
 fun getShape(shape: AvailableShapes, corner: Int): Shape {

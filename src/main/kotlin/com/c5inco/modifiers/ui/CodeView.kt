@@ -22,7 +22,7 @@ import com.c5inco.modifiers.data.*
 fun CodeView(
     modifier: Modifier = Modifier,
     element: Pair<AvailableElements, Any>,
-    modifiers: List<Triple<Modifier, Any, Boolean>>
+    modifiers: List<Pair<Any, Boolean>>
 ) {
     var editorHovered by remember { mutableStateOf( false) }
     SelectionContainer(modifier
@@ -103,14 +103,14 @@ private fun getArrangementString(arrangement: Any, spacing: Int): String {
     return arrangement.toString()
 }
 
-private fun generateModifiers(modifiers: List<Triple<Modifier, Any, Boolean>>): String {
-    val toPrint = modifiers.filter { (_, _, visible) -> visible }
+private fun generateModifiers(modifiers: List<Pair<Any, Boolean>>): String {
+    val toPrint = modifiers.filter { (_, visible) -> visible }
     var str = ""
 
     if (toPrint.isNotEmpty()) {
         str += "\tmodifier = Modifier\n"
         toPrint.forEach {
-            val (_, data, visible) = it
+            val (data, visible) = it
 
             if (visible) {
                 str += "\t\t.${lookupModifier(data)}\n"

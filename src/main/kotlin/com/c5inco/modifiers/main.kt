@@ -4,13 +4,9 @@ import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Code
-import androidx.compose.material.icons.outlined.CodeOff
-import androidx.compose.material.icons.outlined.RestartAlt
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -41,17 +37,21 @@ fun main() = Window(
 
 @Composable
 fun Playground() {
-    val defaultModifiers = listOf(
-        Triple(Modifier.shadow(elevation = 20.dp, shape = RoundedCornerShape(60.dp)), ShadowModifierData(elevation = 20, shape = AvailableShapes.RoundedCorner, corner = 60), true),
-        Triple(Modifier.size(360.dp), SizeModifierData(width = 360, height = 360), true),
-        Triple(Modifier.background(Color.Magenta), BackgroundModifierData(color = Color.Magenta), true),
-        Triple(Modifier.padding(40.dp), PaddingModifierData(40), true),
-        Triple(Modifier.border(width = 20.dp, color = Color.Cyan, shape = RoundedCornerShape(40.dp)), BorderModifierData(width = 20, color = Color.Cyan, shape = AvailableShapes.RoundedCorner, corner = 40), true),
-        Triple(Modifier.padding(20.dp), PaddingModifierData(20), true),
-        Triple(Modifier.background(Color.White), BackgroundModifierData(color = Color.White), true),
+    val defaultParentModifiers = listOf(
+        Pair(ShadowModifierData(elevation = 20, shape = AvailableShapes.RoundedCorner, corner = 60), true),
+        Pair(SizeModifierData(width = 360, height = 360), true),
+        Pair(BackgroundModifierData(color = Color.Magenta), true),
+        Pair(PaddingModifierData(40), true),
+        Pair(BorderModifierData(width = 20, color = Color.Cyan, shape = AvailableShapes.RoundedCorner, corner = 40), true),
+        Pair(PaddingModifierData(20), true),
+        Pair(BackgroundModifierData(color = Color.White), true),
     )
 
-    var baseElement by remember {
+    var defaultChildModifiers = listOf(
+        Pair(BackgroundModifierData(color = Color.Red), true),
+    )
+
+    var parentElement by remember {
         mutableStateOf<Pair<AvailableElements, Any>>(
             Pair(
                 AvailableElements.Row,
@@ -63,7 +63,7 @@ fun Playground() {
     }
 
     var modifiersList = remember {
-        defaultModifiers.toMutableStateList()
+        defaultParentModifiers.toMutableStateList()
     }
 
     var showCode by remember { mutableStateOf(false) }
@@ -81,18 +81,18 @@ fun Playground() {
                             .fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        val element = baseElement.first
+                        val element = parentElement.first
 
                         val content: @Composable () -> Unit = {
                             Text("🥑", fontSize = 48.sp)
                             Text("☕", fontSize = 48.sp)
-                            Text("🤖", fontSize = 48.sp)
+                            Text("🤖", fontSize = 48.sp, modifier = buildModifiers(defaultChildModifiers))
                         }
                         val modifiersChain = buildModifiers(modifiersList)
 
                         when (element) {
                             AvailableElements.Box -> {
-                                val data = baseElement.second as BoxElementData
+                                val data = parentElement.second as BoxElementData
                                 Box(
                                     modifier = modifiersChain,
                                     contentAlignment = data.contentAlignment
@@ -101,7 +101,7 @@ fun Playground() {
                                 }
                             }
                             AvailableElements.Column -> {
-                                val data = baseElement.second as ColumnElementData
+                                val data = parentElement.second as ColumnElementData
                                 Column(
                                     modifier = modifiersChain,
                                     verticalArrangement = getVerticalArrangementObject(
@@ -114,7 +114,7 @@ fun Playground() {
                                 }
                             }
                             AvailableElements.Row -> {
-                                val data = baseElement.second as RowElementData
+                                val data = parentElement.second as RowElementData
                                 Row(
                                     modifier = modifiersChain,
                                     horizontalArrangement = getHorizontalArrangementObject(
@@ -147,7 +147,7 @@ fun Playground() {
                             Modifier
                                 .weight(1f)
                                 .fillMaxSize(),
-                            baseElement,
+                            parentElement,
                             modifiersList
                         )
                     }
@@ -174,62 +174,10 @@ fun Playground() {
                     val verticalScrollState = rememberScrollState(0)
 
                     Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
-                        PropertiesSection(
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
-                            name = "Base element"
-                        ) {
-                            ElementRow(
-                                elementValue = baseElement,
-                                onValueChange = {
-                                    baseElement = it
-                                }
-                            )
-                        }
-                        Divider(Modifier.height(1.dp))
-                        PropertiesSection(
-                            modifier = Modifier
-                                .padding(bottom = 16.dp)
-                                .fillMaxHeight(),
-                            name = "Modifiers",
-                            actions = {
-                                AddModifierAction(
-                                    onSelect = {
-                                        val newModifier = getModifier(it)
-                                        modifiersList.add(Triple(newModifier.first, newModifier.second, true))
-                                    })
-                                ResetDefaultModifiersAction(
-                                    onClick = {
-                                        modifiersList.clear()
-                                        modifiersList.addAll(defaultModifiers)
-                                    }
-                                )
-                            }
-                        ) {
-                            for (i in 0 until modifiersList.size) {
-                                ModifierEntry(
-                                    modifierData = modifiersList[i],
-                                    order = i,
-                                    size = modifiersList.size,
-                                    move = { index, up ->
-                                        val curr = modifiersList[index]
-                                        val targetIndex = if (up) index - 1 else index + 1
-
-                                        val prev = modifiersList.getOrNull(targetIndex)
-
-                                        if (prev != null) {
-                                            modifiersList.set(targetIndex, curr)
-                                            modifiersList.set(index, prev)
-                                        }
-                                    },
-                                    onModifierChange = { order, data ->
-                                        modifiersList.set(order, data)
-                                    },
-                                    onRemove = { order ->
-                                        modifiersList.removeAt(order)
-                                    }
-                                )
-                            }
-                        }
+                        ParentGroup(parentElement, modifiersList)
+                        ChildGroup("🥑", defaultChildModifiers)
+                        ChildGroup("☕", defaultChildModifiers)
+                        ChildGroup("🤖", defaultChildModifiers)
                     }
 
                     if (propertiesHovered) {
@@ -245,7 +193,124 @@ fun Playground() {
     }
 }
 
-private fun getModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
+@Composable
+fun ParentGroup(
+    baseElement: Pair<AvailableElements, Any>,
+    modifiersList: SnapshotStateList<Pair<Any, Boolean>>
+) {
+    var expanded by remember { mutableStateOf(true) }
+    var baseElement1 = baseElement
+    ComponentHeader("Parent element", expanded, onExpand = { expanded = !expanded })
+
+    if (expanded) {
+        PropertiesSection(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+            name = "Base element"
+        ) {
+            ElementRow(
+                elementValue = baseElement1,
+                onValueChange = {
+                    baseElement1 = it
+                }
+            )
+        }
+        Divider(Modifier.height(1.dp))
+        PropertiesSection(
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxHeight(),
+            name = "Modifiers",
+            actions = {
+                AddModifierAction(
+                    onSelect = {
+                        val newModifier = getNewModifier(it)
+                        modifiersList.add(Pair(newModifier.first, true))
+                    })
+            }
+        ) {
+            for (i in 0 until modifiersList.size) {
+                ModifierEntry(
+                    modifierData = modifiersList[i],
+                    order = i,
+                    size = modifiersList.size,
+                    move = { index, up ->
+                        val curr = modifiersList[index]
+                        val targetIndex = if (up) index - 1 else index + 1
+
+                        val prev = modifiersList.getOrNull(targetIndex)
+
+                        if (prev != null) {
+                            modifiersList.set(targetIndex, curr)
+                            modifiersList.set(index, prev)
+                        }
+                    },
+                    onModifierChange = { order, data ->
+                        modifiersList.set(order, data)
+                    },
+                    onRemove = { order ->
+                        modifiersList.removeAt(order)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ChildGroup(
+    name: String,
+    modifiersList: List<Pair<Any, Boolean>>
+) {
+    var expanded by remember { mutableStateOf(true) }
+    ComponentHeader("$name element", expanded, onExpand = { expanded = !expanded })
+
+    if (expanded) {
+        PropertiesSection(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+            name = "Base element"
+        ) {
+            Text("Text")
+        }
+        Divider(Modifier.height(1.dp))
+        PropertiesSection(
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxHeight(),
+            name = "Modifiers",
+            actions = {
+                AddModifierAction(
+                    onSelect = {
+                        val newModifier = getNewModifier(it)
+                        //modifiersList.add(Triple(newModifier.first, newModifier.second, true))
+                    })
+            }
+        ) {
+            for (i in 0 until modifiersList.size) {
+
+            }
+        }
+    }
+}
+
+@Composable
+private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Unit) {
+    Row(Modifier
+        .fillMaxWidth()
+        .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(name.toUpperCase(), style = MaterialTheme.typography.subtitle1)
+        SmallIconButton(onClick = { onExpand() }) {
+            Icon(
+                imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                contentDescription = "Expand/collapse component group"
+            )
+        }
+    }
+}
+
+private fun getNewModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
     var newModifier: Pair<Modifier, Any> = Pair(Modifier.size(0.dp), SizeModifierData())
 
     when (modifierType) {
@@ -373,14 +438,14 @@ fun PropertiesSection(
     }
 }
 
-fun buildModifiers(modifiersList: SnapshotStateList<Triple<Modifier, Any, Boolean>>): Modifier {
+fun buildModifiers(modifiersList: List<Pair<Any, Boolean>>): Modifier {
     var modifier: Modifier = Modifier
 
     modifiersList.forEach {
-        val visible = it.third
+        val visible = it.second
 
         if (visible) {
-            modifier = modifier.then(it.first)
+            modifier = modifier.then(getModifier(it.first))
         }
     }
 

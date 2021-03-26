@@ -1,9 +1,20 @@
 package com.c5inco.modifiers.data
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.c5inco.modifiers.ui.getShape
 
 enum class AvailableShapes {
     Circle,
@@ -153,3 +164,52 @@ data class RotateModifierData(
 data class ScaleModifierData(
     val scale: Float = 1f
 )
+
+data class WeightModifierData(
+    val weight: Float = 1f
+)
+
+fun getModifier(data: Any): Modifier {
+    var modifier: Modifier = Modifier
+
+    when (data) {
+        is SizeModifierData -> {
+            val (width, height) = data
+            modifier = Modifier.size(width = width.dp, height = height.dp)
+        }
+        is PaddingModifierData -> {
+            val (all) = data
+            modifier = Modifier.padding(all.dp)
+        }
+        is BackgroundModifierData -> {
+            val (color, shape, corner) = data
+            modifier = Modifier.background(color = color, shape = getShape(shape, corner))
+        }
+        is BorderModifierData -> {
+            val (width, color, shape, corner) = data
+            modifier = Modifier.border(width = width.dp, color = color, shape = getShape(shape, corner))
+        }
+        is ShadowModifierData -> {
+            val (elevation, shape, corner) = data
+            modifier = Modifier.shadow(elevation = elevation.dp, shape = getShape(shape, corner))
+        }
+        is OffsetDesignModifierData -> {
+            val (x, y) = data
+            modifier = Modifier.offset(x = (x).dp, y = (y).dp)
+        }
+        is ClipModifierData -> {
+            val (shape, corner) = data
+            modifier = Modifier.clip(getShape(shape, corner))
+        }
+        is RotateModifierData -> {
+            val (degrees) = data
+            modifier = Modifier.rotate(degrees)
+        }
+        is ScaleModifierData -> {
+            val (scale) = data
+            modifier = Modifier.scale(scale)
+        }
+    }
+
+    return modifier
+}
