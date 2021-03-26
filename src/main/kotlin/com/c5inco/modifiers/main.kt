@@ -35,29 +35,13 @@ fun main() = Window(
 
 @Composable
 fun Playground() {
-    val defaultParentModifiers = listOf(
-        Pair(ShadowModifierData(elevation = 20, shape = AvailableShapes.RoundedCorner, corner = 60), true),
-        Pair(SizeModifierData(width = 360, height = 360), true),
-        Pair(BackgroundModifierData(color = Color.Magenta), true),
-        Pair(PaddingModifierData(40), true),
-        Pair(BorderModifierData(width = 20, color = Color.Cyan, shape = AvailableShapes.RoundedCorner, corner = 40), true),
-        Pair(PaddingModifierData(20), true),
-        Pair(BackgroundModifierData(color = Color.White), true),
-    )
+    val pinkSquare = Templates.PinkSquare
 
-    val defaultChildModifiers = listOf<Pair<Any, Boolean>>(
-        Pair(BackgroundModifierData(color = Color.Red), true),
-    )
+    val defaultParentModifiers = pinkSquare.parentModifiers
+    val defaultChildModifiers = pinkSquare.childModifiers
 
     var parentElement by remember {
-        mutableStateOf(
-            ElementModel(
-                AvailableElements.Row,
-                RowElementData(
-                    horizontalArrangement = AvailableHorizontalArrangements.SpacedAround,
-                    verticalAlignment = Alignment.CenterVertically)
-            )
-        )
+        mutableStateOf(pinkSquare.parentElement)
     }
 
     var elementModifiersList = remember {
@@ -86,9 +70,10 @@ fun Playground() {
                         val element = parentElement.type
 
                         val content: @Composable () -> Unit = {
-                            Text("🥑", fontSize = 48.sp, modifier = buildModifiers(childModifiersList))
-                            Text("☕", fontSize = 48.sp, modifier = buildModifiers(childModifiersList))
-                            Text("🤖", fontSize = 48.sp, modifier = buildModifiers(childModifiersList))
+                            val emojis = listOf("🥑", "☕", "🤖")
+                            emojis.forEachIndexed { idx, emoji ->
+                                Text(emoji, fontSize = 48.sp, modifier = buildModifiers(childModifiersList[idx]))
+                            }
                         }
                         val elementModifiersChain = buildModifiers(elementModifiersList)
 
@@ -181,18 +166,13 @@ fun Playground() {
                             elementModifiersList.clear()
                             elementModifiersList.addAll(modifiers)
                         })
-                        ChildGroup("🥑", childModifiersList, onChange = {
-                            childModifiersList.clear()
-                            childModifiersList.addAll(it)
-                        })
-                        ChildGroup("☕", childModifiersList, onChange = {
-                            childModifiersList.clear()
-                            childModifiersList.addAll(it)
-                        })
-                        ChildGroup("🤖", childModifiersList, onChange = {
-                            childModifiersList.clear()
-                            childModifiersList.addAll(it)
-                        })
+
+                        val emojis = listOf("🥑", "☕", "🤖")
+                        emojis.forEachIndexed { i, emoji ->
+                            ChildGroup(emoji, childModifiersList[i].toMutableList(), onChange = {
+                                childModifiersList.set(i, it.toMutableList())
+                            })
+                        }
                     }
 
                     if (propertiesHovered) {
@@ -258,6 +238,7 @@ fun ParentGroup(
                             modifiersList.set(targetIndex, curr)
                             modifiersList.set(index, prev)
                         }
+                        onChange(baseElement, modifiersList.toList())
                     },
                     onModifierChange = { order, data ->
                         modifiersList.set(order, data)
@@ -318,6 +299,7 @@ fun ChildGroup(
                             modifiersList.set(targetIndex, curr)
                             modifiersList.set(index, prev)
                         }
+                        onChange(modifiersList.toList())
                     },
                     onModifierChange = { order, data ->
                         modifiersList.set(order, data)
