@@ -52,8 +52,8 @@ fun Playground() {
     )
 
     var parentElement by remember {
-        mutableStateOf<Pair<AvailableElements, Any>>(
-            Pair(
+        mutableStateOf(
+            ElementModel(
                 AvailableElements.Row,
                 RowElementData(
                     horizontalArrangement = AvailableHorizontalArrangements.SpacedAround,
@@ -81,7 +81,7 @@ fun Playground() {
                             .fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        val element = parentElement.first
+                        val element = parentElement.type
 
                         val content: @Composable () -> Unit = {
                             Text("🥑", fontSize = 48.sp)
@@ -92,7 +92,7 @@ fun Playground() {
 
                         when (element) {
                             AvailableElements.Box -> {
-                                val data = parentElement.second as BoxElementData
+                                val data = parentElement.data as BoxElementData
                                 Box(
                                     modifier = modifiersChain,
                                     contentAlignment = data.contentAlignment
@@ -101,7 +101,7 @@ fun Playground() {
                                 }
                             }
                             AvailableElements.Column -> {
-                                val data = parentElement.second as ColumnElementData
+                                val data = parentElement.data as ColumnElementData
                                 Column(
                                     modifier = modifiersChain,
                                     verticalArrangement = getVerticalArrangementObject(
@@ -114,7 +114,7 @@ fun Playground() {
                                 }
                             }
                             AvailableElements.Row -> {
-                                val data = parentElement.second as RowElementData
+                                val data = parentElement.data as RowElementData
                                 Row(
                                     modifier = modifiersChain,
                                     horizontalArrangement = getHorizontalArrangementObject(
@@ -174,7 +174,9 @@ fun Playground() {
                     val verticalScrollState = rememberScrollState(0)
 
                     Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
-                        ParentGroup(parentElement, modifiersList)
+                        ParentGroup(parentElement, modifiersList, onChange = { element, _ ->
+                            parentElement = element
+                        })
                         ChildGroup("🥑", defaultChildModifiers)
                         ChildGroup("☕", defaultChildModifiers)
                         ChildGroup("🤖", defaultChildModifiers)
@@ -195,11 +197,11 @@ fun Playground() {
 
 @Composable
 fun ParentGroup(
-    baseElement: Pair<AvailableElements, Any>,
-    modifiersList: SnapshotStateList<Pair<Any, Boolean>>
+    baseElement: ElementModel,
+    modifiersList: SnapshotStateList<Pair<Any, Boolean>>,
+    onChange: (ElementModel, List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
-    var baseElement1 = baseElement
     ComponentHeader("Parent element", expanded, onExpand = { expanded = !expanded })
 
     if (expanded) {
@@ -208,9 +210,9 @@ fun ParentGroup(
             name = "Base element"
         ) {
             ElementRow(
-                elementValue = baseElement1,
+                model = baseElement,
                 onValueChange = {
-                    baseElement1 = it
+                    onChange(it.copy(), modifiersList)
                 }
             )
         }

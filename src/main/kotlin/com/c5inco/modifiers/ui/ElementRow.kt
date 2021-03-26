@@ -17,12 +17,12 @@ import com.c5inco.modifiers.data.*
 
 @Composable
 fun ElementRow(
-    elementValue: Pair<AvailableElements, Any>,
-    onValueChange: (Pair<AvailableElements, Any>) -> Unit
+    model: ElementModel,
+    onValueChange: (ElementModel) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val element = elementValue.first
-    val elementData: Any = elementValue.second
+    val element = model.type
+    val elementData: Any = model.data
 
     Column(Modifier.fillMaxWidth()) {
         Row {
@@ -66,10 +66,12 @@ fun ElementRow(
                         AvailableElements.Row -> newElementData = RowElementData()
                     }
 
-                    onValueChange(Pair(
+                    onValueChange(
+                        ElementModel(
                         it,
                         newElementData
-                    ))
+                    )
+                    )
                 }
 
                 DropdownMenu(
@@ -97,7 +99,7 @@ fun ElementRow(
                     )
                     Spacer(Modifier.height(4.dp))
                     ContentAlignmentInput(data.contentAlignment, onValueChange = { it ->
-                        onValueChange(Pair(elementValue.first, BoxElementData(it)))
+                        onValueChange(ElementModel(model.type, BoxElementData(it)))
                     })
                 }
             }
@@ -119,8 +121,8 @@ fun ElementRow(
                             data.verticalSpacing,
                             onValueChange = { arrangement, spacing ->
                                 onValueChange(
-                                    Pair(
-                                        elementValue.first,
+                                    ElementModel(
+                                        model.type,
                                         ColumnElementData(
                                             arrangement,
                                             spacing,
@@ -143,8 +145,8 @@ fun ElementRow(
                         Spacer(Modifier.height(4.dp))
                         HorizontalAlignmentInput(data.horizontalAlignment, onValueChange = {
                             onValueChange(
-                                Pair(
-                                    elementValue.first,
+                                ElementModel(
+                                    model.type,
                                     ColumnElementData(
                                         data.verticalArrangement,
                                         data.verticalSpacing,
@@ -173,8 +175,8 @@ fun ElementRow(
                             data.horizontalSpacing,
                             onValueChange = { arrangement, spacing ->
                                 onValueChange(
-                                    Pair(
-                                        elementValue.first,
+                                    ElementModel(
+                                        model.type,
                                         RowElementData(
                                             arrangement,
                                             spacing,
@@ -196,8 +198,8 @@ fun ElementRow(
                         Spacer(Modifier.height(4.dp))
                         VerticalAlignmentInput(data.verticalAlignment, onValueChange = {
                             onValueChange(
-                                Pair(
-                                    elementValue.first,
+                                ElementModel(
+                                    model.type,
                                     RowElementData(
                                         elementData.horizontalArrangement,
                                         elementData.horizontalSpacing,

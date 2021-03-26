@@ -21,7 +21,7 @@ import com.c5inco.modifiers.data.*
 @Composable
 fun CodeView(
     modifier: Modifier = Modifier,
-    element: Pair<AvailableElements, Any>,
+    elementModel: ElementModel,
     modifiers: List<Pair<Any, Boolean>>
 ) {
     var editorHovered by remember { mutableStateOf( false) }
@@ -49,21 +49,21 @@ fun CodeView(
             ) {
                 var code = ""
 
-                when (element.first) {
+                when (elementModel.type) {
                     AvailableElements.Box -> {
-                        val data = element.second as BoxElementData
+                        val data = elementModel.data as BoxElementData
                         code += "Box(\n"
                         code += "\tcontentAlignment = Alignment.${AvailableContentAlignments[data.contentAlignment]},\n"
                     }
                     AvailableElements.Column -> {
-                        val data = element.second as ColumnElementData
+                        val data = elementModel.data as ColumnElementData
                         code += "Column(\n"
                         code += "\tverticalArrangement = Arrangement.${getArrangementString(data.verticalArrangement, data.verticalSpacing)},\n"
                         code += "\thorizontalAlignment = Alignment.${AvailableHorizontalAlignments[data.horizontalAlignment]},\n"
                     }
 
                     AvailableElements.Row -> {
-                        val data = element.second as RowElementData
+                        val data = elementModel.data as RowElementData
                         code += "Row(\n"
                         code += "\thorizontalArrangement = Arrangement.${getArrangementString(data.horizontalArrangement, data.horizontalSpacing)},\n"
                         code += "\tverticalAlignment = Alignment.${AvailableVerticalAlignments[data.verticalAlignment]},\n"

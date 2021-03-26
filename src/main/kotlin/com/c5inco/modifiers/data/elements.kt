@@ -1,6 +1,5 @@
 package com.c5inco.modifiers.data
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
 
 enum class AvailableElements {
@@ -23,4 +22,9 @@ data class RowElementData(
     val horizontalArrangement: AvailableHorizontalArrangements = AvailableHorizontalArrangements.Start,
     val horizontalSpacing: Int = 0,
     val verticalAlignment: Alignment.Vertical = Alignment.Top
+)
+
+data class ElementModel(
+    val type: AvailableElements,
+    val data: Any
 )
