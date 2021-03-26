@@ -7,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.AnnotatedString
@@ -36,13 +35,12 @@ fun CodeView(
                 false
             }
         )
-        .width(350.dp)
-        .shadow(4.dp)
     ) {
         Box {
             var verticalScrollState = rememberScrollState(0)
             Column(
                 Modifier
+                    .fillMaxSize()
                     .background(EditorTheme.colors.backgroundDark)
                     .padding(16.dp)
                     .verticalScroll(verticalScrollState)
