@@ -360,6 +360,15 @@ private fun getNewModifierData(modifierType: ModifierEntry): Any = (
         ModifierEntry.Scale -> {
             ScaleModifierData()
         }
+        ModifierEntry.FillMaxWidth -> {
+            FillMaxWidthModifierData()
+        }
+        ModifierEntry.FillMaxHeight -> {
+            FillMaxHeightModifierData()
+        }
+        ModifierEntry.FillMaxSize -> {
+            FillMaxSizeModifierData()
+        }
         else -> {
             SizeModifierData()
         }
@@ -423,6 +432,15 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
             }
             DropdownMenuItem(onClick = { select(ModifierEntry.Scale) }) {
                 Text("Scale")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.FillMaxWidth) }) {
+                Text("FillMaxWidth")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.FillMaxHeight) }) {
+                Text("FillMaxHeight")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.FillMaxSize) }) {
+                Text("FillMaxSize")
             }
         }
     }

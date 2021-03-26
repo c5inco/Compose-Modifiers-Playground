@@ -133,50 +133,61 @@ private fun generateModifiers(modifiers: List<Pair<Any, Boolean>>, indent: Int):
     return str
 }
 
-private fun lookupModifier(modifier: Any): String {
-    var str = ""
-
+private fun lookupModifier(modifier: Any): String = (
     when (modifier) {
         is SizeModifierData -> {
             val (width, height) = modifier
-            str = "size(width = $width.dp, height = $height.dp)"
+            "size(width = $width.dp, height = $height.dp)"
         }
         is BackgroundModifierData -> {
             val (color, shape, corner) = modifier
-            str = "background(color = ${generateColorString(color)}, shape = ${generateShapeString(shape, corner)})"
+            "background(color = ${generateColorString(color)}, shape = ${generateShapeString(shape, corner)})"
         }
         is BorderModifierData -> {
             val (width, color, shape, corner) = modifier
-            str = "border(width = $width.dp, color = ${generateColorString(color)}, shape = ${generateShapeString(shape, corner)})"
+            "border(width = $width.dp, color = ${generateColorString(color)}, shape = ${generateShapeString(shape, corner)})"
         }
         is PaddingModifierData -> {
             val (all) = modifier
-            str = "padding($all.dp)"
+            "padding($all.dp)"
         }
         is ShadowModifierData -> {
             val (elevation, shape, corner) = modifier
-            str = "shadow(elevation = $elevation.dp, shape = ${generateShapeString(shape, corner)})"
+            "shadow(elevation = $elevation.dp, shape = ${generateShapeString(shape, corner)})"
         }
         is OffsetDesignModifierData -> {
             val (x, y) = modifier
-            str = "offset(x = ($x).dp, y = ($y).dp)"
+            "offset(x = ($x).dp, y = ($y).dp)"
         }
         is ClipModifierData -> {
             val (shape, corner) = modifier
-            str = "clip(${generateShapeString(shape, corner)})"
+            "clip(${generateShapeString(shape, corner)})"
         }
         is RotateModifierData -> {
             val (degrees) = modifier
-            str = "rotate(${degrees}f)"
+            "rotate(${degrees}f)"
         }
         is ScaleModifierData -> {
             val (scale) = modifier
-            str = "scale(${scale}f)"
+            "scale(${scale}f)"
+        }
+        is FillMaxWidthModifierData -> {
+            val (fraction) = modifier
+            "fillMaxWidth(${fraction}f)"
+        }
+        is FillMaxHeightModifierData -> {
+            val (fraction) = modifier
+            "fillMaxHeight(${fraction}f)"
+        }
+        is FillMaxSizeModifierData -> {
+            val (fraction) = modifier
+            "fillMaxSize(${fraction}f)"
+        }
+        else -> {
+            ""
         }
     }
-
-    return str
-}
+)
 
 private fun generateColorString(color: Color): String = (
     when (color) {

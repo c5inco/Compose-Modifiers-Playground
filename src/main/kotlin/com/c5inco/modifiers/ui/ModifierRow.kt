@@ -142,6 +142,42 @@ fun ScaleModifier(scaleValue: Float, onChange: (ScaleModifierData) -> Unit) {
 }
 
 @Composable
+fun FillMaxWidthModifier(fractionValue: Float, onChange: (FillMaxWidthModifierData) -> Unit) {
+    Column {
+        ModifierLabel("fillMaxWidth")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            FloatInput(fractionValue, onValueChange = {
+                onChange(FillMaxWidthModifierData(it))
+            })
+        }
+    }
+}
+
+@Composable
+fun FillMaxHeightModifier(fractionValue: Float, onChange: (FillMaxHeightModifierData) -> Unit) {
+    Column {
+        ModifierLabel("fillMaxHeight")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            FloatInput(fractionValue, onValueChange = {
+                onChange(FillMaxHeightModifierData(it))
+            })
+        }
+    }
+}
+
+@Composable
+fun FillMaxSizeModifier(fractionValue: Float, onChange: (FillMaxSizeModifierData) -> Unit) {
+    Column {
+        ModifierLabel("fillMaxSize")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            FloatInput(fractionValue, onValueChange = {
+                onChange(FillMaxSizeModifierData(it))
+            })
+        }
+    }
+}
+
+@Composable
 private fun ModifierLabel(text: String) {
     Text(
         text,

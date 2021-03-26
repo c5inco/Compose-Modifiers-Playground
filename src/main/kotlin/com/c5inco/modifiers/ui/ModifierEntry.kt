@@ -232,6 +232,51 @@ fun ModifierEntry(
                             }
                         )
                     }
+                    is FillMaxWidthModifierData -> {
+                        val (fraction) = modifierData.first as FillMaxWidthModifierData
+                        FillMaxWidthModifier(
+                            fractionValue = fraction,
+                            onChange = {
+                                onModifierChange(
+                                    order,
+                                    Pair(
+                                        it.copy(),
+                                        visible
+                                    )
+                                )
+                            }
+                        )
+                    }
+                    is FillMaxHeightModifierData -> {
+                        val (fraction) = modifierData.first as FillMaxHeightModifierData
+                        FillMaxHeightModifier(
+                            fractionValue = fraction,
+                            onChange = {
+                                onModifierChange(
+                                    order,
+                                    Pair(
+                                        it.copy(),
+                                        visible
+                                    )
+                                )
+                            }
+                        )
+                    }
+                    is FillMaxSizeModifierData -> {
+                        val (fraction) = modifierData.first as FillMaxSizeModifierData
+                        FillMaxSizeModifier(
+                            fractionValue = fraction,
+                            onChange = {
+                                onModifierChange(
+                                    order,
+                                    Pair(
+                                        it.copy(),
+                                        visible
+                                    )
+                                )
+                            }
+                        )
+                    }
                 }
             }
 

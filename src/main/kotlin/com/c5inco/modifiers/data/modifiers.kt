@@ -2,10 +2,7 @@ package com.c5inco.modifiers.data
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -206,6 +203,18 @@ fun getModifier(data: Any): Modifier = (
         is ScaleModifierData -> {
             val (scale) = data
             Modifier.scale(scale)
+        }
+        is FillMaxWidthModifierData -> {
+            val (fraction) = data
+            Modifier.fillMaxWidth(fraction)
+        }
+        is FillMaxHeightModifierData -> {
+            val (fraction) = data
+            Modifier.fillMaxHeight(fraction)
+        }
+        is FillMaxSizeModifierData -> {
+            val (fraction) = data
+            Modifier.fillMaxSize(fraction)
         }
         else -> {
             Modifier
