@@ -2,21 +2,19 @@ package com.c5inco.modifiers
 
 import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.desktop.Window
-import androidx.compose.foundation.*
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
@@ -174,8 +172,10 @@ fun Playground() {
                     val verticalScrollState = rememberScrollState(0)
 
                     Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
-                        ParentGroup(parentElement, modifiersList, onChange = { element, _ ->
+                        ParentGroup(parentElement, modifiersList, onChange = { element, modifiers ->
                             parentElement = element
+                            modifiersList.clear()
+                            modifiersList.addAll(modifiers)
                         })
                         ChildGroup("🥑", defaultChildModifiers)
                         ChildGroup("☕", defaultChildModifiers)
@@ -198,7 +198,7 @@ fun Playground() {
 @Composable
 fun ParentGroup(
     baseElement: ElementModel,
-    modifiersList: SnapshotStateList<Pair<Any, Boolean>>,
+    modifiersList: MutableList<Pair<Any, Boolean>>,
     onChange: (ElementModel, List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
@@ -212,7 +212,7 @@ fun ParentGroup(
             ElementRow(
                 model = baseElement,
                 onValueChange = {
-                    onChange(it.copy(), modifiersList)
+                    onChange(it.copy(), modifiersList.toList())
                 }
             )
         }
@@ -225,8 +225,8 @@ fun ParentGroup(
             actions = {
                 AddModifierAction(
                     onSelect = {
-                        val newModifier = getNewModifier(it)
-                        modifiersList.add(Pair(newModifier.first, true))
+                        modifiersList.add(Pair(getNewModifierData(it), true))
+                        onChange(baseElement, modifiersList.toList())
                     })
             }
         ) {
@@ -248,9 +248,11 @@ fun ParentGroup(
                     },
                     onModifierChange = { order, data ->
                         modifiersList.set(order, data)
+                        onChange(baseElement, modifiersList.toList())
                     },
                     onRemove = { order ->
                         modifiersList.removeAt(order)
+                        onChange(baseElement, modifiersList.toList())
                     }
                 )
             }
@@ -282,7 +284,7 @@ fun ChildGroup(
             actions = {
                 AddModifierAction(
                     onSelect = {
-                        val newModifier = getNewModifier(it)
+                        val newModifier = getNewModifierData(it)
                         //modifiersList.add(Triple(newModifier.first, newModifier.second, true))
                     })
             }
@@ -312,38 +314,37 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
     }
 }
 
-private fun getNewModifier(modifierType: ModifierEntry): Pair<Modifier, Any> {
-    var newModifier: Pair<Modifier, Any> = Pair(Modifier.size(0.dp), SizeModifierData())
-
+private fun getNewModifierData(modifierType: ModifierEntry): Any = (
     when (modifierType) {
         ModifierEntry.Padding -> {
-            newModifier = Pair(Modifier.padding(0.dp), PaddingModifierData())
+            PaddingModifierData()
         }
         ModifierEntry.Background -> {
-            newModifier = Pair(Modifier.background(Color.Yellow), BackgroundModifierData())
+            BackgroundModifierData()
         }
         ModifierEntry.Border -> {
-            newModifier = Pair(Modifier.border(width = 2.dp, color = Color.Blue), BorderModifierData())
+            BorderModifierData()
         }
         ModifierEntry.Shadow -> {
-            newModifier = Pair(Modifier, ShadowModifierData())
+            ShadowModifierData()
         }
         ModifierEntry.Offset -> {
-            newModifier = Pair(Modifier.offset(), OffsetDesignModifierData())
+            OffsetDesignModifierData()
         }
         ModifierEntry.Clip -> {
-            newModifier = Pair(Modifier.clip(RectangleShape), ClipModifierData())
+            ClipModifierData()
         }
         ModifierEntry.Rotate -> {
-            newModifier = Pair(Modifier.rotate(0f), RotateModifierData())
+            RotateModifierData()
         }
         ModifierEntry.Scale -> {
-            newModifier = Pair(Modifier.scale(1f), ScaleModifierData())
+            ScaleModifierData()
+        }
+        else -> {
+            SizeModifierData()
         }
     }
-
-    return newModifier
-}
+)
 
 @Composable
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {

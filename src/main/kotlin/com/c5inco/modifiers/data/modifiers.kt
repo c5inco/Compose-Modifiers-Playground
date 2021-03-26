@@ -169,47 +169,46 @@ data class WeightModifierData(
     val weight: Float = 1f
 )
 
-fun getModifier(data: Any): Modifier {
-    var modifier: Modifier = Modifier
-
+fun getModifier(data: Any): Modifier = (
     when (data) {
         is SizeModifierData -> {
             val (width, height) = data
-            modifier = Modifier.size(width = width.dp, height = height.dp)
+            Modifier.size(width = width.dp, height = height.dp)
         }
         is PaddingModifierData -> {
             val (all) = data
-            modifier = Modifier.padding(all.dp)
+            Modifier.padding(all.dp)
         }
         is BackgroundModifierData -> {
             val (color, shape, corner) = data
-            modifier = Modifier.background(color = color, shape = getShape(shape, corner))
+            Modifier.background(color = color, shape = getShape(shape, corner))
         }
         is BorderModifierData -> {
             val (width, color, shape, corner) = data
-            modifier = Modifier.border(width = width.dp, color = color, shape = getShape(shape, corner))
+            Modifier.border(width = width.dp, color = color, shape = getShape(shape, corner))
         }
         is ShadowModifierData -> {
             val (elevation, shape, corner) = data
-            modifier = Modifier.shadow(elevation = elevation.dp, shape = getShape(shape, corner))
+            Modifier.shadow(elevation = elevation.dp, shape = getShape(shape, corner))
         }
         is OffsetDesignModifierData -> {
             val (x, y) = data
-            modifier = Modifier.offset(x = (x).dp, y = (y).dp)
+            Modifier.offset(x = (x).dp, y = (y).dp)
         }
         is ClipModifierData -> {
             val (shape, corner) = data
-            modifier = Modifier.clip(getShape(shape, corner))
+            Modifier.clip(getShape(shape, corner))
         }
         is RotateModifierData -> {
             val (degrees) = data
-            modifier = Modifier.rotate(degrees)
+            Modifier.rotate(degrees)
         }
         is ScaleModifierData -> {
             val (scale) = data
-            modifier = Modifier.scale(scale)
+            Modifier.scale(scale)
+        }
+        else -> {
+            Modifier
         }
     }
-
-    return modifier
-}
+)

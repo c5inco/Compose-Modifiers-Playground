@@ -93,11 +93,10 @@ fun ModifierEntry(
                             widthValue = data.width,
                             heightValue = data.height,
                             onChange = {
-                                val (width, height) = it
                                 onModifierChange(
                                     order,
                                     Pair(
-                                        it,
+                                        it.copy(),
                                         visible
                                     )
                                 )
@@ -193,7 +192,6 @@ fun ModifierEntry(
                             shapeValue = shape,
                             cornerValue = corner,
                             onChange = {
-                                println("$it.shape, $it.corner")
                                 onModifierChange(
                                     order,
                                     Pair(
