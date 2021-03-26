@@ -53,7 +53,7 @@ fun ModifierEntry(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         contentAlignment = Alignment.CenterStart
     ) {
-        if (rowHovered) {
+        if (rowHovered && size > 1) {
             Column(
                 modifier = Modifier
                     .offset(x = (-18).dp)
@@ -304,7 +304,7 @@ fun ModifierEntry(
             }
         }
     }
-    Divider(Modifier.padding(horizontal = 16.dp))
+    if (order != size - 1) Divider(Modifier.padding(horizontal = 16.dp))
 }
 
 enum class ModifierEntry {

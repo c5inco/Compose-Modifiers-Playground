@@ -170,6 +170,7 @@ fun Playground() {
 
                         val emojis = listOf("🥑", "☕", "🤖")
                         emojis.forEachIndexed { i, emoji ->
+                            Divider()
                             ChildGroup(emoji, childModifiersList[i].toMutableList(), onChange = {
                                 childModifiersList.set(i, it.toMutableList())
                             })
@@ -200,7 +201,7 @@ fun ParentGroup(
 
     if (expanded) {
         PropertiesSection(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+            modifier = Modifier.padding(8.dp),
             name = "Base element"
         ) {
             ElementRow(
@@ -210,7 +211,10 @@ fun ParentGroup(
                 }
             )
         }
+
         Divider(Modifier.height(1.dp))
+        Spacer(Modifier.height(8.dp))
+
         PropertiesSection(
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -265,13 +269,18 @@ fun ChildGroup(
     ComponentHeader("$name element", expanded, onExpand = { expanded = !expanded })
 
     if (expanded) {
+        Spacer(Modifier.height(8.dp))
+
         PropertiesSection(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
             name = "Base element"
         ) {
             Text("Text")
         }
+
         Divider(Modifier.height(1.dp))
+        Spacer(Modifier.height(8.dp))
+
         PropertiesSection(
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -320,7 +329,7 @@ fun ChildGroup(
 private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Unit) {
     Row(Modifier
         .fillMaxWidth()
-        .padding(16.dp),
+        .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -448,7 +457,7 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
 
 @Composable
 fun PropertiesSection(
-    modifier: Modifier = Modifier.padding(16.dp),
+    modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
     name: String = "<section>",
     actions: @Composable RowScope.() -> Unit = { },
     content: @Composable ColumnScope.() -> Unit
@@ -457,7 +466,7 @@ fun PropertiesSection(
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(bottom = 8.dp, start = 16.dp, end = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
