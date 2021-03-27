@@ -1,5 +1,6 @@
 package com.c5inco.modifiers
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.*
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -369,6 +371,8 @@ fun ChildGroup(
 
 @Composable
 private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Unit) {
+    val expandAnim by animateFloatAsState(if (expanded) 180f else 0f)
+
     Row(Modifier
         .fillMaxWidth()
         .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -378,8 +382,9 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
         Text(name.toUpperCase(), style = MaterialTheme.typography.subtitle1)
         SmallIconButton(onClick = { onExpand() }) {
             Icon(
-                imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
-                contentDescription = "Expand/collapse component group"
+                imageVector = Icons.Outlined.KeyboardArrowDown,
+                contentDescription = "Expand/collapse component group",
+                modifier = Modifier.rotate(expandAnim)
             )
         }
     }
