@@ -88,7 +88,7 @@ fun Playground() {
                                 val data = parentElement.data as BoxElementData
                                 Box(
                                     modifier = elementModifiersChain,
-                                    contentAlignment = data.contentAlignment
+                                    contentAlignment = getContentAlignments(data.contentAlignment)
                                 ) {
                                     content()
                                 }
@@ -101,7 +101,7 @@ fun Playground() {
                                         data.verticalArrangement,
                                         data.verticalSpacing
                                     ),
-                                    horizontalAlignment = data.horizontalAlignment
+                                    horizontalAlignment = getHorizontalAlignments(data.horizontalAlignment)
                                 ) {
                                     content()
                                 }
@@ -114,7 +114,7 @@ fun Playground() {
                                         data.horizontalArrangement,
                                         data.horizontalSpacing
                                     ),
-                                    verticalAlignment = data.verticalAlignment
+                                    verticalAlignment = getVerticalAlignments(data.verticalAlignment)
                                 ) {
                                     content()
                                 }
@@ -197,44 +197,6 @@ fun Playground() {
 }
 
 @Composable
-private fun DotsBackground(modifier: Modifier) {
-    Canvas(
-        modifier.fillMaxSize()
-    ) {
-        val canvasWidth = size.width
-        val canvasHeight = size.height
-        val circleColor = SolidColor(Color.LightGray)
-        val circleRadius = 2f
-        val circleStep = 20
-
-        val circle: (Int, Int) -> Unit = { x, y ->
-            drawCircle(
-                brush = circleColor,
-                radius = circleRadius,
-                center = Offset(x = x.toFloat(), y = y.toFloat())
-            )
-        }
-
-        until((canvasWidth / 2).toInt(), canvasWidth.toInt(), circleStep) { uidx ->
-            downTo((canvasHeight / 2).toInt(), 0, circleStep) { didx ->
-                circle(uidx, didx)
-            }
-            until((canvasHeight / 2).toInt(), canvasHeight.toInt(), circleStep) { uidx2 ->
-                circle(uidx, uidx2)
-            }
-        }
-        downTo((canvasWidth / 2).toInt(), 0, circleStep) { uidx ->
-            downTo((canvasHeight / 2).toInt(), 0, circleStep) { didx ->
-                circle(uidx, didx)
-            }
-            until((canvasHeight / 2).toInt(), canvasHeight.toInt(), circleStep) { uidx2 ->
-                circle(uidx, uidx2)
-            }
-        }
-    }
-}
-
-@Composable
 fun ParentGroup(
     baseElement: ElementModel,
     modifiersList: MutableList<Pair<Any, Boolean>>,
@@ -246,7 +208,6 @@ fun ParentGroup(
     if (expanded) {
         PropertiesSection(
             modifier = Modifier.padding(8.dp),
-            name = "Base element"
         ) {
             ElementRow(
                 model = baseElement,
@@ -256,7 +217,7 @@ fun ParentGroup(
             )
         }
 
-        Divider(Modifier.height(1.dp))
+        DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
         Spacer(Modifier.height(8.dp))
 
         PropertiesSection(
@@ -317,12 +278,11 @@ fun ChildGroup(
 
         PropertiesSection(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
-            name = "Base element"
         ) {
             Text("Text")
         }
 
-        Divider(Modifier.height(1.dp))
+        DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
         Spacer(Modifier.height(8.dp))
 
         PropertiesSection(
@@ -370,6 +330,55 @@ fun ChildGroup(
 }
 
 @Composable
+fun PropertiesSection(
+    modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+    name: String? = null,
+    actions: @Composable RowScope.() -> Unit = { },
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column {
+        name?.let {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp, start = 16.dp, end = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = it,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.subtitle2,
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    actions()
+                }
+            }
+        }
+        Column(modifier) {
+            content()
+        }
+    }
+}
+
+fun buildModifiers(modifiersList: List<Pair<Any, Boolean>>): Modifier {
+    var modifier: Modifier = Modifier
+
+    modifiersList.forEach {
+        val visible = it.second
+
+        if (visible) {
+            modifier = modifier.then(getModifier(it.first))
+        }
+    }
+
+    return modifier
+}
+
+@Composable
 private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Unit) {
     val expandAnim by animateFloatAsState(if (expanded) 180f else 0f)
 
@@ -379,7 +388,7 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(name.toUpperCase(), style = MaterialTheme.typography.subtitle1)
+        Text(name, style = MaterialTheme.typography.subtitle1)
         SmallIconButton(onClick = { onExpand() }) {
             Icon(
                 imageVector = Icons.Outlined.KeyboardArrowDown,
@@ -391,45 +400,45 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
 }
 
 private fun getNewModifierData(modifierType: ModifierEntry): Any = (
-    when (modifierType) {
-        ModifierEntry.Padding -> {
-            PaddingModifierData()
+        when (modifierType) {
+            ModifierEntry.Padding -> {
+                PaddingModifierData()
+            }
+            ModifierEntry.Background -> {
+                BackgroundModifierData()
+            }
+            ModifierEntry.Border -> {
+                BorderModifierData()
+            }
+            ModifierEntry.Shadow -> {
+                ShadowModifierData()
+            }
+            ModifierEntry.Offset -> {
+                OffsetDesignModifierData()
+            }
+            ModifierEntry.Clip -> {
+                ClipModifierData()
+            }
+            ModifierEntry.Rotate -> {
+                RotateModifierData()
+            }
+            ModifierEntry.Scale -> {
+                ScaleModifierData()
+            }
+            ModifierEntry.FillMaxWidth -> {
+                FillMaxWidthModifierData()
+            }
+            ModifierEntry.FillMaxHeight -> {
+                FillMaxHeightModifierData()
+            }
+            ModifierEntry.FillMaxSize -> {
+                FillMaxSizeModifierData()
+            }
+            else -> {
+                SizeModifierData()
+            }
         }
-        ModifierEntry.Background -> {
-            BackgroundModifierData()
-        }
-        ModifierEntry.Border -> {
-            BorderModifierData()
-        }
-        ModifierEntry.Shadow -> {
-            ShadowModifierData()
-        }
-        ModifierEntry.Offset -> {
-            OffsetDesignModifierData()
-        }
-        ModifierEntry.Clip -> {
-            ClipModifierData()
-        }
-        ModifierEntry.Rotate -> {
-            RotateModifierData()
-        }
-        ModifierEntry.Scale -> {
-            ScaleModifierData()
-        }
-        ModifierEntry.FillMaxWidth -> {
-            FillMaxWidthModifierData()
-        }
-        ModifierEntry.FillMaxHeight -> {
-            FillMaxHeightModifierData()
-        }
-        ModifierEntry.FillMaxSize -> {
-            FillMaxSizeModifierData()
-        }
-        else -> {
-            SizeModifierData()
-        }
-    }
-)
+        )
 
 @Composable
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
@@ -503,49 +512,56 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
 }
 
 @Composable
-fun PropertiesSection(
-    modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-    name: String = "<section>",
-    actions: @Composable RowScope.() -> Unit = { },
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Column {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp, start = 16.dp, end = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = name,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.subtitle2,
+private fun DotsBackground(modifier: Modifier) {
+    Canvas(
+        modifier.fillMaxSize()
+    ) {
+        val canvasWidth = size.width
+        val canvasHeight = size.height
+        val circleColor = SolidColor(Color.LightGray)
+        val circleRadius = 2f
+        val circleStep = 20
+
+        val circle: (Int, Int) -> Unit = { x, y ->
+            drawCircle(
+                brush = circleColor,
+                radius = circleRadius,
+                center = Offset(x = x.toFloat(), y = y.toFloat())
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                actions()
+        }
+
+        until((canvasWidth / 2).toInt(), canvasWidth.toInt(), circleStep) { uidx ->
+            downTo((canvasHeight / 2).toInt(), 0, circleStep) { didx ->
+                circle(uidx, didx)
+            }
+            until((canvasHeight / 2).toInt(), canvasHeight.toInt(), circleStep) { uidx2 ->
+                circle(uidx, uidx2)
             }
         }
-        Column(modifier) {
-            content()
+        downTo((canvasWidth / 2).toInt(), 0, circleStep) { uidx ->
+            downTo((canvasHeight / 2).toInt(), 0, circleStep) { didx ->
+                circle(uidx, didx)
+            }
+            until((canvasHeight / 2).toInt(), canvasHeight.toInt(), circleStep) { uidx2 ->
+                circle(uidx, uidx2)
+            }
         }
     }
 }
 
-fun buildModifiers(modifiersList: List<Pair<Any, Boolean>>): Modifier {
-    var modifier: Modifier = Modifier
-
-    modifiersList.forEach {
-        val visible = it.second
-
-        if (visible) {
-            modifier = modifier.then(getModifier(it.first))
+@Composable
+private fun DottedLine(modifier: Modifier = Modifier, color: Color = Color.Gray) {
+    Canvas(
+        modifier
+            .fillMaxWidth()
+    ) {
+        until(0, size.width.toInt(), 10) {
+            drawCircle(
+                brush = SolidColor(color),
+                radius = 1f,
+                center = Offset(x = it.toFloat(), y = 0f)
+            )
         }
     }
-
-    return modifier
 }
 

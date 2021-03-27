@@ -1,6 +1,5 @@
 package com.c5inco.modifiers.data
 
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 
 object Templates {
@@ -9,7 +8,7 @@ object Templates {
             AvailableElements.Row,
             RowElementData(
                 horizontalArrangement = AvailableHorizontalArrangements.SpacedAround,
-                verticalAlignment = Alignment.CenterVertically)
+                verticalAlignment = AvailableVerticalAlignments.CenterVertically)
         ),
         parentModifiers = listOf(
             Pair(ShadowModifierData(elevation = 20, shape = AvailableShapes.RoundedCorner, corner = 60), true),

@@ -68,9 +68,9 @@ fun ElementRow(
 
                     onValueChange(
                         ElementModel(
-                        it,
-                        newElementData
-                    )
+                            it,
+                            newElementData
+                        )
                     )
                 }
 
@@ -166,6 +166,7 @@ fun ElementRow(
                     ) {
                         Text(
                             "horizontalArrangement",
+                            modifier = Modifier.padding(start = 8.dp),
                             fontSize = 12.sp,
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         )
@@ -192,6 +193,7 @@ fun ElementRow(
                     ) {
                         Text(
                             "verticalAlignment",
+                            modifier = Modifier.padding(start = 8.dp),
                             fontSize = 12.sp,
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         )

@@ -1,7 +1,5 @@
 package com.c5inco.modifiers.data
 
-import androidx.compose.ui.Alignment
-
 enum class AvailableElements {
     Box,
     Column,
@@ -9,19 +7,19 @@ enum class AvailableElements {
 }
 
 data class BoxElementData(
-    val contentAlignment: Alignment = Alignment.TopStart,
+    val contentAlignment: AvailableContentAlignments = AvailableContentAlignments.TopStart,
 )
 
 data class ColumnElementData(
     val verticalArrangement: AvailableVerticalArrangements = AvailableVerticalArrangements.Top,
     val verticalSpacing: Int = 0,
-    val horizontalAlignment: Alignment.Horizontal = Alignment.Start
+    val horizontalAlignment: AvailableHorizontalAlignments = AvailableHorizontalAlignments.Start
 )
 
 data class RowElementData(
     val horizontalArrangement: AvailableHorizontalArrangements = AvailableHorizontalArrangements.Start,
     val horizontalSpacing: Int = 0,
-    val verticalAlignment: Alignment.Vertical = Alignment.Top
+    val verticalAlignment: AvailableVerticalAlignments = AvailableVerticalAlignments.Top
 )
 
 data class ElementModel(

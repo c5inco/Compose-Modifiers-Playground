@@ -70,38 +70,88 @@ fun getVerticalArrangementObject(arrangement: AvailableVerticalArrangements, spa
     return va
 }
 
-val AvailableHorizontalAlignments: Map<Alignment.Horizontal, String> = mapOf(
-    Alignment.Start to "Start",
-    Alignment.End to "End",
-    Alignment.CenterHorizontally to "CenterHorizontally",
+enum class AvailableHorizontalAlignments {
+    Start,
+    End,
+    CenterHorizontally
+}
+
+fun getHorizontalAlignments(alignment: AvailableHorizontalAlignments): Alignment.Horizontal = (
+    when (alignment) {
+        AvailableHorizontalAlignments.End -> {
+            Alignment.End
+        }
+        AvailableHorizontalAlignments.CenterHorizontally -> {
+            Alignment.CenterHorizontally
+        }
+        else -> {
+            Alignment.Start
+        }
+    }
 )
 
-val AvailableVerticalAlignments: Map<Alignment.Vertical, String> = mapOf(
-    Alignment.Top to "Top",
-    Alignment.Bottom to "Bottom",
-    Alignment.CenterVertically to "CenterVertically",
+enum class AvailableVerticalAlignments {
+    Top,
+    Bottom,
+    CenterVertically
+}
+
+fun getVerticalAlignments(alignment: AvailableVerticalAlignments): Alignment.Vertical = (
+    when (alignment) {
+        AvailableVerticalAlignments.Bottom -> {
+            Alignment.Bottom
+        }
+        AvailableVerticalAlignments.CenterVertically -> {
+            Alignment.CenterVertically
+        }
+        else -> {
+            Alignment.Top
+        }
+    }
 )
 
-val AvailableContentAlignments: Map<Alignment, String> = mapOf(
-    Alignment.TopStart to "TopStart",
-    Alignment.TopEnd to "TopEnd",
-    Alignment.TopCenter to "TopCenter",
-    Alignment.CenterStart to "CenterStart",
-    Alignment.CenterEnd to "CenterEnd",
-    Alignment.Center to "Center",
-    Alignment.BottomStart to "BottomStart",
-    Alignment.BottomEnd to "BottomEnd",
-    Alignment.BottomCenter to "BottomCenter"
-)
+enum class AvailableContentAlignments {
+    TopStart,
+    TopEnd,
+    TopCenter,
+    CenterStart,
+    CenterEnd,
+    Center,
+    BottomStart,
+    BottomEnd,
+    BottomCenter
+}
 
-data class HorizontalArrangementData(
-    val arrangement: AvailableHorizontalArrangements = AvailableHorizontalArrangements.Start,
-    val spacing: Int = 0
-)
-
-data class VerticalArrangementData(
-    val arrangement: AvailableVerticalArrangements = AvailableVerticalArrangements.Top,
-    val spacing: Int = 0
+fun getContentAlignments(alignment: AvailableContentAlignments): Alignment = (
+    when (alignment) {
+        AvailableContentAlignments.TopEnd -> {
+            Alignment.TopEnd
+        }
+        AvailableContentAlignments.TopCenter -> {
+            Alignment.TopCenter
+        }
+        AvailableContentAlignments.CenterStart -> {
+            Alignment.CenterStart
+        }
+        AvailableContentAlignments.CenterEnd -> {
+            Alignment.CenterEnd
+        }
+        AvailableContentAlignments.Center -> {
+            Alignment.Center
+        }
+        AvailableContentAlignments.BottomStart -> {
+            Alignment.BottomStart
+        }
+        AvailableContentAlignments.BottomEnd -> {
+            Alignment.BottomEnd
+        }
+        AvailableContentAlignments.BottomCenter -> {
+            Alignment.BottomCenter
+        }
+        else -> {
+            Alignment.TopStart
+        }
+    }
 )
 
 data class SizeModifierData(

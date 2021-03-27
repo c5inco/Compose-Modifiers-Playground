@@ -53,20 +53,20 @@ fun CodeView(
                     AvailableElements.Box -> {
                         val data = elementModel.data as BoxElementData
                         code += "Box(\n"
-                        code += "\tcontentAlignment = Alignment.${AvailableContentAlignments[data.contentAlignment]},\n"
+                        code += "\tcontentAlignment = Alignment.${data.contentAlignment},\n"
                     }
                     AvailableElements.Column -> {
                         val data = elementModel.data as ColumnElementData
                         code += "Column(\n"
                         code += "\tverticalArrangement = Arrangement.${getArrangementString(data.verticalArrangement, data.verticalSpacing)},\n"
-                        code += "\thorizontalAlignment = Alignment.${AvailableHorizontalAlignments[data.horizontalAlignment]},\n"
+                        code += "\thorizontalAlignment = Alignment.${data.horizontalAlignment},\n"
                     }
 
                     AvailableElements.Row -> {
                         val data = elementModel.data as RowElementData
                         code += "Row(\n"
                         code += "\thorizontalArrangement = Arrangement.${getArrangementString(data.horizontalArrangement, data.horizontalSpacing)},\n"
-                        code += "\tverticalAlignment = Alignment.${AvailableVerticalAlignments[data.verticalAlignment]},\n"
+                        code += "\tverticalAlignment = Alignment.${data.verticalAlignment},\n"
                     }
                 }
 

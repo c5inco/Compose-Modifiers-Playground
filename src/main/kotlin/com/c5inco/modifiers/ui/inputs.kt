@@ -174,17 +174,16 @@ fun HorizontalArrangementInput(
     spacingValue: Int = 0,
     onValueChange: (arrangement: AvailableHorizontalArrangements, spacing: Int) -> Unit,
 ) {
-    DropdownInput2(
-        items = AvailableHorizontalArrangements.values().toList(),
-        activeItem = arrangementValue,
-        onSelect = {
-            onValueChange(it, spacingValue)
+    val spacedBy = arrangementValue == AvailableHorizontalArrangements.SpacedBy
+    ArrangementInput(
+        spacedBy,
+        AvailableHorizontalArrangements.values().toList(),
+        arrangementValue,
+        spacingValue,
+        onArrangementChange = { arr, sp ->
+            onValueChange(arr, sp)
         }
     )
-    Spacer(Modifier.width(8.dp))
-    DpInput(spacingValue, onValueChange = {
-        onValueChange(arrangementValue, it)
-    })
 }
 
 @Composable
@@ -193,27 +192,55 @@ fun VerticalArrangementInput(
     spacingValue: Int = 0,
     onValueChange: (arrangement: AvailableVerticalArrangements, spacing: Int) -> Unit,
 ) {
-    DropdownInput2(
-        items = AvailableVerticalArrangements.values().toList(),
-        activeItem = arrangementValue,
-        onSelect = {
-            onValueChange(it, spacingValue)
+    val spacedBy = arrangementValue == AvailableVerticalArrangements.SpacedBy
+    ArrangementInput(
+        spacedBy,
+        AvailableVerticalArrangements.values().toList(),
+        arrangementValue,
+        spacingValue,
+        onArrangementChange = { arr, sp ->
+            onValueChange(arr, sp)
         }
     )
-    Spacer(Modifier.width(8.dp))
-    DpInput(spacingValue, onValueChange = {
-        onValueChange(arrangementValue, it)
-    })
+}
+
+@Composable
+private fun <T> ArrangementInput(
+    spacedBy: Boolean,
+    arrangements: List<T>,
+    arrangementValue: T,
+    spacingValue: Int,
+    onArrangementChange: (arrangement: T, spacing: Int) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        DropdownInput(
+            modifier = if (spacedBy) Modifier.weight(1f) else Modifier.fillMaxWidth().padding(end = 8.dp),
+            items = arrangements,
+            activeItem = arrangementValue,
+            onSelect = {
+                onArrangementChange(it, spacingValue)
+            }
+        )
+        if (spacedBy) {
+            Spacer(Modifier.width(8.dp))
+            DpInput(spacingValue, modifier = Modifier.padding(end = 8.dp), onValueChange = {
+                onArrangementChange(arrangementValue, it)
+            })
+        }
+    }
 }
 
 @Composable
 fun HorizontalAlignmentInput(
-    alignmentValue: Alignment.Horizontal = Alignment.Start,
-    onValueChange: (alignment: Alignment.Horizontal) -> Unit,
+    alignmentValue: AvailableHorizontalAlignments = AvailableHorizontalAlignments.Start,
+    onValueChange: (alignment: AvailableHorizontalAlignments) -> Unit,
 ) {
     DropdownInput(
-        items = AvailableHorizontalAlignments,
-        activeItem = AvailableHorizontalAlignments[alignmentValue]!!,
+        items = AvailableHorizontalAlignments.values().toList(),
+        activeItem = alignmentValue,
         onSelect = {
             onValueChange(it)
         }
@@ -222,12 +249,12 @@ fun HorizontalAlignmentInput(
 
 @Composable
 fun VerticalAlignmentInput(
-    alignmentValue: Alignment.Vertical = Alignment.Top,
-    onValueChange: (alignment: Alignment.Vertical) -> Unit,
+    alignmentValue: AvailableVerticalAlignments = AvailableVerticalAlignments.Top,
+    onValueChange: (alignment: AvailableVerticalAlignments) -> Unit,
 ) {
     DropdownInput(
-        items = AvailableVerticalAlignments,
-        activeItem = AvailableVerticalAlignments[alignmentValue]!!,
+        items = AvailableVerticalAlignments.values().toList(),
+        activeItem = alignmentValue,
         onSelect = {
             onValueChange(it)
         }
@@ -236,12 +263,15 @@ fun VerticalAlignmentInput(
 
 @Composable
 fun ContentAlignmentInput(
-    alignmentValue: Alignment = Alignment.TopStart,
-    onValueChange: (alignment: Alignment) -> Unit,
+    alignmentValue: AvailableContentAlignments = AvailableContentAlignments.TopStart,
+    onValueChange: (alignment: AvailableContentAlignments) -> Unit,
 ) {
     DropdownInput(
-        items = AvailableContentAlignments,
-        activeItem = AvailableContentAlignments[alignmentValue]!!,
+        modifier = Modifier
+            .fillMaxWidth(0.5f)
+            .padding(end = 8.dp),
+        items = AvailableContentAlignments.values().toList(),
+        activeItem = alignmentValue,
         onSelect = {
             onValueChange(it)
         }
@@ -249,7 +279,7 @@ fun ContentAlignmentInput(
 }
 
 @Composable
-fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
+fun DpInput(value: Int, modifier: Modifier = Modifier, onValueChange: (Int) -> Unit) {
     var hasError by remember { mutableStateOf(false) }
 
     BasicTextField(
@@ -280,11 +310,17 @@ fun DpInput(value: Int, onValueChange: (Int) -> Unit) {
             ) {
                 Box {
                     innerTextField()
-                    if (value == 0) Text("0", color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
+                    if (value == 0) {
+                        Text(
+                            "0",
+                            style = MaterialTheme.typography.body2,
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+                        )
+                    }
                 }
             }
         },
-        modifier = Modifier.width(40.dp),
+        modifier = modifier.size(height = 24.dp, width = 40.dp),
         textStyle = MaterialTheme.typography.body2
     )
 }
@@ -333,13 +369,13 @@ fun FloatInput(value: Float, onValueChange: (Float) -> Unit) {
 }
 
 @Composable
-fun <T> DropdownInput2(items: List<T>, activeItem: T, onSelect: (T) -> Unit) {
+fun <T> DropdownInput(modifier: Modifier = Modifier.fillMaxWidth(), items: List<T>, activeItem: T, onSelect: (T) -> Unit) {
     Box {
         var hovered by remember { mutableStateOf(false) }
         var expanded by remember { mutableStateOf(false) }
 
         Row(
-            Modifier
+            modifier
                 .clickable { expanded = true }
                 .pointerMoveFilter(
                     onEnter = {
@@ -352,7 +388,6 @@ fun <T> DropdownInput2(items: List<T>, activeItem: T, onSelect: (T) -> Unit) {
                     }
                 )
                 .height(24.dp)
-                .width(120.dp)
                 .border(width = 1.dp, color = if (hovered) Color.LightGray else Color.Transparent)
                 .padding(vertical = 4.dp, horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -376,56 +411,6 @@ fun <T> DropdownInput2(items: List<T>, activeItem: T, onSelect: (T) -> Unit) {
                     expanded = false
                 }) {
                     Text("$it")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun <T> DropdownInput(items: Map<T, String>, activeItem: String, onSelect: (T) -> Unit) {
-    Box {
-        var hovered by remember { mutableStateOf(false) }
-        var expanded by remember { mutableStateOf(false) }
-
-        Row(
-            Modifier
-                .clickable { expanded = true }
-                .pointerMoveFilter(
-                    onEnter = {
-                        hovered = true
-                        false
-                    },
-                    onExit = {
-                        hovered = false
-                        false
-                    }
-                )
-                .height(24.dp)
-                .width(120.dp)
-                .border(width = 1.dp, color = if (hovered) Color.LightGray else Color.Transparent)
-                .padding(vertical = 4.dp, horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = if (hovered) Arrangement.SpaceBetween else Arrangement.Start
-        ) {
-            Text(activeItem, style = MaterialTheme.typography.body2)
-            Icon(
-                imageVector = Icons.Outlined.KeyboardArrowDown,
-                contentDescription = "Dropdown icon",
-                modifier = Modifier.size(18.dp)
-            )
-        }
-
-        DropdownMenu(
-            expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            items.forEach { (key, it) ->
-                DropdownMenuItem(onClick = {
-                    onSelect(key)
-                    expanded = false
-                }) {
-                    Text(it)
                 }
             }
         }
