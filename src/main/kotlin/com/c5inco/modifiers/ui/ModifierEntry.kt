@@ -90,20 +90,27 @@ fun ModifierEntry(
                 .weight(1f)
                 .padding(end = 16.dp)
             ) {
+                fun modifierChange(data: Any) {
+                    onModifierChange(order, Pair(data, visible))
+                }
+
                 when (modifierData.first) {
+                    is AlphaModifierData -> {
+                        val (alpha) = modifierData.first as AlphaModifierData
+                        AlphaModifier(
+                            alphaValue = alpha,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
                     is SizeModifierData -> {
                         val data = modifierData.first as SizeModifierData
                         SizeModifier(
                             widthValue = data.width,
                             heightValue = data.height,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -114,13 +121,7 @@ fun ModifierEntry(
                             shapeValue = data.shape,
                             cornerValue = data.corner,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -132,13 +133,7 @@ fun ModifierEntry(
                             shapeValue = data.shape,
                             cornerValue = data.corner,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -147,13 +142,7 @@ fun ModifierEntry(
                         PaddingModifier(
                             allValue = data.all,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -164,13 +153,7 @@ fun ModifierEntry(
                             shapeValue = data.shape,
                             cornerValue = data.corner,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -180,13 +163,7 @@ fun ModifierEntry(
                             xValue = data.x,
                             yValue = data.y,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -196,13 +173,7 @@ fun ModifierEntry(
                             shapeValue = shape,
                             cornerValue = corner,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -211,13 +182,7 @@ fun ModifierEntry(
                         RotateModifier(
                             degreesValue = degrees,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -226,13 +191,7 @@ fun ModifierEntry(
                         ScaleModifier(
                             scaleValue = scale,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -241,13 +200,7 @@ fun ModifierEntry(
                         FillMaxWidthModifier(
                             fractionValue = fraction,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -256,13 +209,7 @@ fun ModifierEntry(
                         FillMaxHeightModifier(
                             fractionValue = fraction,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -271,13 +218,34 @@ fun ModifierEntry(
                         FillMaxSizeModifier(
                             fractionValue = fraction,
                             onChange = {
-                                onModifierChange(
-                                    order,
-                                    Pair(
-                                        it.copy(),
-                                        visible
-                                    )
-                                )
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is WrapContentHeightModifierData -> {
+                        val (unbounded) = modifierData.first as WrapContentHeightModifierData
+                        WrapContentHeightModifier(
+                            unboundedValue = unbounded,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is WrapContentWidthModifierData -> {
+                        val (unbounded) = modifierData.first as WrapContentWidthModifierData
+                        WrapContentWidthModifier(
+                            unboundedValue = unbounded,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is WrapContentSizeModifierData -> {
+                        val (unbounded) = modifierData.first as WrapContentSizeModifierData
+                        WrapContentSizeModifier(
+                            unboundedValue = unbounded,
+                            onChange = {
+                                modifierChange(it.copy())
                             }
                         )
                     }
@@ -310,19 +278,26 @@ fun ModifierEntry(
 }
 
 enum class ModifierEntry {
-    Size,
-    FillMaxWidth,
+    Alpha,
+    Background,
+    Border,
+    Clickable,
+    Clip,
+    Height,
     FillMaxHeight,
     FillMaxSize,
-    Padding,
-    Border,
-    Background,
-    Shadow,
+    FillMaxWidth,
     Offset,
-    Clip,
+    Padding,
     Rotate,
+    Shadow,
+    Size,
     Scale,
     Weight,
+    Width,
+    WrapContentHeight,
+    WrapContentSize,
+    WrapContentWidth,
 }
 
 fun getShape(shape: AvailableShapes, corner: Int): Shape {

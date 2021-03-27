@@ -400,45 +400,57 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
 }
 
 private fun getNewModifierData(modifierType: ModifierEntry): Any = (
-        when (modifierType) {
-            ModifierEntry.Padding -> {
-                PaddingModifierData()
-            }
-            ModifierEntry.Background -> {
-                BackgroundModifierData()
-            }
-            ModifierEntry.Border -> {
-                BorderModifierData()
-            }
-            ModifierEntry.Shadow -> {
-                ShadowModifierData()
-            }
-            ModifierEntry.Offset -> {
-                OffsetDesignModifierData()
-            }
-            ModifierEntry.Clip -> {
-                ClipModifierData()
-            }
-            ModifierEntry.Rotate -> {
-                RotateModifierData()
-            }
-            ModifierEntry.Scale -> {
-                ScaleModifierData()
-            }
-            ModifierEntry.FillMaxWidth -> {
-                FillMaxWidthModifierData()
-            }
-            ModifierEntry.FillMaxHeight -> {
-                FillMaxHeightModifierData()
-            }
-            ModifierEntry.FillMaxSize -> {
-                FillMaxSizeModifierData()
-            }
-            else -> {
-                SizeModifierData()
-            }
+    when (modifierType) {
+        ModifierEntry.Alpha -> {
+            AlphaModifierData()
         }
-        )
+        ModifierEntry.Padding -> {
+            PaddingModifierData()
+        }
+        ModifierEntry.Background -> {
+            BackgroundModifierData()
+        }
+        ModifierEntry.Border -> {
+            BorderModifierData()
+        }
+        ModifierEntry.Shadow -> {
+            ShadowModifierData()
+        }
+        ModifierEntry.Offset -> {
+            OffsetDesignModifierData()
+        }
+        ModifierEntry.Clip -> {
+            ClipModifierData()
+        }
+        ModifierEntry.Rotate -> {
+            RotateModifierData()
+        }
+        ModifierEntry.Scale -> {
+            ScaleModifierData()
+        }
+        ModifierEntry.FillMaxWidth -> {
+            FillMaxWidthModifierData()
+        }
+        ModifierEntry.FillMaxHeight -> {
+            FillMaxHeightModifierData()
+        }
+        ModifierEntry.FillMaxSize -> {
+            FillMaxSizeModifierData()
+        }
+        ModifierEntry.WrapContentHeight -> {
+            WrapContentHeightModifierData()
+        }
+        ModifierEntry.WrapContentWidth -> {
+            WrapContentWidthModifierData()
+        }
+        ModifierEntry.WrapContentSize -> {
+            WrapContentSizeModifierData()
+        }
+        else -> {
+            SizeModifierData()
+        }
+    }
+)
 
 @Composable
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
@@ -507,6 +519,20 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
             DropdownMenuItem(onClick = { select(ModifierEntry.FillMaxSize) }) {
                 Text("FillMaxSize")
             }
+            DropdownMenuItem(onClick = { select(ModifierEntry.WrapContentWidth) }) {
+                Text("WrapContentWidth")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.WrapContentHeight) }) {
+                Text("WrapContentHeight")
+            }
+            DropdownMenuItem(onClick = { select(ModifierEntry.WrapContentSize) }) {
+                Text("WrapContentSize")
+            }
+            /*
+            DropdownMenuItem(onClick = { select(ModifierEntry.Alpha) }) {
+                Text("Alpha")
+            }
+            */
         }
     }
 }

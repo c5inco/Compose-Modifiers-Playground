@@ -135,6 +135,10 @@ private fun generateModifiers(modifiers: List<Pair<Any, Boolean>>, indent: Int):
 
 private fun lookupModifier(modifier: Any): String = (
     when (modifier) {
+        is AlphaModifierData -> {
+            val (alpha) = modifier
+            "alpha(${alpha}f)"
+        }
         is SizeModifierData -> {
             val (width, height) = modifier
             "size(width = $width.dp, height = $height.dp)"
@@ -182,6 +186,18 @@ private fun lookupModifier(modifier: Any): String = (
         is FillMaxSizeModifierData -> {
             val (fraction) = modifier
             "fillMaxSize(${fraction}f)"
+        }
+        is WrapContentWidthModifierData -> {
+            val (unbounded) = modifier
+            "wrapContentWidth(unbounded = $unbounded)"
+        }
+        is WrapContentHeightModifierData -> {
+            val (unbounded) = modifier
+            "wrapContentHeight(unbounded = $unbounded)"
+        }
+        is WrapContentSizeModifierData -> {
+            val (unbounded) = modifier
+            "wrapContentSize(unbounded = $unbounded)"
         }
         else -> {
             ""

@@ -6,11 +6,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.RotateLeft
 import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
+
+@Composable
+fun AlphaModifier(alphaValue: Float, onChange: (AlphaModifierData) -> Unit) {
+    Column {
+        ModifierLabel("alpha")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            FloatInput(
+                alphaValue,
+                onValueChange = {
+                    onChange(AlphaModifierData(it))
+                }
+            )
+        }
+    }
+}
 
 @Composable
 fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue: Int, onChange: (ShadowModifierData) -> Unit) {
@@ -268,6 +284,63 @@ fun FillMaxSizeModifier(fractionValue: Float, onChange: (FillMaxSizeModifierData
             FloatInput(fractionValue, onValueChange = {
                 onChange(FillMaxSizeModifierData(it))
             })
+        }
+    }
+}
+
+@Composable
+fun WrapContentHeightModifier(unboundedValue: Boolean, onChange: (WrapContentHeightModifierData) -> Unit) {
+    Column {
+        ModifierLabel("wrapContentHeight")
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Checkbox(
+                checked = unboundedValue,
+                onCheckedChange = {
+                    onChange(WrapContentHeightModifierData(it))
+                }
+            )
+            Text("Unbounded", style = MaterialTheme.typography.body2)
+        }
+    }
+}
+
+@Composable
+fun WrapContentWidthModifier(unboundedValue: Boolean, onChange: (WrapContentWidthModifierData) -> Unit) {
+    Column {
+        ModifierLabel("wrapContentWidth")
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Checkbox(
+                checked = unboundedValue,
+                onCheckedChange = {
+                    onChange(WrapContentWidthModifierData(it))
+                }
+            )
+            Text("Unbounded", style = MaterialTheme.typography.body2)
+        }
+    }
+}
+
+@Composable
+fun WrapContentSizeModifier(unboundedValue: Boolean, onChange: (WrapContentSizeModifierData) -> Unit) {
+    Column {
+        ModifierLabel("wrapContentSize")
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Checkbox(
+                checked = unboundedValue,
+                onCheckedChange = {
+                    onChange(WrapContentSizeModifierData(it))
+                }
+            )
+            Text("Unbounded", style = MaterialTheme.typography.body2)
         }
     }
 }

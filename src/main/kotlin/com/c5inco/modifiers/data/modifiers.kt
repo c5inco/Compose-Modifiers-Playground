@@ -5,10 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.ui.getShape
@@ -154,6 +151,10 @@ fun getContentAlignments(alignment: AvailableContentAlignments): Alignment = (
     }
 )
 
+data class AlphaModifierData(
+    val alpha: Float = 1f
+)
+
 data class SizeModifierData(
     val width: Int = 0,
     val height: Int = 0
@@ -216,8 +217,24 @@ data class WeightModifierData(
     val weight: Float = 1f
 )
 
+data class WrapContentHeightModifierData(
+    val unbounded: Boolean = false
+)
+
+data class WrapContentWidthModifierData(
+    val unbounded: Boolean = false
+)
+
+data class WrapContentSizeModifierData(
+    val unbounded: Boolean = false
+)
+
 fun getModifier(data: Any): Modifier = (
     when (data) {
+        is AlphaModifierData -> {
+            val (alpha) = data
+            Modifier.alpha(alpha)
+        }
         is SizeModifierData -> {
             val (width, height) = data
             Modifier.size(width = width.dp, height = height.dp)
@@ -265,6 +282,18 @@ fun getModifier(data: Any): Modifier = (
         is FillMaxSizeModifierData -> {
             val (fraction) = data
             Modifier.fillMaxSize(fraction)
+        }
+        is WrapContentHeightModifierData -> {
+            val (unbounded) = data
+            Modifier.wrapContentHeight(unbounded = unbounded)
+        }
+        is WrapContentWidthModifierData -> {
+            val (unbounded) = data
+            Modifier.wrapContentWidth(unbounded = unbounded)
+        }
+        is WrapContentSizeModifierData -> {
+            val (unbounded) = data
+            Modifier.wrapContentSize(unbounded = unbounded)
         }
         else -> {
             Modifier
