@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
@@ -163,9 +165,19 @@ fun ShapeInput(
     }
 
     Spacer(Modifier.width(8.dp))
-    DpInput(cornerValue, onValueChange = {
-        onValueChange(shapeValue, it)
-    })
+    DpInput(
+        cornerValue,
+        label = {
+            Text(
+                "C",
+                style = MaterialTheme.typography.body2,
+                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+            )
+        },
+        onValueChange = {
+            onValueChange(shapeValue, it)
+        }
+    )
 }
 
 @Composable
@@ -226,9 +238,13 @@ private fun <T> ArrangementInput(
         )
         if (spacedBy) {
             Spacer(Modifier.width(8.dp))
-            DpInput(spacingValue, modifier = Modifier.padding(end = 8.dp), onValueChange = {
-                onArrangementChange(arrangementValue, it)
-            })
+            DpInput(
+                spacingValue,
+                modifier = Modifier.padding(end = 8.dp),
+                onValueChange = {
+                    onArrangementChange(arrangementValue, it)
+                }
+            )
         }
     }
 }
@@ -279,24 +295,29 @@ fun ContentAlignmentInput(
 }
 
 @Composable
-fun DpInput(value: Int, modifier: Modifier = Modifier, onValueChange: (Int) -> Unit) {
-    var hasError by remember { mutableStateOf(false) }
+fun DpInput(
+    value: Int,
+    modifier: Modifier = Modifier,
+    label: @Composable () -> Unit = {},
+    onValueChange: (Int) -> Unit
+) {
+    var hovered by remember { mutableStateOf(false) }
+    var focused by remember { mutableStateOf(false) }
+
+    fun getBorderColor(): Color {
+        if (focused) return Color.Blue
+        if (hovered) return Color.LightGray
+        return Color.Transparent
+    }
 
     BasicTextField(
-        value = if (value == 0) "" else value.toString(),
+        value = value.toString(),
         onValueChange = {
-            if (it.isBlank()) {
-                onValueChange(0)
-                hasError = false
+            val convertedValue = it.toIntOrNull()
+            if (convertedValue != null) {
+                onValueChange(convertedValue)
             } else {
-                val convertedValue = it.toIntOrNull()
-                if (convertedValue != null) {
-                    onValueChange(convertedValue)
-                    hasError = false
-                } else {
-                    onValueChange(0)
-                    hasError = true
-                }
+                onValueChange(0)
             }
         },
         singleLine = true,
@@ -304,46 +325,62 @@ fun DpInput(value: Int, modifier: Modifier = Modifier, onValueChange: (Int) -> U
             Row(
                 modifier = Modifier
                     .background(MaterialTheme.colors.surface)
-                    .border(width = 1.dp, color = if (hasError) MaterialTheme.colors.error else Color.LightGray)
+                    .border(width = 1.dp, color = getBorderColor())
                     .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box {
-                    innerTextField()
-                    if (value == 0) {
-                        Text(
-                            "0",
-                            style = MaterialTheme.typography.body2,
-                            color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-                        )
-                    }
-                }
+                label()
+                innerTextField()
             }
         },
-        modifier = modifier.size(height = 24.dp, width = 40.dp),
+        modifier = modifier
+            .onFocusChanged {
+                if (it == FocusState.Active) {
+                    focused = true
+                }
+                if (it == FocusState.Inactive) {
+                    focused = false
+                }
+            }
+            .pointerMoveFilter(
+                onEnter = {
+                    hovered = true
+                    false
+                },
+                onExit = {
+                    hovered = false
+                    false
+                }
+            )
+            .size(height = 24.dp, width = 54.dp),
         textStyle = MaterialTheme.typography.body2
     )
 }
 
 @Composable
-fun FloatInput(value: Float, onValueChange: (Float) -> Unit) {
-    var hasError by remember { mutableStateOf(false) }
+fun FloatInput(
+    value: Float,
+    label: @Composable () -> Unit = {},
+    onValueChange: (Float) -> Unit
+) {
+    var hovered by remember { mutableStateOf(false) }
+    var focused by remember { mutableStateOf(false) }
+
+    fun getBorderColor(): Color {
+        if (focused) return Color.Blue
+        if (hovered) return Color.LightGray
+        return Color.Transparent
+    }
 
     BasicTextField(
         value = value.toString(),
         onValueChange = {
-            if (it.isBlank()) {
-                //onValueChange(0)
-                //hasError = false
+            val convertedValue = it.toFloatOrNull()
+            if (convertedValue != null) {
+                onValueChange(convertedValue)
             } else {
-                val convertedValue = it.toFloatOrNull()
-                if (convertedValue != null) {
-                    onValueChange(convertedValue)
-                    hasError = false
-                } else {
-                    onValueChange(0f)
-                    hasError = true
-                }
+                onValueChange(0f)
             }
         },
         singleLine = true,
@@ -351,18 +388,35 @@ fun FloatInput(value: Float, onValueChange: (Float) -> Unit) {
             Row(
                 modifier = Modifier
                     .background(MaterialTheme.colors.surface)
-                    .border(width = 1.dp, color = if (hasError) MaterialTheme.colors.error else Color.LightGray)
+                    .border(width = 1.dp, color = getBorderColor())
                     .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box {
-                    innerTextField()
-                    if (value == 0f) Text("0", color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
-                }
+                label()
+                innerTextField()
             }
         },
         modifier = Modifier
-            .width(48.dp)
+            .onFocusChanged {
+                if (it == FocusState.Active) {
+                    focused = true
+                }
+                if (it == FocusState.Inactive) {
+                    focused = false
+                }
+            }
+            .pointerMoveFilter(
+                onEnter = {
+                    hovered = true
+                    false
+                },
+                onExit = {
+                    hovered = false
+                    false
+                }
+            )
+            .width(54.dp)
         ,
         textStyle = MaterialTheme.typography.body2
     )
