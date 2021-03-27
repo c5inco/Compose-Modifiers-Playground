@@ -1,10 +1,26 @@
 <idea-plugin>
-    <id>com.c5inco.ModifiersPlaygroundPlugin</id>
-    <name>Modifiers Playground</name>
-    <vendor email="csinco.design@gmail.com" url="csinco.com">Chris Sinco</vendor>
+    <id>com.c5inco.modifiers</id>
+    <name>Compose Modifiers Playground</name>
+    <vendor email="csinco.design@gmail.com" url="https://csinco.com">Chris Sinco</vendor>
 
     <description><![CDATA[
-A plugin to help learn how to use Jetpack Compose Modifiers
+        Learn how to use Jetpack Compose modifiers through this interactive playground!
+        <br><br>
+        Available modifiers to use:
+        <ul>
+            <li>Background</li>
+            <li>Border</li>
+            <li>Clip</li>
+            <li>FillMaxHeight</li>
+            <li>FillMaxSize</li>
+            <li>FillMaxWidth</li>
+            <li>Offset</li>
+            <li>Padding</li>
+            <li>Rotate</li>
+            <li>Scale</li>
+            <li>Shadow</li>
+            <li>Size</li>
+        </ul>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -17,7 +33,7 @@ A plugin to help learn how to use Jetpack Compose Modifiers
 
     <actions>
         <!-- Add your actions here -->
-        <action id="com.c5inco.modifiers" class="com.c5inco.modifiers.plugin.PluginAction"
+        <action id="com.c5inco.modifiers.plugin.PluginAction" class="com.c5inco.modifiers.plugin.PluginAction"
                 text="Compose Modifiers Playground">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
