@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.RotateLeft
+import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,7 +16,9 @@ import com.c5inco.modifiers.data.*
 fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue: Int, onChange: (ShadowModifierData) -> Unit) {
     Column {
         ModifierLabel("shadow")
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             DpInput(
                 elevationValue,
                 label = {
@@ -29,7 +32,6 @@ fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue
                     onChange(ShadowModifierData(it, shapeValue, cornerValue))
                 }
             )
-            Spacer(Modifier.width(16.dp))
             ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
                 onChange(ShadowModifierData(elevationValue, shape, corner))
             })
@@ -76,11 +78,12 @@ fun SizeModifier(widthValue: Int, heightValue: Int, onChange: (SizeModifierData)
 fun BackgroundModifier(colorValue: Color, shapeValue: AvailableShapes, cornerValue: Int, onChange: (BackgroundModifierData) -> Unit) {
     Column {
         ModifierLabel("background")
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ){
             ColorInput(colorValue, onValueChange = { color ->
                 onChange(BackgroundModifierData(color, shapeValue, cornerValue))
             })
-            Spacer(Modifier.width(16.dp))
             ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
                 onChange(BackgroundModifierData(colorValue, shape, corner))
             })
@@ -92,7 +95,9 @@ fun BackgroundModifier(colorValue: Color, shapeValue: AvailableShapes, cornerVal
 fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShapes, cornerValue: Int, onChange: (BorderModifierData) -> Unit) {
     Column {
         ModifierLabel("border")
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             DpInput(
                 widthValue,
                 label = {
@@ -106,11 +111,9 @@ fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShap
                     onChange(BorderModifierData(it, colorValue, shapeValue, cornerValue))
                 }
             )
-            Spacer(Modifier.width(16.dp))
             ColorInput(colorValue, onValueChange = { color ->
                 onChange(BorderModifierData(widthValue, color, shapeValue, cornerValue))
             })
-            Spacer(Modifier.width(16.dp))
             ShapeInput(shapeValue, cornerValue, onValueChange = { shape, corner ->
                 onChange(BorderModifierData(widthValue, colorValue, shape, corner))
             })
@@ -215,9 +218,20 @@ fun ScaleModifier(scaleValue: Float, onChange: (ScaleModifierData) -> Unit) {
     Column {
         ModifierLabel("scale")
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            FloatInput(scaleValue, onValueChange = {
-                onChange(ScaleModifierData(it))
-            })
+            FloatInput(
+                scaleValue,
+                label = {
+                    Icon(
+                        imageVector = Icons.Outlined.SquareFoot,
+                        contentDescription = "Scale icon",
+                        tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                        modifier = Modifier.size(18.dp)
+                    )
+                },
+                onValueChange = {
+                    onChange(ScaleModifierData(it))
+                }
+            )
         }
     }
 }

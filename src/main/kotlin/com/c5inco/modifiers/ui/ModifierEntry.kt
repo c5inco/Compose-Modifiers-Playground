@@ -85,7 +85,11 @@ fun ModifierEntry(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Box(Modifier.alpha(if (visible) 1f else 0.4f)) {
+            Box(Modifier
+                .alpha(if (visible) 1f else 0.4f)
+                .weight(1f)
+                .padding(end = 16.dp)
+            ) {
                 when (modifierData.first) {
                     is SizeModifierData -> {
                         val data = modifierData.first as SizeModifierData
@@ -279,8 +283,6 @@ fun ModifierEntry(
                     }
                 }
             }
-
-            Spacer(Modifier.width(16.dp))
             Row {
                 SmallIconButton(onClick = {
                     onModifierChange(order, Pair(modifierData.first, !visible))

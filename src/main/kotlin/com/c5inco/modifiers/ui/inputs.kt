@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.RoundedCorner
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -164,20 +165,22 @@ fun ShapeInput(
         }
     }
 
-    Spacer(Modifier.width(8.dp))
-    DpInput(
-        cornerValue,
-        label = {
-            Text(
-                "C",
-                style = MaterialTheme.typography.body2,
-                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-            )
-        },
-        onValueChange = {
-            onValueChange(shapeValue, it)
-        }
-    )
+    if (shapeValue == AvailableShapes.RoundedCorner || shapeValue == AvailableShapes.CutCorner) {
+        DpInput(
+            cornerValue,
+            label = {
+                Icon(
+                    imageVector = Icons.Outlined.RoundedCorner,
+                    contentDescription = "Corner icon",
+                    tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                    modifier = Modifier.size(18.dp)
+                )
+            },
+            onValueChange = {
+                onValueChange(shapeValue, it)
+            }
+        )
+    }
 }
 
 @Composable
