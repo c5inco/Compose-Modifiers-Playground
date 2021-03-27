@@ -31,7 +31,7 @@ import com.c5inco.modifiers.utils.until
 
 fun main() = Window(
     title = "Modifiers Playground",
-    size = IntSize(width = 900, height = 750)
+    size = IntSize(width = 1000, height = 750)
 ) {
     Playground()
 }
