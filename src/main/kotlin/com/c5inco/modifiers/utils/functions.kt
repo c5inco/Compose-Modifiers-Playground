@@ -1,11 +1,5 @@
 package com.c5inco.modifiers.utils
 
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
-import com.c5inco.modifiers.ui.EditorTheme
-
 fun <T> chunk(list: List<T>, size: Int): List<List<T>> {
     val chunkedList = mutableListOf<List<T>>()
 
@@ -19,4 +13,16 @@ fun <T> chunk(list: List<T>, size: Int): List<List<T>> {
     }
 
     return chunkedList.toList()
+}
+
+fun until(start: Int, end: Int, incrementStep: Int, body: (idx: Int) -> Unit) {
+    for (i in start until end step incrementStep) {
+        body(i)
+    }
+}
+
+fun downTo(start: Int, end: Int, incrementStep: Int, body: (idx: Int) -> Unit) {
+    for (i in start downTo end step incrementStep) {
+        body(i)
+    }
 }
