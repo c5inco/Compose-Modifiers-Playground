@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.*
 import com.c5inco.modifiers.ui.controls.CompactDropdownItem
+import com.c5inco.modifiers.ui.theme.Fonts
 import com.c5inco.modifiers.ui.theme.appLightColors
 import com.c5inco.modifiers.ui.theme.blue700
 import com.c5inco.modifiers.utils.downTo
@@ -277,12 +279,22 @@ fun ChildGroup(
     ComponentHeader("$name element", expanded, onExpand = { expanded = !expanded })
 
     if (expanded) {
-        Spacer(Modifier.height(8.dp))
-
-        PropertiesSection(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
-        ) {
-            Text("Text")
+        PropertiesSection {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .background(
+                        EditorTheme.colors.backgroundDark,
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            ) {
+                Text(
+                    formatCode("Text(\"$name\", fontSize = 48.sp)"),
+                    fontSize = 14.sp,
+                    fontFamily = Fonts.jetbrainsMono()
+                )
+            }
         }
 
         DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))

@@ -239,7 +239,7 @@ private fun generateShapeString(shape: AvailableShapes, corner: Int): String = (
     }
 )
 
-private fun formatCode(str: String) = buildAnnotatedString {
+fun formatCode(str: String) = buildAnnotatedString {
     withStyle(EditorTheme.code.simple) {
         var strFormatted = str.replace("\t", "    ")
         append(strFormatted)
