@@ -131,11 +131,14 @@ fun Playground() {
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(end = 8.dp, bottom = 8.dp)
+                                .shadow(elevation = 6.dp, shape = RoundedCornerShape(8.dp))
+                                .background(MaterialTheme.colors.surface)
+                                .size(32.dp)
                         ) {
                             Icon(
                                 imageVector = if (showCode) Icons.Outlined.CodeOff else Icons.Outlined.Code,
                                 contentDescription = "Toggle code on or off",
-                                tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                                tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
                             )
                         }
                     }

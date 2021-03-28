@@ -2,11 +2,17 @@ package com.c5inco.modifiers.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.AnnotatedString
@@ -17,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.theme.Fonts
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 
 @Composable
 fun CodeView(
@@ -40,7 +48,9 @@ fun CodeView(
         )
     ) {
         Box {
+            var code = ""
             var verticalScrollState = rememberScrollState(0)
+
             Column(
                 Modifier
                     .fillMaxSize()
@@ -48,8 +58,6 @@ fun CodeView(
                     .padding(16.dp)
                     .verticalScroll(verticalScrollState)
             ) {
-                var code = ""
-
                 when (elementModel.type) {
                     AvailableElements.Box -> {
                         val data = elementModel.data as BoxElementData
@@ -99,8 +107,28 @@ fun CodeView(
                     adapter = rememberScrollbarAdapter(verticalScrollState),
                 )
             }
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(end = 8.dp, top = 8.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .size(32.dp),
+                onClick = { copyCode(code) }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ContentCopy,
+                    contentDescription = "Copy code",
+                    tint = Color.White
+                )
+            }
         }
     }
+}
+
+
+private fun copyCode(code: String) {
+    val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+    clipboard.setContents(StringSelection(code), null)
 }
 
 private fun getArrangementString(arrangement: Any, spacing: Int): String {
