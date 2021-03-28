@@ -140,6 +140,14 @@ private fun lookupModifier(modifier: Any): String = (
             val (alpha) = modifier
             "alpha(${alpha}f)"
         }
+        is HeightModifierData -> {
+            val (height) = modifier
+            "height($height.dp)"
+        }
+        is WidthModifierData -> {
+            val (width) = modifier
+            "width($width.dp)"
+        }
         is SizeModifierData -> {
             val (width, height) = modifier
             "size(width = $width.dp, height = $height.dp)"

@@ -104,6 +104,24 @@ fun ModifierEntry(
                             }
                         )
                     }
+                    is HeightModifierData -> {
+                        val data = modifierData.first as HeightModifierData
+                        HeightModifier(
+                            heightValue = data.height,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is WidthModifierData -> {
+                        val data = modifierData.first as WidthModifierData
+                        WidthModifier(
+                            widthValue = data.width,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
                     is SizeModifierData -> {
                         val data = modifierData.first as SizeModifierData
                         SizeModifier(

@@ -56,6 +56,36 @@ fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue
 }
 
 @Composable
+fun HeightModifier(heightValue: Int, onChange: (HeightModifierData) -> Unit) {
+    Column {
+        ModifierLabel("height")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            DpInput(
+                heightValue,
+                onValueChange = {
+                    onChange(HeightModifierData(it))
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun WidthModifier(widthValue: Int, onChange: (WidthModifierData) -> Unit) {
+    Column {
+        ModifierLabel("width")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            DpInput(
+                widthValue,
+                onValueChange = {
+                    onChange(WidthModifierData(it))
+                }
+            )
+        }
+    }
+}
+
+@Composable
 fun SizeModifier(widthValue: Int, heightValue: Int, onChange: (SizeModifierData) -> Unit) {
     Column {
         ModifierLabel("size")

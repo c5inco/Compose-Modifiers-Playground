@@ -422,6 +422,12 @@ private fun getNewModifierData(modifierType: ModifierEntry): Any = (
         ModifierEntry.Padding -> {
             PaddingModifierData()
         }
+        ModifierEntry.Height -> {
+            HeightModifierData()
+        }
+        ModifierEntry.Width -> {
+            WidthModifierData()
+        }
         ModifierEntry.Background -> {
             BackgroundModifierData()
         }

@@ -155,6 +155,14 @@ data class AlphaModifierData(
     val alpha: Float = 1f
 )
 
+data class HeightModifierData(
+    val height: Int = 0
+)
+
+data class WidthModifierData(
+    val width: Int = 0
+)
+
 data class SizeModifierData(
     val width: Int = 0,
     val height: Int = 0
@@ -234,6 +242,14 @@ fun getModifier(data: Any): Modifier = (
         is AlphaModifierData -> {
             val (alpha) = data
             Modifier.alpha(alpha)
+        }
+        is HeightModifierData -> {
+            val (height) = data
+            Modifier.height(height.dp)
+        }
+        is WidthModifierData -> {
+            val (width) = data
+            Modifier.width(width.dp)
         }
         is SizeModifierData -> {
             val (width, height) = data
