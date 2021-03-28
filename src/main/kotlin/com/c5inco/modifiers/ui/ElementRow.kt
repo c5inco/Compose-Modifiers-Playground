@@ -1,16 +1,11 @@
 package com.c5inco.modifiers.ui
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
@@ -25,40 +20,16 @@ fun ElementRow(
     val elementData: Any = model.data
 
     Column(Modifier.fillMaxWidth()) {
-        Row {
-            Box {
-                var hovered by remember { mutableStateOf(false) }
-
-                Row(
-                    Modifier
-                        .clickable { expanded = true }
-                        .pointerMoveFilter(
-                            onEnter = {
-                                hovered = true
-                                false
-                            },
-                            onExit = {
-                                hovered = false
-                                false
-                            }
-                        )
-                        .height(24.dp)
-                        .width(120.dp)
-                        .border(width = 1.dp, color = if (hovered) Color.LightGray else Color.Transparent)
-                        .padding(vertical = 4.dp, horizontal = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = if (hovered) Arrangement.SpaceBetween else Arrangement.Start
-                ) {
-                    Text("$element", style = MaterialTheme.typography.body2)
-                    Icon(
-                        imageVector = Icons.Outlined.KeyboardArrowDown,
-                        contentDescription = "Dropdown icon",
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-
-                val select: (AvailableElements) -> Unit = {
-                    expanded = false
+        Row(
+            Modifier
+                .fillMaxWidth(0.5f)
+                .padding(end = 8.dp)
+        ) {
+            DropdownInput(
+                items = AvailableElements.values().toList(),
+                activeItem = element,
+                onSelect = {
+                    //expanded = false
                     var newElementData: Any = BoxElementData()
 
                     when (it) {
@@ -66,25 +37,9 @@ fun ElementRow(
                         AvailableElements.Row -> newElementData = RowElementData()
                     }
 
-                    onValueChange(
-                        ElementModel(
-                            it,
-                            newElementData
-                        )
-                    )
+                    onValueChange(ElementModel(it, newElementData))
                 }
-
-                DropdownMenu(
-                    expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    AvailableElements.values().forEach {
-                        DropdownMenuItem(onClick = { select(it) }) {
-                            Text("$it")
-                        }
-                    }
-                }
-            }
+            )
         }
 
         when (element) {
