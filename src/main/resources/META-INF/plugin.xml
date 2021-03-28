@@ -8,18 +8,25 @@
         <br><br>
         Available modifiers to use:
         <ul>
+            <li>Alpha</li>
             <li>Background</li>
             <li>Border</li>
+            <li>Clickable</li>
             <li>Clip</li>
             <li>FillMaxHeight</li>
             <li>FillMaxSize</li>
             <li>FillMaxWidth</li>
+            <li>Height</li>
             <li>Offset</li>
             <li>Padding</li>
             <li>Rotate</li>
             <li>Scale</li>
             <li>Shadow</li>
             <li>Size</li>
+            <li>Width</li>
+            <li>WrapContentHeight</li>
+            <li>WrapContentSize</li>
+            <li>WrapContentWidth</li>
         </ul>
     ]]></description>
 
