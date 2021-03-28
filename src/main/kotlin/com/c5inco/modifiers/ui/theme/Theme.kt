@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontStyle
 
 @Composable
 fun PlaygroundTheme(
@@ -41,8 +42,16 @@ object EditorTheme {
         val simple: SpanStyle = SpanStyle(Color(0xFFA9B7C6)),
         val value: SpanStyle = SpanStyle(Color(0xFF6897BB)),
         val keyword: SpanStyle = SpanStyle(Color(0xFFCC7832)),
+        val namedArgument: SpanStyle = SpanStyle(Color(0xFF467CDA)),
+        val function: SpanStyle =
+            SpanStyle(
+                Color(0xFFFFC66D),
+                fontStyle = FontStyle.Italic
+            ),
+        val number: SpanStyle = SpanStyle(Color(0xFF6897BB)),
         val punctuation: SpanStyle = SpanStyle(Color(0xFFA1C17E)),
         val annotation: SpanStyle = SpanStyle(Color(0xFFBBB529)),
-        val comment: SpanStyle = SpanStyle(Color(0xFF808080))
+        val comment: SpanStyle = SpanStyle(Color(0xFF808080)),
+        val extension: SpanStyle = SpanStyle(Color(0xFF9876AA)),
     )
 }
