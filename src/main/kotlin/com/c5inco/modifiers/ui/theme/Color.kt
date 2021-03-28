@@ -12,6 +12,11 @@ val blue700: Color = Color(0xff1976d2)
 val hoverLightColor: Color = Color.Black.copy(alpha = 0.1f)
 val hoverDarkColor: Color = Color.White.copy(alpha = 0.1f)
 
+// Code colors (dark theme)
+val baseColor: Color = Color(0xFFA9B7C6)
+val stringColor: Color = Color(0xFF6A8759)
+val extensionColor: Color = Color(0xFF9876AA)
+
 val appLightColors: Colors = lightColors(
     primary = blue700,
     secondary = blue200

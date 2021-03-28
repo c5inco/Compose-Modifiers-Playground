@@ -6,6 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
+import com.c5inco.modifiers.ui.theme.baseColor
+import com.c5inco.modifiers.ui.theme.extensionColor
+import com.c5inco.modifiers.ui.theme.stringColor
 
 @Composable
 fun PlaygroundTheme(
@@ -39,19 +42,30 @@ object EditorTheme {
     )
 
     class Code(
-        val simple: SpanStyle = SpanStyle(Color(0xFFA9B7C6)),
+        val simple: SpanStyle = SpanStyle(baseColor),
         val value: SpanStyle = SpanStyle(Color(0xFF6897BB)),
         val keyword: SpanStyle = SpanStyle(Color(0xFFCC7832)),
         val namedArgument: SpanStyle = SpanStyle(Color(0xFF467CDA)),
+        val string: SpanStyle = SpanStyle(stringColor),
         val function: SpanStyle =
             SpanStyle(
                 Color(0xFFFFC66D),
+                fontStyle = FontStyle.Italic
+            ),
+        val composable: SpanStyle =
+            SpanStyle(
+                baseColor,
                 fontStyle = FontStyle.Italic
             ),
         val number: SpanStyle = SpanStyle(Color(0xFF6897BB)),
         val punctuation: SpanStyle = SpanStyle(Color(0xFFA1C17E)),
         val annotation: SpanStyle = SpanStyle(Color(0xFFBBB529)),
         val comment: SpanStyle = SpanStyle(Color(0xFF808080)),
-        val extension: SpanStyle = SpanStyle(Color(0xFF9876AA)),
+        val property: SpanStyle = SpanStyle(extensionColor),
+        val extension: SpanStyle =
+            SpanStyle(
+                extensionColor,
+                fontStyle = FontStyle.Italic
+            ),
     )
 }
