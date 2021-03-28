@@ -30,6 +30,7 @@ import com.c5inco.modifiers.ui.theme.Fonts
 import com.c5inco.modifiers.ui.theme.appLightColors
 import com.c5inco.modifiers.ui.theme.blue700
 import com.c5inco.modifiers.utils.downTo
+import com.c5inco.modifiers.utils.formatCode
 import com.c5inco.modifiers.utils.until
 
 fun main() = Window(

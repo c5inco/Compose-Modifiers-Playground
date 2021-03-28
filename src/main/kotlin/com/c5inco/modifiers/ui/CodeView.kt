@@ -15,14 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.theme.Fonts
+import com.c5inco.modifiers.utils.formatCode
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 
@@ -67,19 +64,19 @@ fun CodeView(
                     AvailableElements.Column -> {
                         val data = elementModel.data as ColumnElementData
                         code += "Column(\n"
-                        code += "\tverticalArrangement = Arrangement.${getArrangementString(data.verticalArrangement, data.verticalSpacing)},\n"
+                        code += "\tverticalArrangement = ${generateArrangementString(data.verticalArrangement, data.verticalSpacing)},\n"
                         code += "\thorizontalAlignment = Alignment.${data.horizontalAlignment},\n"
                     }
 
                     AvailableElements.Row -> {
                         val data = elementModel.data as RowElementData
                         code += "Row(\n"
-                        code += "\thorizontalArrangement = Arrangement.${getArrangementString(data.horizontalArrangement, data.horizontalSpacing)},\n"
+                        code += "\thorizontalArrangement = ${generateArrangementString(data.horizontalArrangement, data.horizontalSpacing)},\n"
                         code += "\tverticalAlignment = Alignment.${data.verticalAlignment},\n"
                     }
                 }
 
-                code += generateModifiers(elementModifiers, 1)
+                code += generateModifiersString(elementModifiers, 1)
                 code += ") {\n"
 
                 val emojis = listOf("🥑", "☕", "🤖")
@@ -87,7 +84,7 @@ fun CodeView(
                     code += "\tText(\n"
                     code += "\t\t\"$emoji\",\n"
                     code += "\t\tfontSize = 48.sp,\n"
-                    code += generateModifiers(childModifiersList[idx], indent = 2)
+                    code += generateModifiersString(childModifiersList[idx], indent = 2)
                     code += "\t)\n"
                 }
 
@@ -131,14 +128,16 @@ private fun copyCode(code: String) {
     clipboard.setContents(StringSelection(code), null)
 }
 
-private fun getArrangementString(arrangement: Any, spacing: Int): String {
+private fun generateArrangementString(arrangement: Any, spacing: Int): String {
+    var str = "Arrangement."
+
     if (arrangement == AvailableHorizontalArrangements.SpacedBy || arrangement == AvailableVerticalArrangements.SpacedBy) {
-        return "spacedBy($spacing.dp)"
+        return str + "spacedBy($spacing.dp)"
     }
-    return arrangement.toString()
+    return str + arrangement.toString()
 }
 
-private fun generateModifiers(modifiers: List<Pair<Any, Boolean>>, indent: Int): String {
+private fun generateModifiersString(modifiers: List<Pair<Any, Boolean>>, indent: Int): String {
     val toPrint = modifiers.filter { (_, visible) -> visible }
     var str = ""
 
@@ -270,38 +269,3 @@ private fun generateShapeString(shape: AvailableShapes, corner: Int): String = (
         else -> "RectangleShape"
     }
 )
-
-fun formatCode(str: String) = buildAnnotatedString {
-    withStyle(EditorTheme.code.simple) {
-        var strFormatted = str.replace("\t", "    ")
-        append(strFormatted)
-        addStyle(EditorTheme.code.simple, strFormatted, Regex("[\\[\\]\\(\\)\\.{}]"))
-        addStyle(EditorTheme.code.punctuation, strFormatted, "=")
-        addStyle(EditorTheme.code.punctuation, strFormatted, ":")
-        addStyle(EditorTheme.code.namedArgument, strFormatted, Regex("[a-zA-z]+\\s="))
-        addStyle(EditorTheme.code.keyword, strFormatted, Regex("[a-zA-z]+\\.]"))
-        addStyle(EditorTheme.code.function, strFormatted, Regex("[a-zA-z]+\\("))
-        addStyle(EditorTheme.code.function, strFormatted, Regex("\\.[a-zA-z]+\\("))
-        //addStyle(EditorTheme.code.composable, strFormatted, Regex("^\\s*[a-zA-z]+\\("))
-        addStyle(EditorTheme.code.property, strFormatted, Regex("\\.[a-zA-z]+"))
-        addStyle(EditorTheme.code.extension, strFormatted, Regex("(RectangleShape|CircleShape)[^\\(]"))
-        addStyle(EditorTheme.code.value, strFormatted, "Modifier")
-        addStyle(EditorTheme.code.number, strFormatted, Regex("(\\d+.dp)"))
-        addStyle(EditorTheme.code.extension, strFormatted, Regex("(.dp|.sp)"))
-        addStyle(EditorTheme.code.annotation, strFormatted, Regex("^@[a-zA-Z_]*"))
-        addStyle(EditorTheme.code.comment, strFormatted, Regex("^\\s*//.*"))
-        addStyle(EditorTheme.code.punctuation, strFormatted, ".")
-        addStyle(EditorTheme.code.keyword, strFormatted, ",")
-        addStyle(EditorTheme.code.string, strFormatted, "\"")
-    }
-}
-
-private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: String) {
-    addStyle(style, text, Regex.fromLiteral(regexp))
-}
-
-private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: Regex) {
-    for (result in regexp.findAll(text)) {
-        addStyle(style, result.range.first, result.range.last + 1)
-    }
-}
