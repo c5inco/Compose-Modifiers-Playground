@@ -311,7 +311,6 @@ enum class ModifierEntry {
     Shadow,
     Size,
     Scale,
-    Weight,
     Width,
     WrapContentHeight,
     WrapContentSize,
