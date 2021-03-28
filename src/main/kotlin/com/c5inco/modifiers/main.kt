@@ -452,6 +452,9 @@ private fun getNewModifierData(modifierType: ModifierEntry): Any = (
         ModifierEntry.Offset -> {
             OffsetDesignModifierData()
         }
+        ModifierEntry.Clickable -> {
+            ClickableModifierData()
+        }
         ModifierEntry.Clip -> {
             ClipModifierData()
         }

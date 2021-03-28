@@ -2,6 +2,7 @@ package com.c5inco.modifiers.data
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -208,6 +209,10 @@ data class OffsetDesignModifierData(
     val y: Int = 0
 )
 
+data class ClickableModifierData(
+    val enabled: Boolean = true
+)
+
 data class ClipModifierData(
     val shape: AvailableShapes = AvailableShapes.Rectangle,
     val corner: Int = 0
@@ -274,6 +279,10 @@ fun getModifier(data: Any): Modifier = (
         is OffsetDesignModifierData -> {
             val (x, y) = data
             Modifier.offset(x = (x).dp, y = (y).dp)
+        }
+        is ClickableModifierData -> {
+            val (enabled) = data
+            Modifier.clickable(enabled, onClick = { })
         }
         is ClipModifierData -> {
             val (shape, corner) = data

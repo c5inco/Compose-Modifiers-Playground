@@ -225,6 +225,25 @@ fun OffsetDesignModifier(xValue: Int, yValue: Int, onChange: (OffsetDesignModifi
 }
 
 @Composable
+fun ClickableModifier(enabledValue: Boolean, onChange: (ClickableModifierData) -> Unit) {
+    Column {
+        ModifierLabel("clickable")
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Checkbox(
+                checked = enabledValue,
+                onCheckedChange = {
+                    onChange(ClickableModifierData(it))
+                }
+            )
+            Text("Enabled", style = MaterialTheme.typography.body2)
+        }
+    }
+}
+
+@Composable
 fun ClipModifier(shapeValue: AvailableShapes, cornerValue: Int, onChange: (ClipModifierData) -> Unit) {
     Column {
         ModifierLabel("clip")

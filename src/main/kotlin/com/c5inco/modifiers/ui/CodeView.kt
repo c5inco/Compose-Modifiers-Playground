@@ -172,6 +172,10 @@ private fun lookupModifier(modifier: Any): String = (
             val (x, y) = modifier
             "offset(x = ($x).dp, y = ($y).dp)"
         }
+        is ClickableModifierData -> {
+            val (enabled) = modifier
+            "clickable($enabled, onClick = { })"
+        }
         is ClipModifierData -> {
             val (shape, corner) = modifier
             "clip(${generateShapeString(shape, corner)})"

@@ -185,6 +185,15 @@ fun ModifierEntry(
                             }
                         )
                     }
+                    is ClickableModifierData -> {
+                        val (enabled) = modifierData.first as ClickableModifierData
+                        ClickableModifier(
+                            enabledValue = enabled,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
                     is ClipModifierData -> {
                         val (shape, corner) = modifierData.first as ClipModifierData
                         ClipModifier(
