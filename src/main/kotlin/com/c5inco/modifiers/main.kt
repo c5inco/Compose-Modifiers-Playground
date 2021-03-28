@@ -1,7 +1,6 @@
 package com.c5inco.modifiers
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerMoveFilter
@@ -22,10 +23,10 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
-import com.c5inco.modifiers.ui.CodeView
-import com.c5inco.modifiers.ui.ElementRow
-import com.c5inco.modifiers.ui.ModifierEntry
-import com.c5inco.modifiers.ui.SmallIconButton
+import com.c5inco.modifiers.ui.*
+import com.c5inco.modifiers.ui.controls.CompactDropdownItem
+import com.c5inco.modifiers.ui.theme.appLightColors
+import com.c5inco.modifiers.ui.theme.blue700
 import com.c5inco.modifiers.utils.downTo
 import com.c5inco.modifiers.utils.until
 
@@ -57,7 +58,9 @@ fun Playground() {
 
     var showCode by remember { mutableStateOf(false) }
 
-    DesktopMaterialTheme {
+    PlaygroundTheme(
+        colors = appLightColors
+    ) {
         Row {
             Surface(
                 modifier = Modifier.weight(1f),
@@ -384,11 +387,23 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
 
     Row(Modifier
         .fillMaxWidth()
+        .height(IntrinsicSize.Min)
         .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(name, style = MaterialTheme.typography.subtitle1)
+        Canvas(Modifier.width(4.dp).fillMaxHeight()) {
+            drawRoundRect(
+                color = blue700,
+                size = Size(width = size.width, height = size.height),
+                cornerRadius = CornerRadius(50f)
+            )
+        }
+        Spacer(Modifier.width(6.dp))
+        Text(
+            name,
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.weight(1f)
+        )
         SmallIconButton(onClick = { onExpand() }) {
             Icon(
                 imageVector = Icons.Outlined.KeyboardArrowDown,
@@ -474,7 +489,16 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
                 modifier = Modifier.size(18.dp)
             )
         }
+
+        val defaultVerticalPadding = 8
+        val dropdownHeight = 32
+
         DropdownMenu(
+            modifier = Modifier
+                .sizeIn(
+                    minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
+                    maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
+                ),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
@@ -483,56 +507,9 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
                 expanded = false
             }
 
-            DropdownMenuItem(onClick = { select(ModifierEntry.Size) }) {
-                Text("Size")
+            ModifierEntry.values().toList().forEachIndexed { idx, entry ->
+                CompactDropdownItem(entry, onClick = { select(entry) })
             }
-            DropdownMenuItem(onClick = { select(ModifierEntry.Padding) }) {
-                Text("Padding")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.Border) }) {
-                Text("Border")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.Background) }) {
-                Text("Background")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.Shadow) }) {
-                Text("Shadow")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.Offset) }) {
-                Text("Offset")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.Clip) }) {
-                Text("Clip")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.Rotate) }) {
-                Text("Rotate")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.Scale) }) {
-                Text("Scale")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.FillMaxWidth) }) {
-                Text("FillMaxWidth")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.FillMaxHeight) }) {
-                Text("FillMaxHeight")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.FillMaxSize) }) {
-                Text("FillMaxSize")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.WrapContentWidth) }) {
-                Text("WrapContentWidth")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.WrapContentHeight) }) {
-                Text("WrapContentHeight")
-            }
-            DropdownMenuItem(onClick = { select(ModifierEntry.WrapContentSize) }) {
-                Text("WrapContentSize")
-            }
-            /*
-            DropdownMenuItem(onClick = { select(ModifierEntry.Alpha) }) {
-                Text("Alpha")
-            }
-            */
         }
     }
 }

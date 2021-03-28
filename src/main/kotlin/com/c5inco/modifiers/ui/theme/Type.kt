@@ -1,4 +1,4 @@
-package com.c5inco.modifiers.ui
+package com.c5inco.modifiers.ui.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.Font

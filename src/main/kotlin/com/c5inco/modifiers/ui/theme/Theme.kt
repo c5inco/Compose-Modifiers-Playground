@@ -1,8 +1,24 @@
 package com.c5inco.modifiers.ui
 
-import androidx.compose.material.darkColors
+import androidx.compose.desktop.DesktopMaterialTheme
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
+
+@Composable
+fun PlaygroundTheme(
+    colors: Colors = MaterialTheme.colors,
+    typography: Typography = MaterialTheme.typography,
+    shapes: Shapes = MaterialTheme.shapes,
+    content: @Composable () -> Unit
+) = DesktopMaterialTheme(
+    colors,
+    typography,
+    shapes
+) {
+    content()
+}
 
 object EditorTheme {
     val colors: Colors = Colors()

@@ -27,6 +27,7 @@ import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.ui.controls.CompactDropdownItem
 import com.c5inco.modifiers.utils.chunk
 import java.awt.Cursor
 
@@ -307,8 +308,9 @@ fun DpInput(
     var hovered by remember { mutableStateOf(false) }
     var focused by remember { mutableStateOf(false) }
 
+    @Composable
     fun getBorderColor(): Color {
-        if (focused) return Color.Blue
+        if (focused) return MaterialTheme.colors.primary
         if (hovered) return Color.LightGray
         return Color.Transparent
     }
@@ -463,12 +465,10 @@ fun <T> DropdownInput(modifier: Modifier = Modifier.fillMaxWidth(), items: List<
             onDismissRequest = { expanded = false }
         ) {
             items.forEach {
-                DropdownMenuItem(onClick = {
-                    onSelect(it)
+                CompactDropdownItem(it, onClick = { item ->
+                    onSelect(item)
                     expanded = false
-                }) {
-                    Text("$it")
-                }
+                })
             }
         }
     }
