@@ -304,6 +304,101 @@ fun ModifierEntry(
     if (order != size - 1) Divider(Modifier.padding(horizontal = 16.dp))
 }
 
+@Composable
+fun RowColumnScopeModifierEntry(
+    modifierData: Pair<Any, Boolean>,
+    order: Int,
+    size: Int,
+    onModifierChange: (Int, Pair<Any, Boolean>) -> Unit,
+    onRemove: (Int) -> Unit,
+) {
+    val visible = modifierData.second
+
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Box(Modifier
+                .alpha(if (visible) 1f else 0.4f)
+                .weight(1f)
+                .padding(end = 16.dp)
+            ) {
+                fun modifierChange(data: Any) {
+                    onModifierChange(order, Pair(data, visible))
+                }
+
+                val data = modifierData.first
+                when (data) {
+                    is WeightModifierData -> {
+                        val (weight) = data
+                        WeightModifier(
+                            weightValue = weight,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is AlignBoxModifierData -> {
+                        val (alignment) = data
+                        AlignBoxModifier(
+                            alignmentValue = alignment,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is AlignColumnModifierData -> {
+                        val (alignment) = data
+                        AlignColumnModifier(
+                            alignmentValue = alignment,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is AlignRowModifierData -> {
+                        val (alignment) = data
+                        AlignRowModifier(
+                            alignmentValue = alignment,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                }
+            }
+            Row {
+                SmallIconButton(onClick = {
+                    onModifierChange(order, Pair(modifierData.first, !visible))
+                }) {
+                    Icon(
+                        imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                        contentDescription = "Toggle visibility",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+                Spacer(Modifier.width(8.dp))
+                SmallIconButton(onClick = {
+                    onRemove(order)
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Remove,
+                        contentDescription = "Remove modifier",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
+        }
+    }
+    if (order != size - 1) Divider(Modifier.padding(horizontal = 16.dp))
+}
+
 enum class ModifierEntry {
     Alpha,
     Background,
@@ -324,6 +419,20 @@ enum class ModifierEntry {
     WrapContentHeight,
     WrapContentSize,
     WrapContentWidth,
+}
+
+enum class BoxScopeModifierEntry {
+    Align,
+}
+
+enum class ColumnScopeModifierEntry {
+    Align,
+    Weight,
+}
+
+enum class RowScopeModifierEntry {
+    Align,
+    Weight,
 }
 
 fun getShape(shape: AvailableShapes, corner: Int): Shape {

@@ -230,6 +230,18 @@ data class WeightModifierData(
     val weight: Float = 1f
 )
 
+data class AlignBoxModifierData(
+    val alignment: AvailableContentAlignments = AvailableContentAlignments.TopStart
+)
+
+data class AlignColumnModifierData(
+    val alignment: AvailableHorizontalAlignments = AvailableHorizontalAlignments.Start
+)
+
+data class AlignRowModifierData(
+    val alignment: AvailableVerticalAlignments = AvailableVerticalAlignments.Top
+)
+
 data class WrapContentHeightModifierData(
     val unbounded: Boolean = false
 )

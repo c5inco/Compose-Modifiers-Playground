@@ -46,6 +46,7 @@ fun Playground() {
 
     val defaultParentModifiers = pinkSquare.parentModifiers
     val defaultChildModifiers = pinkSquare.childModifiers
+    val defaultChildScopeModifiers = pinkSquare.childScopeModifiers
 
     var parentElement by remember {
         mutableStateOf(pinkSquare.parentElement)
@@ -57,6 +58,10 @@ fun Playground() {
 
     var childModifiersList = remember {
         defaultChildModifiers.toMutableStateList()
+    }
+
+    var childScopeModifiersList = remember {
+        defaultChildScopeModifiers.toMutableStateList()
     }
 
     var showCode by remember { mutableStateOf(false) }
@@ -84,7 +89,64 @@ fun Playground() {
                         val content: @Composable () -> Unit = {
                             val emojis = listOf("🥑", "☕", "🤖")
                             emojis.forEachIndexed { idx, emoji ->
-                                Text(emoji, fontSize = 48.sp, modifier = buildModifiers(childModifiersList[idx]))
+                                var sm: Modifier = Modifier
+                                when (element) {
+                                    AvailableElements.Column -> {
+                                        ColumnScope.apply {
+                                            childScopeModifiersList[idx].forEach {
+                                                val (data, visible) = it
+                                                if (visible) {
+                                                    when (data) {
+                                                        is WeightModifierData -> {
+                                                            val (weight) = data
+                                                            sm = sm.then(Modifier.weight(weight))
+                                                        }
+                                                        is AlignColumnModifierData -> {
+                                                            val (alignment) = data
+                                                            sm = sm.then(Modifier.align(getHorizontalAlignments(alignment)))
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    AvailableElements.Row -> {
+                                        RowScope.apply {
+                                            childScopeModifiersList[idx].forEach {
+                                                val (data, visible) = it
+                                                if (visible) {
+                                                    when (data) {
+                                                        is WeightModifierData -> {
+                                                            val (weight) = data
+                                                            sm = sm.then(Modifier.weight(weight))
+                                                        }
+                                                        is AlignRowModifierData -> {
+                                                            val (alignment) = data
+                                                            sm = sm.then(Modifier.align(getVerticalAlignments(alignment)))
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else -> {
+                                        BoxScope.apply {
+                                            childScopeModifiersList[idx].forEach {
+                                                val (data, visible) = it
+                                                if (visible) {
+                                                    when (data) {
+                                                        is AlignBoxModifierData -> {
+                                                            val (alignment) = data
+                                                            sm = sm.then(Modifier.align(getContentAlignments(alignment)))
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Text(emoji, fontSize = 48.sp, modifier = sm.then(buildModifiers(childModifiersList[idx])))
                             }
                         }
                         val elementModifiersChain = buildModifiers(elementModifiersList)
@@ -151,7 +213,8 @@ fun Playground() {
                                 .fillMaxSize(),
                             parentElement,
                             elementModifiersList,
-                            childModifiersList
+                            childModifiersList,
+                            childScopeModifiersList
                         )
                     }
                 }
@@ -181,14 +244,25 @@ fun Playground() {
                             parentElement = element
                             elementModifiersList.clear()
                             elementModifiersList.addAll(modifiers)
+                            childScopeModifiersList.clear()
+                            childScopeModifiersList.add(mutableListOf())
+                            childScopeModifiersList.add(mutableListOf())
+                            childScopeModifiersList.add(mutableListOf())
                         })
 
                         val emojis = listOf("🥑", "☕", "🤖")
                         emojis.forEachIndexed { i, emoji ->
                             Divider()
-                            ChildGroup(emoji, childModifiersList[i].toMutableList(), onChange = {
-                                childModifiersList.set(i, it.toMutableList())
-                            })
+                            ChildGroup(
+                                emoji,
+                                parentElement.type,
+                                scopeModifiersList = childScopeModifiersList[i].toMutableList(),
+                                modifiersList = childModifiersList[i].toMutableList(),
+                                onChange = { scopeModifiers, modifiers ->
+                                    childScopeModifiersList.set(i, scopeModifiers.toMutableList())
+                                    childModifiersList.set(i, modifiers.toMutableList())
+                                }
+                            )
                         }
                     }
 
@@ -276,8 +350,10 @@ fun ParentGroup(
 @Composable
 fun ChildGroup(
     name: String,
+    parentElement: AvailableElements,
+    scopeModifiersList: MutableList<Pair<Any, Boolean>>,
     modifiersList: MutableList<Pair<Any, Boolean>>,
-    onChange: (List<Pair<Any, Boolean>>) -> Unit
+    onChange: (scopeModifiers: List<Pair<Any, Boolean>>, modifiers: List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
     ComponentHeader("$name element", expanded, onExpand = { expanded = !expanded })
@@ -308,12 +384,46 @@ fun ChildGroup(
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .fillMaxHeight(),
+            name = "Scope modifiers",
+            actions = {
+                AddChildModifierAction(
+                    parentElement,
+                    onSelect = {
+                        scopeModifiersList.add(Pair(getNewScopeModifierData(it), true))
+                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                    })
+            }
+        ) {
+            for (i in 0 until scopeModifiersList.size) {
+                RowColumnScopeModifierEntry(
+                    modifierData = scopeModifiersList[i],
+                    order = i,
+                    size = scopeModifiersList.size,
+                    onModifierChange = { order, data ->
+                        scopeModifiersList.set(order, data)
+                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                    },
+                    onRemove = { order ->
+                        scopeModifiersList.removeAt(order)
+                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                    }
+                )
+            }
+        }
+
+        DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+        Spacer(Modifier.height(8.dp))
+
+        PropertiesSection(
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxHeight(),
             name = "Modifiers",
             actions = {
                 AddModifierAction(
                     onSelect = {
                         modifiersList.add(Pair(getNewModifierData(it), true))
-                        onChange(modifiersList.toList())
+                        onChange(scopeModifiersList.toList(), modifiersList.toList())
                     })
             }
         ) {
@@ -332,15 +442,15 @@ fun ChildGroup(
                             modifiersList.set(targetIndex, curr)
                             modifiersList.set(index, prev)
                         }
-                        onChange(modifiersList.toList())
+                        onChange(scopeModifiersList.toList(), modifiersList.toList())
                     },
                     onModifierChange = { order, data ->
                         modifiersList.set(order, data)
-                        onChange(modifiersList.toList())
+                        onChange(scopeModifiersList.toList(), modifiersList.toList())
                     },
                     onRemove = { order ->
                         modifiersList.removeAt(order)
-                        onChange(modifiersList.toList())
+                        onChange(scopeModifiersList.toList(), modifiersList.toList())
                     }
                 )
             }
@@ -492,6 +602,25 @@ private fun getNewModifierData(modifierType: ModifierEntry): Any = (
     }
 )
 
+private fun getNewScopeModifierData(modifierType: Any): Any = (
+    when (modifierType) {
+        ColumnScopeModifierEntry.Weight,
+        RowScopeModifierEntry.Weight -> {
+            WeightModifierData()
+        }
+        BoxScopeModifierEntry.Align -> {
+            AlignBoxModifierData()
+        }
+        ColumnScopeModifierEntry.Align -> {
+            AlignColumnModifierData()
+        }
+        RowScopeModifierEntry.Align -> {
+            AlignRowModifierData()
+        }
+        else -> { }
+    }
+)
+
 @Composable
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
     SmallIconButton(onClick = { onClick() }) {
@@ -506,6 +635,7 @@ private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
 @Composable
 private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
+
     Box {
         SmallIconButton(onClick = { expanded = true }) {
             Icon(
@@ -532,8 +662,59 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
                 expanded = false
             }
 
-            ModifierEntry.values().toList().forEachIndexed { idx, entry ->
+            ModifierEntry.values().toList().forEach { entry ->
                 CompactDropdownItem(entry, onClick = { select(entry) })
+            }
+        }
+    }
+}
+
+@Composable
+private fun AddChildModifierAction(parentType: AvailableElements, onSelect: (Any) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box {
+        SmallIconButton(onClick = { expanded = true }) {
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = "Add child modifier",
+                modifier = Modifier.size(18.dp)
+            )
+        }
+
+        val defaultVerticalPadding = 8
+        val dropdownHeight = 32
+
+        DropdownMenu(
+            modifier = Modifier
+                .sizeIn(
+                    minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
+                    maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
+                ),
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            val select: (Any) -> Unit = {
+                onSelect(it)
+                expanded = false
+            }
+
+            when (parentType) {
+                AvailableElements.Box -> {
+                    BoxScopeModifierEntry.values().toList().forEach { entry ->
+                        CompactDropdownItem(entry, onClick = { select(entry) })
+                    }
+                }
+                AvailableElements.Column -> {
+                    ColumnScopeModifierEntry.values().toList().forEach { entry ->
+                        CompactDropdownItem(entry, onClick = { select(entry) })
+                    }
+                }
+                AvailableElements.Row -> {
+                    RowScopeModifierEntry.values().toList().forEach { entry ->
+                        CompactDropdownItem(entry, onClick = { select(entry) })
+                    }
+                }
             }
         }
     }

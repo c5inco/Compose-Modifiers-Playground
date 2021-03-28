@@ -28,7 +28,8 @@ fun CodeView(
     modifier: Modifier = Modifier,
     elementModel: ElementModel,
     elementModifiers: List<Pair<Any, Boolean>>,
-    childModifiersList: List<MutableList<Pair<Any, Boolean>>>
+    childModifiersList: MutableList<MutableList<Pair<Any, Boolean>>>,
+    childScopeModifiersList: MutableList<MutableList<Pair<Any, Boolean>>>
 ) {
     var editorHovered by remember { mutableStateOf( false) }
 
@@ -84,7 +85,11 @@ fun CodeView(
                     code += "\tText(\n"
                     code += "\t\t\"$emoji\",\n"
                     code += "\t\tfontSize = 48.sp,\n"
-                    code += generateModifiersString(childModifiersList[idx], indent = 2)
+
+                    val allChildModifiers = childScopeModifiersList[idx].toMutableList()
+                    allChildModifiers.addAll(childModifiersList[idx].toList())
+
+                    code += generateModifiersString(allChildModifiers, indent = 2)
                     code += "\t)\n"
                 }
 
@@ -238,6 +243,22 @@ private fun lookupModifier(modifier: Any): String = (
         is WrapContentSizeModifierData -> {
             val (unbounded) = modifier
             "wrapContentSize(unbounded = $unbounded)"
+        }
+        is WeightModifierData -> {
+            val (weight) = modifier
+            "weight(${weight}f)"
+        }
+        is AlignBoxModifierData -> {
+            val (alignment) = modifier
+            "align(Alignment.$alignment)"
+        }
+        is AlignColumnModifierData -> {
+            val (alignment) = modifier
+            "align(Alignment.$alignment)"
+        }
+        is AlignRowModifierData -> {
+            val (alignment) = modifier
+            "align(Alignment.$alignment)"
         }
         else -> {
             ""

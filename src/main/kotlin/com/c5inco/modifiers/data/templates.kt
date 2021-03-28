@@ -29,6 +29,11 @@ object Templates {
             mutableListOf(
                 Pair(BackgroundModifierData(color = Color.Green), true),
             )
+        ),
+        childScopeModifiers = listOf(
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf()
         )
     )
 }
@@ -36,5 +41,6 @@ object Templates {
 data class Template(
     var parentElement: ElementModel,
     val parentModifiers: List<Pair<Any, Boolean>>,
-    val childModifiers: List<MutableList<Pair<Any, Boolean>>>
+    val childModifiers: List<MutableList<Pair<Any, Boolean>>>,
+    val childScopeModifiers: List<MutableList<Pair<Any, Boolean>>>
 )

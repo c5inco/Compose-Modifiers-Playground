@@ -3,6 +3,7 @@ package com.c5inco.modifiers.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.LineWeight
 import androidx.compose.material.icons.outlined.RotateLeft
 import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.runtime.Composable
@@ -390,6 +391,65 @@ fun WrapContentSizeModifier(unboundedValue: Boolean, onChange: (WrapContentSizeM
                 }
             )
             Text("Unbounded", style = MaterialTheme.typography.body2)
+        }
+    }
+}
+
+@Composable
+fun WeightModifier(weightValue: Float, onChange: (WeightModifierData) -> Unit) {
+    Column {
+        ModifierLabel("weight")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            FloatInput(
+                weightValue,
+                label = {
+                    Icon(
+                        imageVector = Icons.Outlined.LineWeight,
+                        contentDescription = "Weight icon",
+                        tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                        modifier = Modifier.size(18.dp)
+                    )
+                },
+                onValueChange = {
+                    onChange(WeightModifierData(it))
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun AlignBoxModifier(alignmentValue: AvailableContentAlignments, onChange: (AlignBoxModifierData) -> Unit) {
+    Column {
+        ModifierLabel("align")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            ContentAlignmentInput(alignmentValue, onValueChange = {
+                onChange(AlignBoxModifierData(it))
+            })
+        }
+    }
+}
+
+@Composable
+fun AlignColumnModifier(alignmentValue: AvailableHorizontalAlignments, onChange: (AlignColumnModifierData) -> Unit) {
+    Column {
+        ModifierLabel("align")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            HorizontalAlignmentInput(alignmentValue, onValueChange = {
+                onChange(AlignColumnModifierData(it))
+            })
+        }
+    }
+}
+
+@Composable
+fun AlignRowModifier(alignmentValue: AvailableVerticalAlignments, onChange: (AlignRowModifierData) -> Unit) {
+    Column {
+        ModifierLabel("align")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            VerticalAlignmentInput(alignmentValue, onValueChange = {
+                onChange(AlignRowModifierData(it))
+            })
         }
     }
 }
