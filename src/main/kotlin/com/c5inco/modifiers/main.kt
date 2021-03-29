@@ -33,16 +33,16 @@ import com.c5inco.modifiers.utils.until
 
 fun main() = Window(
     title = "Modifiers Playground",
-    size = IntSize(width = 1000, height = 750)
+    size = IntSize(width = 1100, height = 800)
 ) {
     Application()
 }
 
 @Composable
 fun Application() {
-    val pinkSquare = Templates.Rainbow
+    val defaultTemplate = Templates.Sun
 
-    var activeTemplate by remember { mutableStateOf(pinkSquare) }
+    var activeTemplate by remember { mutableStateOf(defaultTemplate) }
 
     Playground(activeTemplate, onTemplateChange = {
         activeTemplate = it.copy()

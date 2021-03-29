@@ -27,12 +27,12 @@ class PluginAction : DumbAwareAction() {
         override fun createCenterPanel(): JComponent {
             val dialog = this
             return ComposePanel().apply {
-                preferredSize = Dimension(1000, 750)
+                preferredSize = Dimension(1100, 800)
                 setContent {
                     ComposeSizeAdjustmentWrapper(
                         window = dialog,
                         panel = this,
-                        preferredSize = IntSize(1000, 750)
+                        preferredSize = IntSize(1100, 800)
                     ) {
                         Thread.currentThread().contextClassLoader = PluginAction::class.java.classLoader
                         Surface(modifier = Modifier.fillMaxSize()) {

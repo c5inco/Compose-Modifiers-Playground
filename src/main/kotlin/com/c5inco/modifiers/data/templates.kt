@@ -94,7 +94,10 @@ object Templates {
             Pair(BorderModifierData(width = 16, color = Color.Red, shape = AvailableShapes.RoundedCorner, corner = 32), true),
             Pair(RotateModifierData(-60f), true),
             Pair(PaddingModifierData(42), true),
-            Pair(BackgroundModifierData(color = Color.Magenta, shape = AvailableShapes.Circle), true),
+            Pair(ShadowModifierData(elevation = 16, AvailableShapes.Circle), true),
+            Pair(ClipModifierData(shape = AvailableShapes.Circle), true),
+            Pair(BackgroundModifierData(color = Color.Yellow, shape = AvailableShapes.Circle), true),
+            Pair(ClickableModifierData(), true)
         ),
     )
 
