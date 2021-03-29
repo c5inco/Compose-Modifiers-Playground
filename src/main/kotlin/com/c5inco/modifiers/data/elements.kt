@@ -1,5 +1,7 @@
 package com.c5inco.modifiers.data
 
+import androidx.compose.ui.text.TextStyle
+
 enum class AvailableElements {
     Box,
     Column,
@@ -26,3 +28,23 @@ data class ElementModel(
     val type: AvailableElements,
     val data: Any
 )
+
+data class EmojiChildData(
+    val emoji: String
+)
+
+data class TextChildData(
+    val text: String,
+    val style: TextStyle,
+    val alpha: AvailableContentAlphas = AvailableContentAlphas.High
+)
+
+data class ImageChildData(
+    val imagePath: String
+)
+
+enum class AvailableContentAlphas {
+    High,
+    Medium,
+    Disabled
+}

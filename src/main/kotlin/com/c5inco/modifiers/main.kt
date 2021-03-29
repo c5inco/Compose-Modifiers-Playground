@@ -58,6 +58,7 @@ fun Playground(
 ) {
     var parentElement = activeTemplate.parentElement
     var elementModifiersList = activeTemplate.parentModifiers.toMutableStateList()
+    val childElements = activeTemplate.childElements
     var childModifiersList = activeTemplate.childModifiers.toMutableStateList()
     var childScopeModifiersList = activeTemplate.childScopeModifiers.toMutableStateList()
 
@@ -84,8 +85,7 @@ fun Playground(
                         val element = parentElement.type
 
                         val content: @Composable () -> Unit = {
-                            val emojis = listOf("🥑", "☕", "🤖")
-                            emojis.forEachIndexed { idx, emoji ->
+                            childElements.forEachIndexed { idx, childData ->
                                 var sm: Modifier = Modifier
                                 when (element) {
                                     AvailableElements.Column -> {
@@ -143,7 +143,20 @@ fun Playground(
                                     }
                                 }
 
-                                Text(emoji, fontSize = 48.sp, modifier = sm.then(buildModifiers(childModifiersList[idx])))
+                                when (childData) {
+                                    is TextChildData -> {
+                                        val (text, style, alpha) = childData
+                                        TextChildElement(text, style, alpha, sm.then(buildModifiers(childModifiersList[idx])))
+                                    }
+                                    is ImageChildData -> {
+                                        val (imagePath) = childData
+                                        ImageChildElement(imagePath, sm.then(buildModifiers(childModifiersList[idx])))
+                                    }
+                                    else -> {
+                                        val (emoji) = childData as EmojiChildData
+                                        EmojiChildElement(emoji, sm.then(buildModifiers(childModifiersList[idx])))
+                                    }
+                                }
                             }
                         }
                         val elementModifiersChain = buildModifiers(elementModifiersList)
@@ -244,7 +257,12 @@ fun Playground(
                             Spacer(Modifier.width(4.dp))
                             DropdownInput(
                                 modifier = Modifier.weight(1f),
-                                items = listOf(Templates.PinkSquare, Templates.Rainbow),
+                                items = listOf(
+                                    Templates.PinkSquare,
+                                    Templates.Rainbow,
+                                    Templates.Sun,
+                                    Templates.SimpleCard
+                                ),
                                 shape = RoundedCornerShape(6.dp),
                                 hoverBackgroundColor = Color.Black.copy(alpha = 0.2f),
                                 hoverBorderColor = Color.Transparent,
@@ -265,16 +283,13 @@ fun Playground(
                                 elementModifiersList.clear()
                                 elementModifiersList.addAll(modifiers)
                                 childScopeModifiersList.clear()
-                                childScopeModifiersList.add(mutableListOf())
-                                childScopeModifiersList.add(mutableListOf())
-                                childScopeModifiersList.add(mutableListOf())
+                                childScopeModifiersList.addAll(activeTemplate.childScopeModifiers.toList())
                             })
 
-                            val emojis = listOf("🥑", "☕", "🤖")
-                            emojis.forEachIndexed { i, emoji ->
+                            childElements.forEachIndexed { i, element ->
                                 Divider()
                                 ChildGroup(
-                                    emoji,
+                                    i.toString(),
                                     parentElement.type,
                                     scopeModifiersList = childScopeModifiersList[i].toMutableList(),
                                     modifiersList = childModifiersList[i].toMutableList(),
