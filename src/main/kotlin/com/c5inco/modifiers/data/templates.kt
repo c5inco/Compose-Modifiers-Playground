@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 object Templates {
     val PinkSquare = Template(
+        name = "Pink square",
         parentElement = ElementModel(
             AvailableElements.Row,
             RowElementData(
@@ -38,6 +39,7 @@ object Templates {
     )
 
     val Rainbow = Template(
+        name = "Rainbow",
         parentElement = ElementModel(
             AvailableElements.Row,
             RowElementData(
@@ -81,8 +83,13 @@ object Templates {
 }
 
 data class Template(
+    val name: String,
     var parentElement: ElementModel,
     val parentModifiers: List<Pair<Any, Boolean>>,
     val childModifiers: List<MutableList<Pair<Any, Boolean>>>,
-    val childScopeModifiers: List<MutableList<Pair<Any, Boolean>>>
-)
+    val childScopeModifiers: List<MutableList<Pair<Any, Boolean>>>,
+) {
+    override fun toString(): String {
+        return name
+    }
+}

@@ -37,32 +37,29 @@ fun main() = Window(
     title = "Modifiers Playground",
     size = IntSize(width = 1000, height = 750)
 ) {
-    Playground()
+    Application()
 }
 
 @Composable
-fun Playground() {
-    val pinkSquare = Templates.PinkSquare
+fun Application() {
+    val pinkSquare = Templates.Rainbow
 
-    val defaultParentModifiers = pinkSquare.parentModifiers
-    val defaultChildModifiers = pinkSquare.childModifiers
-    val defaultChildScopeModifiers = pinkSquare.childScopeModifiers
+    var activeTemplate by remember { mutableStateOf(pinkSquare) }
 
-    var parentElement by remember {
-        mutableStateOf(pinkSquare.parentElement)
-    }
+    Playground(activeTemplate, onTemplateChange = {
+        activeTemplate = it.copy()
+    })
+}
 
-    var elementModifiersList = remember {
-        defaultParentModifiers.toMutableStateList()
-    }
-
-    var childModifiersList = remember {
-        defaultChildModifiers.toMutableStateList()
-    }
-
-    var childScopeModifiersList = remember {
-        defaultChildScopeModifiers.toMutableStateList()
-    }
+@Composable
+fun Playground(
+    activeTemplate: Template,
+    onTemplateChange: (Template) -> Unit
+) {
+    var parentElement = activeTemplate.parentElement
+    var elementModifiersList = activeTemplate.parentModifiers.toMutableStateList()
+    var childModifiersList = activeTemplate.childModifiers.toMutableStateList()
+    var childScopeModifiersList = activeTemplate.childScopeModifiers.toMutableStateList()
 
     var showCode by remember { mutableStateOf(false) }
 
@@ -236,42 +233,66 @@ fun Playground() {
                     .width(350.dp)
                     .shadow(4.dp)
             ) {
-                Box {
-                    val verticalScrollState = rememberScrollState(0)
-
-                    Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
-                        ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
-                            parentElement = element
-                            elementModifiersList.clear()
-                            elementModifiersList.addAll(modifiers)
-                            childScopeModifiersList.clear()
-                            childScopeModifiersList.add(mutableListOf())
-                            childScopeModifiersList.add(mutableListOf())
-                            childScopeModifiersList.add(mutableListOf())
-                        })
-
-                        val emojis = listOf("🥑", "☕", "🤖")
-                        emojis.forEachIndexed { i, emoji ->
-                            Divider()
-                            ChildGroup(
-                                emoji,
-                                parentElement.type,
-                                scopeModifiersList = childScopeModifiersList[i].toMutableList(),
-                                modifiersList = childModifiersList[i].toMutableList(),
-                                onChange = { scopeModifiers, modifiers ->
-                                    childScopeModifiersList.set(i, scopeModifiers.toMutableList())
-                                    childModifiersList.set(i, modifiers.toMutableList())
+                Column {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                "Template //",
+                                style = MaterialTheme.typography.body2,
+                                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                            )
+                            Spacer(Modifier.width(4.dp))
+                            DropdownInput(
+                                modifier = Modifier.weight(1f),
+                                items = listOf(Templates.PinkSquare, Templates.Rainbow),
+                                shape = RoundedCornerShape(6.dp),
+                                hoverBackgroundColor = Color.Black.copy(alpha = 0.2f),
+                                hoverBorderColor = Color.Transparent,
+                                activeItem = activeTemplate,
+                                onSelect = {
+                                    onTemplateChange(it)
                                 }
                             )
-                        }
-                    }
+                        },
+                        modifier = Modifier.shadow(elevation = 3.dp)
+                    )
+                    Box {
+                        val verticalScrollState = rememberScrollState(0)
 
-                    if (propertiesHovered) {
-                        VerticalScrollbar(
-                            modifier = Modifier.align(Alignment.CenterEnd)
-                                .fillMaxHeight(),
-                            adapter = rememberScrollbarAdapter(verticalScrollState),
-                        )
+                        Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
+                            ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
+                                parentElement = element
+                                elementModifiersList.clear()
+                                elementModifiersList.addAll(modifiers)
+                                childScopeModifiersList.clear()
+                                childScopeModifiersList.add(mutableListOf())
+                                childScopeModifiersList.add(mutableListOf())
+                                childScopeModifiersList.add(mutableListOf())
+                            })
+
+                            val emojis = listOf("🥑", "☕", "🤖")
+                            emojis.forEachIndexed { i, emoji ->
+                                Divider()
+                                ChildGroup(
+                                    emoji,
+                                    parentElement.type,
+                                    scopeModifiersList = childScopeModifiersList[i].toMutableList(),
+                                    modifiersList = childModifiersList[i].toMutableList(),
+                                    onChange = { scopeModifiers, modifiers ->
+                                        childScopeModifiersList.set(i, scopeModifiers.toMutableList())
+                                        childModifiersList.set(i, modifiers.toMutableList())
+                                    }
+                                )
+                            }
+                        }
+
+                        if (propertiesHovered) {
+                            VerticalScrollbar(
+                                modifier = Modifier.align(Alignment.CenterEnd)
+                                    .fillMaxHeight(),
+                                adapter = rememberScrollbarAdapter(verticalScrollState),
+                            )
+                        }
                     }
                 }
             }

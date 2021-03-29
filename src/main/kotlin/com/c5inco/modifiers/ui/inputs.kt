@@ -22,6 +22,8 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.DpOffset
@@ -431,13 +433,22 @@ fun FloatInput(
 }
 
 @Composable
-fun <T> DropdownInput(modifier: Modifier = Modifier.fillMaxWidth(), items: List<T>, activeItem: T, onSelect: (T) -> Unit) {
+fun <T> DropdownInput(
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    items: List<T>,
+    shape: Shape = RectangleShape,
+    hoverBackgroundColor: Color = Color.Transparent,
+    hoverBorderColor: Color = Color.LightGray,
+    activeItem: T,
+    onSelect: (T) -> Unit
+) {
     Box {
         var hovered by remember { mutableStateOf(false) }
         var expanded by remember { mutableStateOf(false) }
 
         Row(
             modifier
+                .clip(shape)
                 .clickable { expanded = true }
                 .pointerMoveFilter(
                     onEnter = {
@@ -449,8 +460,9 @@ fun <T> DropdownInput(modifier: Modifier = Modifier.fillMaxWidth(), items: List<
                         false
                     }
                 )
+                .then(if (hovered) Modifier.background(hoverBackgroundColor) else Modifier)
                 .height(24.dp)
-                .border(width = 1.dp, color = if (hovered) Color.LightGray else Color.Transparent)
+                .border(width = 1.dp, color = if (hovered) hoverBorderColor else Color.Transparent)
                 .padding(vertical = 4.dp, horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = if (hovered) Arrangement.SpaceBetween else Arrangement.Start
