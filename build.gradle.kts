@@ -40,4 +40,6 @@ intellij {
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
       Initial release of the plugin.""")
+    sinceBuild("201")
+    untilBuild("203.*")
 }
