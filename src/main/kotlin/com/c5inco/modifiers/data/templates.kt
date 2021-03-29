@@ -126,13 +126,13 @@ object Templates {
                 Pair(FillMaxWidthModifierData(), true),
             ),
             mutableListOf(
-                Pair(PaddingModifierData(16), true),
+                Pair(PaddingModifierData(16, 16, 16, 0), true),
             ),
             mutableListOf(
-                Pair(PaddingModifierData(16), true),
+                Pair(PaddingModifierData(16, 0), true),
             ),
             mutableListOf(
-                Pair(PaddingModifierData(16), true),
+                Pair(PaddingModifierData(16, 16), true),
             ),
         ),
         childScopeModifiers = listOf(

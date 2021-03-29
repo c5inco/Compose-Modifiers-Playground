@@ -158,7 +158,8 @@ fun ModifierEntry(
                     is PaddingModifierData -> {
                         val data = modifierData.first as PaddingModifierData
                         PaddingModifier(
-                            allValue = data.all,
+                            typeValue = data.type,
+                            cornerValues = data.corners,
                             onChange = {
                                 modifierChange(it.copy())
                             }

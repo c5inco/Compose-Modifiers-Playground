@@ -11,8 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.RoundedCorner
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -186,6 +185,139 @@ fun ShapeInput(
                 onValueChange(shapeValue, it)
             }
         )
+    }
+}
+
+@Composable
+fun PaddingInput(
+    typeValue: AvailablePadding,
+    cornerValues: CornerValues,
+    onValueChange: (type: AvailablePadding, corners: CornerValues) -> Unit,
+) {
+    val shapesList = listOf(
+        Pair(Icons.Outlined.CropSquare, AvailablePadding.All),
+        Pair(Icons.Outlined.GridGoldenratio, AvailablePadding.Sides),
+        Pair(Icons.Outlined.Fullscreen, AvailablePadding.Individual),
+    )
+    var hovered = remember { mutableStateOf(false) }
+
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(
+            modifier = Modifier
+                .pointerMoveFilter(
+                    onEnter = {
+                        hovered.value = true
+                        false
+                    },
+                    onExit = {
+                        hovered.value = false
+                        false
+                    }
+                )
+                .border(
+                    width = 1.dp,
+                    color = if (hovered.value) Color.LightGray else Color.Transparent,
+                    shape = RoundedCornerShape(4.dp)
+                ),
+        ) {
+            for (pair in shapesList) {
+                var mod: Modifier = Modifier
+                if (typeValue == pair.second) mod =
+                    mod.background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp))
+
+                SmallIconButton(
+                    modifier = mod,
+                    onClick = { onValueChange(pair.second, cornerValues) }
+                ) {
+                    Icon(
+                        imageVector = pair.first,
+                        contentDescription = "${pair.first} icon",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
+        }
+
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            when (typeValue) {
+                AvailablePadding.All -> {
+                    DpInput(
+                        cornerValues.top,
+                        label = {
+                            Text(
+                                "all",
+                                style = MaterialTheme.typography.body2,
+                                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+                            )
+                        },
+                        onValueChange = {
+                            onValueChange(typeValue, CornerValues(it))
+                        }
+                    )
+                }
+                AvailablePadding.Sides -> {
+                    DpInput(
+                        cornerValues.start,
+                        label = {
+                            Text(
+                                "H",
+                                style = MaterialTheme.typography.body2,
+                                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+                            )
+                        },
+                        onValueChange = {
+                            onValueChange(typeValue, CornerValues(horizontal = it, vertical = cornerValues.top))
+                        }
+                    )
+                    DpInput(
+                        cornerValues.top,
+                        label = {
+                            Text(
+                                "V",
+                                style = MaterialTheme.typography.body2,
+                                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+                            )
+                        },
+                        onValueChange = {
+                            onValueChange(typeValue, CornerValues(horizontal = cornerValues.start, vertical = it))
+                        }
+                    )
+                }
+                AvailablePadding.Individual -> {
+                    DpInput(
+                        cornerValues.start,
+                        modifier = Modifier.weight(1f),
+                        onValueChange = {
+                            onValueChange(typeValue, cornerValues.copy(start = it))
+                        }
+                    )
+                    DpInput(
+                        cornerValues.top,
+                        modifier = Modifier.weight(1f),
+                        onValueChange = {
+                            onValueChange(typeValue, cornerValues.copy(top = it))
+                        }
+                    )
+                    DpInput(
+                        cornerValues.end,
+                        modifier = Modifier.weight(1f),
+                        onValueChange = {
+                            onValueChange(typeValue, cornerValues.copy(end = it))
+                        }
+                    )
+                    DpInput(
+                        cornerValues.bottom,
+                        modifier = Modifier.weight(1f),
+                        onValueChange = {
+                            onValueChange(typeValue, cornerValues.copy(bottom = it))
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -463,7 +595,7 @@ fun <T> DropdownInput(
                 .then(if (hovered) Modifier.background(hoverBackgroundColor) else Modifier)
                 .height(24.dp)
                 .border(width = 1.dp, color = if (hovered) hoverBorderColor else Color.Transparent)
-                .padding(vertical = 4.dp, horizontal = 8.dp),
+                .padding(start = 8.dp, top = 4.dp, end = 4.dp, bottom = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = if (hovered) Arrangement.SpaceBetween else Arrangement.Start
         ) {

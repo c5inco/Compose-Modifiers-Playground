@@ -169,24 +169,16 @@ fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShap
 }
 
 @Composable
-fun PaddingModifier(allValue: Int, onChange: (PaddingModifierData) -> Unit) {
+fun PaddingModifier(typeValue: AvailablePadding, cornerValues: CornerValues, onChange: (PaddingModifierData) -> Unit) {
     Column {
         ModifierLabel("padding")
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            DpInput(
-                allValue,
-                label = {
-                    Text(
-                        "all",
-                        style = MaterialTheme.typography.body2,
-                        color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-                    )
-                },
-                onValueChange = {
-                    onChange(PaddingModifierData(it))
-                }
-            )
-        }
+        PaddingInput(
+            typeValue = typeValue,
+            cornerValues = cornerValues,
+            onValueChange = { type, corners ->
+                onChange(PaddingModifierData(type = type, corners = corners.copy()))
+            }
+        )
     }
 }
 
@@ -194,7 +186,7 @@ fun PaddingModifier(allValue: Int, onChange: (PaddingModifierData) -> Unit) {
 fun OffsetDesignModifier(xValue: Int, yValue: Int, onChange: (OffsetDesignModifierData) -> Unit) {
     Column {
         ModifierLabel("offset")
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             DpInput(
                 xValue,
                 label = {
@@ -422,7 +414,7 @@ fun WeightModifier(weightValue: Float, onChange: (WeightModifierData) -> Unit) {
 fun AlignBoxModifier(alignmentValue: AvailableContentAlignments, onChange: (AlignBoxModifierData) -> Unit) {
     Column {
         ModifierLabel("align")
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(Modifier.fillMaxWidth(0.75f)) {
             ContentAlignmentInput(alignmentValue, onValueChange = {
                 onChange(AlignBoxModifierData(it))
             })
@@ -434,7 +426,7 @@ fun AlignBoxModifier(alignmentValue: AvailableContentAlignments, onChange: (Alig
 fun AlignColumnModifier(alignmentValue: AvailableHorizontalAlignments, onChange: (AlignColumnModifierData) -> Unit) {
     Column {
         ModifierLabel("align")
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(Modifier.fillMaxWidth(0.75f)) {
             HorizontalAlignmentInput(alignmentValue, onValueChange = {
                 onChange(AlignColumnModifierData(it))
             })
@@ -446,7 +438,7 @@ fun AlignColumnModifier(alignmentValue: AvailableHorizontalAlignments, onChange:
 fun AlignRowModifier(alignmentValue: AvailableVerticalAlignments, onChange: (AlignRowModifierData) -> Unit) {
     Column {
         ModifierLabel("align")
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(Modifier.fillMaxWidth(0.75f)) {
             VerticalAlignmentInput(alignmentValue, onValueChange = {
                 onChange(AlignRowModifierData(it))
             })

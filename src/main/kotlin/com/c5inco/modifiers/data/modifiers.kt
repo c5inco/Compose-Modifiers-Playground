@@ -152,6 +152,12 @@ fun getContentAlignments(alignment: AvailableContentAlignments): Alignment = (
     }
 )
 
+enum class AvailablePadding {
+    All,
+    Sides,
+    Individual
+}
+
 data class AlphaModifierData(
     val alpha: Float = 1f
 )
@@ -195,8 +201,35 @@ data class BorderModifierData(
 )
 
 data class PaddingModifierData(
-    val all: Int = 0
-)
+    val type: AvailablePadding = AvailablePadding.All,
+    val corners: CornerValues = CornerValues()
+) {
+    constructor(all: Int) : this(
+        corners = CornerValues(all)
+    )
+    constructor(horizontal: Int, vertical: Int) : this(
+        type = AvailablePadding.Sides,
+        corners = CornerValues(horizontal, vertical)
+    )
+    constructor(start: Int, top: Int, end: Int, bottom: Int) : this(
+        type = AvailablePadding.Individual,
+        corners = CornerValues(start, top, end, bottom)
+    )
+}
+
+data class CornerValues(
+    val start: Int = 0,
+    val top: Int = 0,
+    val end: Int = 0,
+    val bottom: Int = 0,
+) {
+    constructor(all: Int) : this(
+        all, all, all, all
+    )
+    constructor(horizontal: Int, vertical: Int) : this(
+        horizontal, vertical, horizontal, vertical
+    )
+}
 
 data class ShadowModifierData(
     val elevation: Int = 0,
@@ -273,8 +306,23 @@ fun getModifier(data: Any): Modifier = (
             Modifier.size(width = width.dp, height = height.dp)
         }
         is PaddingModifierData -> {
-            val (all) = data
-            Modifier.padding(all.dp)
+            val (type, corners) = data
+            when (type) {
+                AvailablePadding.Sides -> {
+                    Modifier.padding(vertical = (corners.top).dp, horizontal = (corners.start).dp)
+                }
+                AvailablePadding.Individual -> {
+                    Modifier.padding(
+                        top = (corners.top).dp,
+                        bottom = (corners.bottom).dp,
+                        start = (corners.start).dp,
+                        end = (corners.end).dp,
+                    )
+                }
+                else -> {
+                    Modifier.padding((corners.top).dp)
+                }
+            }
         }
         is BackgroundModifierData -> {
             val (color, shape, corner) = data

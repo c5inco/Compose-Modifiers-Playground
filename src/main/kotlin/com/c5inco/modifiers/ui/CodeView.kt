@@ -193,8 +193,18 @@ private fun lookupModifier(modifier: Any): String = (
             "border(width = $width.dp, color = ${generateColorString(color)}, shape = ${generateShapeString(shape, corner)})"
         }
         is PaddingModifierData -> {
-            val (all) = modifier
-            "padding($all.dp)"
+            val (type, corners) = modifier
+            when (type) {
+                AvailablePadding.Sides -> {
+                    "padding(horizontal = ${corners.start}.dp, vertical = ${corners.top}.dp)"
+                }
+                AvailablePadding.Individual -> {
+                    "padding(start = ${corners.start}.dp, top = ${corners.top}.dp, end = ${corners.end}.dp, bottom = ${corners.bottom}.dp)"
+                }
+                else -> {
+                    "padding(${corners.top}.dp)"
+                }
+            }
         }
         is ShadowModifierData -> {
             val (elevation, shape, corner) = modifier
