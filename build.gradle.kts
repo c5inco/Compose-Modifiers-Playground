@@ -34,7 +34,7 @@ compose.desktop {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2020.1.4"
+    version = "2020.3.3"
 }
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
