@@ -6,18 +6,24 @@ Source code for Compose Modifiers Playground IDEA plugin
 Learn how to use Jetpack Compose modifiers through this interactive playground!
 
 Available modifiers to use:
+- Align
+- Alpha
 - Background
 - Border
+- Clickable
 - Clip
 - FillMaxHeight
 - FillMaxSize
 - FillMaxWidth
+- Height
 - Offset
 - Padding
 - Rotate
 - Scale
 - Shadow
 - Size
+- Weight
+- Width
 - WrapContentHeight
 - WrapContentSize
 - WrapContentWidth

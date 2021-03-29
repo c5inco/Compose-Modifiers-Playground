@@ -56,7 +56,6 @@ fun CodeView(
                 Modifier
                     .fillMaxSize()
                     .background(EditorTheme.colors.backgroundDark)
-                    .padding(16.dp)
                     .verticalScroll(verticalScrollState)
             ) {
                 when (elementModel.type) {
@@ -98,7 +97,8 @@ fun CodeView(
                 Text(
                     formatCode(code),
                     fontSize = 14.sp,
-                    fontFamily = Fonts.jetbrainsMono()
+                    fontFamily = Fonts.jetbrainsMono(),
+                    modifier = Modifier.padding(16.dp)
                 )
             }
 
