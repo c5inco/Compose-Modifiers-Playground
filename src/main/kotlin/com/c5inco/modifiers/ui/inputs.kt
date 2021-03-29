@@ -153,16 +153,19 @@ fun ShapeInput(
             ),
     ) {
         for (pair in shapesList) {
-            var mod = Modifier.clip(shape = RoundedCornerShape(4.dp))
-            if (shapeValue == pair.second) mod = mod.background(MaterialTheme.colors.secondary)
+            var mod: Modifier = Modifier
+            if (shapeValue == pair.second) mod = mod.background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp))
 
-            Icon(
-                painter = svgResource("icons/${pair.first}.svg"),
-                contentDescription = "${pair.first} shape button",
-                modifier = mod.clickable {
-                    onValueChange(pair.second, cornerValue)
-                }
-            )
+            SmallIconButton(
+                modifier = mod,
+                onClick = { onValueChange(pair.second, cornerValue) }
+            ) {
+                Icon(
+                    painter = svgResource("icons/${pair.first}.svg"),
+                    contentDescription = "${pair.first} shape button",
+                    modifier = Modifier.size(18.dp)
+                )
+            }
         }
     }
 
