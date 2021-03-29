@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.Typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.runtime.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
@@ -28,6 +30,7 @@ fun CodeView(
     modifier: Modifier = Modifier,
     elementModel: ElementModel,
     elementModifiers: List<Pair<Any, Boolean>>,
+    childElements: List<Any>,
     childModifiersList: MutableList<MutableList<Pair<Any, Boolean>>>,
     childScopeModifiersList: MutableList<MutableList<Pair<Any, Boolean>>>
 ) {
@@ -80,11 +83,8 @@ fun CodeView(
                 code += generateModifiersString(elementModifiers, 1)
                 code += ") {\n"
 
-                val emojis = listOf("🥑", "☕", "🤖")
-                emojis.forEachIndexed { idx, emoji ->
-                    code += "\tText(\n"
-                    code += "\t\t\"$emoji\",\n"
-                    code += "\t\tfontSize = 48.sp,\n"
+                childElements.forEachIndexed { idx, child ->
+                    code += generateChildElementString(child)
 
                     val allChildModifiers = childScopeModifiersList[idx].toMutableList()
                     allChildModifiers.addAll(childModifiersList[idx].toList())
@@ -300,3 +300,55 @@ private fun generateShapeString(shape: AvailableShapes, corner: Int): String = (
         else -> "RectangleShape"
     }
 )
+
+private fun generateTextStyleString(style: TextStyle): String {
+    var str = "MaterialTheme.typography."
+
+    when (style) {
+        Typography().h6 -> {
+            str += "h6"
+        }
+        Typography().subtitle1 -> {
+            str += "subtitle1"
+        }
+        Typography().subtitle2 -> {
+            str += "subtitle2"
+        }
+        Typography().body2 -> {
+            str += "body2"
+        }
+        else -> {
+            str += "body1"
+        }
+    }
+
+    return str
+}
+
+private fun generateChildElementString(element: Any): String {
+    var code = ""
+
+    when (element) {
+        is TextChildData -> {
+            val (text, style, alpha) = element
+            code += "\tText(\n"
+            code += "\t\t\"$text\",\n"
+            code += "\t\tstyle = ${generateTextStyleString(style)}),\n"
+            code += "\t\tcolor = LocalContentColor.current.copy(alpha = ContentAlpha.${alpha.toString().toLowerCase()}),\n"
+        }
+        is ImageChildData -> {
+            val (imagePath) = element
+            code += "\tImage(\n"
+            code += "\t\timageVector = \"images/$imagePath\",\n"
+            code += "\t\tcontentDescription = \"$imagePath image\",\n"
+        }
+        else -> {
+            val (emoji) = element as EmojiChildData
+            code += "\tText(\n"
+            code += "\t\t\"$emoji\",\n"
+            code += "\t\tfontSize = 48.sp,\n"
+        }
+    }
+
+    return code
+}

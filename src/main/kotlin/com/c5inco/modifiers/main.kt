@@ -20,17 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.*
 import com.c5inco.modifiers.ui.controls.CompactDropdownItem
-import com.c5inco.modifiers.ui.theme.Fonts
 import com.c5inco.modifiers.ui.theme.appLightColors
 import com.c5inco.modifiers.ui.theme.blue700
 import com.c5inco.modifiers.utils.downTo
-import com.c5inco.modifiers.utils.formatCode
 import com.c5inco.modifiers.utils.until
 
 fun main() = Window(
@@ -223,6 +221,7 @@ fun Playground(
                                 .fillMaxSize(),
                             parentElement,
                             elementModifiersList,
+                            childElements,
                             childModifiersList,
                             childScopeModifiersList
                         )
@@ -289,7 +288,7 @@ fun Playground(
                             childElements.forEachIndexed { i, element ->
                                 Divider()
                                 ChildGroup(
-                                    i.toString(),
+                                    getChildElementHeader(element),
                                     parentElement.type,
                                     scopeModifiersList = childScopeModifiersList[i].toMutableList(),
                                     modifiersList = childModifiersList[i].toMutableList(),
@@ -314,6 +313,23 @@ fun Playground(
         }
     }
 }
+
+fun getChildElementHeader(data: Any): String = (
+    when (data) {
+        is TextChildData -> {
+            val (text) = data
+            "Text(\"$text\")"
+        }
+        is ImageChildData -> {
+            val (imagePath) = data
+            "Image(\"$imagePath\")"
+        }
+        else -> {
+            val (emoji) = data as EmojiChildData
+            "$emoji emoji"
+        }
+    }
+)
 
 @Composable
 fun ParentGroup(
@@ -392,9 +408,10 @@ fun ChildGroup(
     onChange: (scopeModifiers: List<Pair<Any, Boolean>>, modifiers: List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
-    ComponentHeader("$name element", expanded, onExpand = { expanded = !expanded })
+    ComponentHeader(name, expanded, onExpand = { expanded = !expanded })
 
     if (expanded) {
+        /*
         PropertiesSection {
             Column(
                 Modifier
@@ -415,6 +432,7 @@ fun ChildGroup(
 
         DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
         Spacer(Modifier.height(8.dp))
+        */
 
         PropertiesSection(
             modifier = Modifier
@@ -564,7 +582,9 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
         Text(
             name,
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.weight(1f)
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            modifier = Modifier.weight(1f).padding(end = 4.dp)
         )
         SmallIconButton(onClick = { onExpand() }) {
             Icon(
