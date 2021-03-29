@@ -36,6 +36,48 @@ object Templates {
             mutableListOf()
         )
     )
+
+    val Rainbow = Template(
+        parentElement = ElementModel(
+            AvailableElements.Row,
+            RowElementData(
+                horizontalArrangement = AvailableHorizontalArrangements.Center,
+                verticalAlignment = AvailableVerticalAlignments.CenterVertically)
+        ),
+        parentModifiers = listOf(
+            Pair(OffsetDesignModifierData(y = -90), true),
+            Pair(SizeModifierData(width = 360, height = 360), true),
+            Pair(ClipModifierData(shape = AvailableShapes.Rectangle), true),
+            Pair(OffsetDesignModifierData(y = 180), true),
+            Pair(BackgroundModifierData(color = Color.Red, shape = AvailableShapes.Circle), true),
+            Pair(PaddingModifierData(20), true),
+            Pair(BackgroundModifierData(color = Color.Yellow, shape = AvailableShapes.Circle), true),
+            Pair(PaddingModifierData(20), true),
+            Pair(BackgroundModifierData(color = Color.Green, shape = AvailableShapes.Circle), true),
+            Pair(PaddingModifierData(20), true),
+            Pair(BackgroundModifierData(color = Color.Cyan, shape = AvailableShapes.Circle), true),
+            Pair(PaddingModifierData(20), true),
+            Pair(BackgroundModifierData(color = Color.Blue, shape = AvailableShapes.Circle), true),
+            Pair(PaddingModifierData(20), true),
+            Pair(BackgroundModifierData(color = Color.Magenta, shape = AvailableShapes.Circle), true),
+        ),
+        childModifiers = listOf(
+            mutableListOf(
+                Pair(OffsetDesignModifierData(y = -24), true),
+            ),
+            mutableListOf(
+                Pair(OffsetDesignModifierData(y = -24), true),
+            ),
+            mutableListOf(
+                Pair(OffsetDesignModifierData(y = -24), true),
+            )
+        ),
+        childScopeModifiers = listOf(
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf()
+        )
+    )
 }
 
 data class Template(
