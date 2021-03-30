@@ -1,5 +1,13 @@
 package com.c5inco.modifiers.utils
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -73,5 +81,59 @@ private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, reg
 private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: Regex) {
     for (result in regexp.findAll(text)) {
         addStyle(style, result.range.first, result.range.last + 1)
+    }
+}
+
+@Composable
+fun DotsBackground(modifier: Modifier) {
+    Canvas(
+        modifier.fillMaxSize()
+    ) {
+        val canvasWidth = size.width
+        val canvasHeight = size.height
+        val circleColor = SolidColor(Color.LightGray)
+        val circleRadius = 2f
+        val circleStep = 20
+
+        val circle: (Int, Int) -> Unit = { x, y ->
+            drawCircle(
+                brush = circleColor,
+                radius = circleRadius,
+                center = Offset(x = x.toFloat(), y = y.toFloat())
+            )
+        }
+
+        until((canvasWidth / 2).toInt(), canvasWidth.toInt(), circleStep) { uidx ->
+            downTo((canvasHeight / 2).toInt(), 0, circleStep) { didx ->
+                circle(uidx, didx)
+            }
+            until((canvasHeight / 2).toInt(), canvasHeight.toInt(), circleStep) { uidx2 ->
+                circle(uidx, uidx2)
+            }
+        }
+        downTo((canvasWidth / 2).toInt(), 0, circleStep) { uidx ->
+            downTo((canvasHeight / 2).toInt(), 0, circleStep) { didx ->
+                circle(uidx, didx)
+            }
+            until((canvasHeight / 2).toInt(), canvasHeight.toInt(), circleStep) { uidx2 ->
+                circle(uidx, uidx2)
+            }
+        }
+    }
+}
+
+@Composable
+fun DottedLine(modifier: Modifier = Modifier, color: Color = Color.Gray) {
+    Canvas(
+        modifier
+            .fillMaxWidth()
+    ) {
+        until(0, size.width.toInt(), 10) {
+            drawCircle(
+                brush = SolidColor(color),
+                radius = 1f,
+                center = Offset(x = it.toFloat(), y = 0f)
+            )
+        }
     }
 }
