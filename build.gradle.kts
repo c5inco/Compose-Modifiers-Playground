@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     jcenter()
@@ -35,11 +35,12 @@ compose.desktop {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version = "2020.3.3"
+    type = "IC"
 }
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Initial release of the plugin.""")
+      Polish up visual styling and text inputs interaction""")
     sinceBuild("201")
     untilBuild("203.*")
 }

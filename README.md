@@ -5,6 +5,8 @@ Source code for Compose Modifiers Playground IDEA plugin
 
 Learn how to use Jetpack Compose modifiers through this interactive playground!
 
+The playground comes with several templates to start experimenting from. The tool can be found under the **Tools menu**.
+
 Available modifiers to use:
 - Align
 - Alpha
