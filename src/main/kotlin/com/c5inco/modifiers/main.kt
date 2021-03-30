@@ -7,17 +7,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,8 +28,7 @@ import com.c5inco.modifiers.ui.*
 import com.c5inco.modifiers.ui.controls.CompactDropdownItem
 import com.c5inco.modifiers.ui.theme.appLightColors
 import com.c5inco.modifiers.ui.theme.blue700
-import com.c5inco.modifiers.utils.downTo
-import com.c5inco.modifiers.utils.until
+import com.c5inco.modifiers.utils.DottedLine
 
 fun main() = Window(
     title = "Modifiers Playground",
@@ -438,7 +437,7 @@ fun ChildGroup(
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .fillMaxHeight(),
-            name = "Scope modifiers",
+            name = "${parentElement}Scope modifiers",
             actions = {
                 AddChildModifierAction(
                     parentElement,
