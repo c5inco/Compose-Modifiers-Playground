@@ -24,6 +24,10 @@ class PluginAction : DumbAwareAction() {
             init()
         }
 
+        override fun getStyle(): DialogStyle {
+            return DialogStyle.COMPACT
+        }
+
         override fun createCenterPanel(): JComponent {
             val dialog = this
             return ComposePanel().apply {
