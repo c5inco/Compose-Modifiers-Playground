@@ -5,6 +5,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import com.c5inco.modifiers.ui.EditorTheme
+import kotlin.math.roundToInt
+
+fun Float.roundToDecimals(decimals: Int): Float {
+    var dotAt = 1
+    repeat(decimals) { dotAt *= 10 }
+    val roundedValue = (this * dotAt).roundToInt()
+    return (roundedValue / dotAt) + (roundedValue % dotAt).toFloat() / dotAt
+}
 
 fun <T> chunk(list: List<T>, size: Int): List<List<T>> {
     val chunkedList = mutableListOf<List<T>>()

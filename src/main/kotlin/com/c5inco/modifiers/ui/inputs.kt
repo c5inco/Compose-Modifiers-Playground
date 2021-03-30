@@ -23,6 +23,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.shortcuts
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.DpOffset
@@ -442,6 +444,7 @@ fun DpInput(
     label: @Composable () -> Unit = {},
     onValueChange: (Int) -> Unit
 ) {
+    var text by remember { mutableStateOf(value.toString()) }
     var hovered by remember { mutableStateOf(false) }
     var focused by remember { mutableStateOf(false) }
 
@@ -452,16 +455,18 @@ fun DpInput(
         return Color.Transparent
     }
 
+    fun saveText() {
+        val convertedValue = text.toIntOrNull()
+        if (convertedValue != null) {
+            onValueChange(convertedValue)
+        } else {
+            text = value.toString()
+        }
+    }
+
     BasicTextField(
-        value = value.toString(),
-        onValueChange = {
-            val convertedValue = it.toIntOrNull()
-            if (convertedValue != null) {
-                onValueChange(convertedValue)
-            } else {
-                onValueChange(0)
-            }
-        },
+        value = text,
+        onValueChange = { text = it },
         singleLine = true,
         decorationBox = { innerTextField ->
             Row(
@@ -477,12 +482,21 @@ fun DpInput(
             }
         },
         modifier = modifier
+            .shortcuts {
+                on(Key.Enter) {
+                    saveText()
+                }
+                on(Key.Escape) {
+                    text = value.toString()
+                }
+            }
             .onFocusChanged {
                 if (it == FocusState.Active) {
                     focused = true
                 }
                 if (it == FocusState.Inactive) {
                     focused = false
+                    saveText()
                 }
             }
             .pointerMoveFilter(
@@ -506,6 +520,7 @@ fun FloatInput(
     label: @Composable () -> Unit = {},
     onValueChange: (Float) -> Unit
 ) {
+    var text by remember { mutableStateOf(value.toString()) }
     var hovered by remember { mutableStateOf(false) }
     var focused by remember { mutableStateOf(false) }
 
@@ -514,17 +529,18 @@ fun FloatInput(
         if (hovered) return Color.LightGray
         return Color.Transparent
     }
+    fun saveText() {
+        val convertedValue = text.toFloatOrNull()
+        if (convertedValue != null) {
+            onValueChange(convertedValue)
+        } else {
+            text = value.toString()
+        }
+    }
 
     BasicTextField(
-        value = value.toString(),
-        onValueChange = {
-            val convertedValue = it.toFloatOrNull()
-            if (convertedValue != null) {
-                onValueChange(convertedValue)
-            } else {
-                onValueChange(0f)
-            }
-        },
+        value = text,
+        onValueChange = { text = it },
         singleLine = true,
         decorationBox = { innerTextField ->
             Row(
@@ -540,25 +556,24 @@ fun FloatInput(
             }
         },
         modifier = Modifier
+            .shortcuts {
+                on(Key.Enter) {
+                    saveText()
+                }
+                on(Key.Escape) {
+                    text = value.toString()
+                }
+            }
             .onFocusChanged {
                 if (it == FocusState.Active) {
                     focused = true
                 }
                 if (it == FocusState.Inactive) {
                     focused = false
+                    saveText()
                 }
             }
-            .pointerMoveFilter(
-                onEnter = {
-                    hovered = true
-                    false
-                },
-                onExit = {
-                    hovered = false
-                    false
-                }
-            )
-            .width(54.dp)
+            .width(60.dp)
         ,
         textStyle = MaterialTheme.typography.body2
     )
