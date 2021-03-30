@@ -4,10 +4,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.Typography
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.runtime.*
@@ -106,6 +103,14 @@ fun CodeView(
                 VerticalScrollbar(
                     modifier = Modifier.align(Alignment.CenterEnd)
                         .fillMaxHeight(),
+                    style = ScrollbarStyle(
+                        minimalHeight = 16.dp,
+                        thickness = 8.dp,
+                        shape = MaterialTheme.shapes.small,
+                        hoverDurationMillis = 300,
+                        unhoverColor = Color.LightGray.copy(alpha = 0.4f),
+                        hoverColor = Color.LightGray.copy(alpha = 0.6f)
+                    ),
                     adapter = rememberScrollbarAdapter(verticalScrollState),
                 )
             }
