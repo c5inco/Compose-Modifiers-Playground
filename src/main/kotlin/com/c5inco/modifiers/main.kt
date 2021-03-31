@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
@@ -209,6 +210,7 @@ fun ParentGroup(
 
     if (expanded) {
         PropertiesSection(
+            empty = modifiersList.isEmpty(),
             modifier = Modifier.padding(8.dp),
         ) {
             ElementRow(
@@ -219,7 +221,7 @@ fun ParentGroup(
             )
         }
 
-        DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+        DottedLine(Modifier.padding(horizontal = 16.dp))
         Spacer(Modifier.height(8.dp))
 
         PropertiesSection(
@@ -227,6 +229,7 @@ fun ParentGroup(
                 .padding(bottom = 16.dp)
                 .fillMaxHeight(),
             name = "Modifiers",
+            empty = modifiersList.isEmpty(),
             actions = {
                 AddModifierAction(
                     onSelect = {
@@ -235,10 +238,10 @@ fun ParentGroup(
                     })
             }
         ) {
-            for (i in 0 until modifiersList.size) {
+            modifiersList.forEachIndexed { idx, modifier ->
                 ModifierEntry(
-                    modifierData = modifiersList[i],
-                    order = i,
+                    modifierData = modifier,
+                    order = idx,
                     size = modifiersList.size,
                     move = { index, up ->
                         val curr = modifiersList[index]
@@ -300,25 +303,28 @@ fun ChildGroup(
         DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
         Spacer(Modifier.height(8.dp))
         */
+        fun onAddChildModifier(newModifier: Any) {
+            scopeModifiersList.add(Pair(getNewScopeModifierData(newModifier), true))
+            onChange(scopeModifiersList.toList(), modifiersList.toList())
+        }
 
         PropertiesSection(
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .fillMaxHeight(),
             name = "${parentElement}Scope modifiers",
+            empty = scopeModifiersList.isEmpty(),
             actions = {
                 AddChildModifierAction(
                     parentElement,
-                    onSelect = {
-                        scopeModifiersList.add(Pair(getNewScopeModifierData(it), true))
-                        onChange(scopeModifiersList.toList(), modifiersList.toList())
-                    })
+                    onSelect = { onAddChildModifier(it) }
+                )
             }
         ) {
-            for (i in 0 until scopeModifiersList.size) {
+            scopeModifiersList.forEachIndexed { idx, modifier ->
                 RowColumnScopeModifierEntry(
-                    modifierData = scopeModifiersList[i],
-                    order = i,
+                    modifierData = modifier,
+                    order = idx,
                     size = scopeModifiersList.size,
                     onModifierChange = { order, data ->
                         scopeModifiersList.set(order, data)
@@ -332,7 +338,7 @@ fun ChildGroup(
             }
         }
 
-        DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+        DottedLine(Modifier.padding(horizontal = 16.dp))
         Spacer(Modifier.height(8.dp))
 
         PropertiesSection(
@@ -340,6 +346,7 @@ fun ChildGroup(
                 .padding(bottom = 16.dp)
                 .fillMaxHeight(),
             name = "Modifiers",
+            empty = modifiersList.isEmpty(),
             actions = {
                 AddModifierAction(
                     onSelect = {
@@ -383,20 +390,35 @@ fun ChildGroup(
 fun PropertiesSection(
     modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
     name: String? = null,
+    empty: Boolean = false,
     actions: @Composable RowScope.() -> Unit = { },
     content: @Composable ColumnScope.() -> Unit
 ) {
+    var hovered by remember { mutableStateOf(false) }
+    val alphaAnim by animateFloatAsState(if (hovered || !empty) 1f else ContentAlpha.disabled)
+
     Column {
         name?.let {
             Row(
                 Modifier
+                    .pointerMoveFilter(
+                        onEnter = {
+                            hovered = true
+                            false
+                        },
+                        onExit = {
+                            hovered = false
+                            false
+                        }
+                    )
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp, start = 16.dp, end = 16.dp),
+                    .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+                    .alpha(alphaAnim),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = it,
+                    text = name,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.subtitle2,
                 )
@@ -605,38 +627,54 @@ private fun AddChildModifierAction(parentType: AvailableElements, onSelect: (Any
             )
         }
 
-        val defaultVerticalPadding = 8
-        val dropdownHeight = 32
-
-        DropdownMenu(
-            modifier = Modifier
-                .sizeIn(
-                    minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
-                    maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
-                ),
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            val select: (Any) -> Unit = {
+        AddScopeModifiersDropdownMenu(
+            expanded,
+            parentType,
+            onDismiss = { expanded = false },
+            onSelect = {
                 onSelect(it)
                 expanded = false
-            }
+            })
+    }
+}
 
-            when (parentType) {
-                AvailableElements.Box -> {
-                    BoxScopeModifierEntry.values().toList().forEach { entry ->
-                        CompactDropdownItem(entry, onClick = { select(entry) })
-                    }
+@Composable
+private fun AddScopeModifiersDropdownMenu(
+    expanded: Boolean,
+    parentType: AvailableElements,
+    onDismiss: () -> Unit,
+    onSelect: (Any) -> Unit
+) {
+    val defaultVerticalPadding = 8
+    val dropdownHeight = 32
+
+    DropdownMenu(
+        modifier = Modifier
+            .sizeIn(
+                minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
+                maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
+            ),
+        expanded = expanded,
+        onDismissRequest = { onDismiss() }
+    ) {
+        val select: (Any) -> Unit = {
+            onSelect(it)
+        }
+
+        when (parentType) {
+            AvailableElements.Box -> {
+                BoxScopeModifierEntry.values().toList().forEach { entry ->
+                    CompactDropdownItem(entry, onClick = { select(entry) })
                 }
-                AvailableElements.Column -> {
-                    ColumnScopeModifierEntry.values().toList().forEach { entry ->
-                        CompactDropdownItem(entry, onClick = { select(entry) })
-                    }
+            }
+            AvailableElements.Column -> {
+                ColumnScopeModifierEntry.values().toList().forEach { entry ->
+                    CompactDropdownItem(entry, onClick = { select(entry) })
                 }
-                AvailableElements.Row -> {
-                    RowScopeModifierEntry.values().toList().forEach { entry ->
-                        CompactDropdownItem(entry, onClick = { select(entry) })
-                    }
+            }
+            AvailableElements.Row -> {
+                RowScopeModifierEntry.values().toList().forEach { entry ->
+                    CompactDropdownItem(entry, onClick = { select(entry) })
                 }
             }
         }
