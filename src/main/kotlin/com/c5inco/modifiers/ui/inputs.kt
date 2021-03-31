@@ -486,6 +486,9 @@ fun DpInput(
                 on(Key.Enter) {
                     saveText()
                 }
+                on(Key.NumPadEnter) {
+                    saveText()
+                }
                 on(Key.Escape) {
                     text = value.toString()
                 }
@@ -558,6 +561,9 @@ fun FloatInput(
         modifier = Modifier
             .shortcuts {
                 on(Key.Enter) {
+                    saveText()
+                }
+                on(Key.NumPadEnter) {
                     saveText()
                 }
                 on(Key.Escape) {
