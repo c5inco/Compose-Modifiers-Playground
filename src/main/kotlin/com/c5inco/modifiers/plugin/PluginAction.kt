@@ -10,6 +10,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.FrameWrapper
+import com.intellij.openapi.util.IconLoader
 import java.awt.Dimension
 import javax.swing.JComponent
 
@@ -43,4 +44,9 @@ class PluginAction : DumbAwareAction() {
             }
         }
     }
+}
+
+object PluginIcons {
+    @JvmField
+    val PlaygroundAction = IconLoader.getIcon("/icons/menu-icon.svg", javaClass)
 }
