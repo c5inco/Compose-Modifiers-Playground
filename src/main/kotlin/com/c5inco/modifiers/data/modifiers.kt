@@ -259,6 +259,10 @@ data class ScaleModifierData(
     val scale: Float = 1f
 )
 
+data class AspectRatioModifierData(
+    val ratio: Float = 1f
+)
+
 data class WeightModifierData(
     val weight: Float = 1f
 )
@@ -355,6 +359,10 @@ fun getModifier(data: Any): Modifier = (
         is ScaleModifierData -> {
             val (scale) = data
             Modifier.scale(scale)
+        }
+        is AspectRatioModifierData -> {
+            val (ratio) = data
+            Modifier.aspectRatio(ratio)
         }
         is FillMaxWidthModifierData -> {
             val (fraction) = data

@@ -223,6 +223,15 @@ fun ModifierEntry(
                             }
                         )
                     }
+                    is AspectRatioModifierData -> {
+                        val (ratio) = modifierData.first as AspectRatioModifierData
+                        AspectRatioModifier(
+                            ratioValue = ratio,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
                     is FillMaxWidthModifierData -> {
                         val (fraction) = modifierData.first as FillMaxWidthModifierData
                         FillMaxWidthModifier(
@@ -402,6 +411,7 @@ fun RowColumnScopeModifierEntry(
 
 enum class ModifierEntry {
     Alpha,
+    AspectRatio,
     Background,
     Border,
     Clickable,

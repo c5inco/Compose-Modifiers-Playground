@@ -535,6 +535,9 @@ private fun getNewModifierData(modifierType: ModifierEntry): Any = (
         ModifierEntry.Scale -> {
             ScaleModifierData()
         }
+        ModifierEntry.AspectRatio -> {
+            AspectRatioModifierData()
+        }
         ModifierEntry.FillMaxWidth -> {
             FillMaxWidthModifierData()
         }

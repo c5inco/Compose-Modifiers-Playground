@@ -295,6 +295,21 @@ fun ScaleModifier(scaleValue: Float, onChange: (ScaleModifierData) -> Unit) {
 }
 
 @Composable
+fun AspectRatioModifier(ratioValue: Float, onChange: (AspectRatioModifierData) -> Unit) {
+    Column {
+        ModifierLabel("aspectRatio")
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            FloatInput(
+                ratioValue,
+                onValueChange = {
+                    onChange(AspectRatioModifierData(it))
+                }
+            )
+        }
+    }
+}
+
+@Composable
 fun FillMaxWidthModifier(fractionValue: Float, onChange: (FillMaxWidthModifierData) -> Unit) {
     Column {
         ModifierLabel("fillMaxWidth")

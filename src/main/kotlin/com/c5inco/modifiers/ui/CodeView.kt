@@ -235,6 +235,10 @@ private fun lookupModifier(modifier: Any): String = (
             val (scale) = modifier
             "scale(${scale}f)"
         }
+        is AspectRatioModifierData -> {
+            val (ratio) = modifier
+            "aspectRatio(${ratio}f)"
+        }
         is FillMaxWidthModifierData -> {
             val (fraction) = modifier
             "fillMaxWidth(${fraction}f)"
