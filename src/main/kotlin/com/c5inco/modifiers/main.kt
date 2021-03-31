@@ -53,7 +53,7 @@ fun Playground(
     activeTemplate: Template,
     onTemplateChange: (Template) -> Unit
 ) {
-    var parentElement = activeTemplate.parentElement
+    var parentElement = mutableStateOf(activeTemplate.parentElement)
     var elementModifiersList = activeTemplate.parentModifiers.toMutableStateList()
     val childElements = activeTemplate.childElements
     var childModifiersList = activeTemplate.childModifiers.toMutableStateList()
@@ -72,7 +72,7 @@ fun Playground(
                 Column {
                     PreviewCanvas(
                         Modifier.weight(2f).fillMaxSize(),
-                        parentElement,
+                        parentElement.value,
                         childElements,
                         childScopeModifiersList,
                         childModifiersList,
@@ -86,7 +86,7 @@ fun Playground(
                             Modifier
                                 .weight(1f)
                                 .fillMaxSize(),
-                            parentElement,
+                            parentElement.value,
                             elementModifiersList,
                             childElements,
                             childModifiersList,
@@ -144,8 +144,8 @@ fun Playground(
                         val verticalScrollState = rememberScrollState(0)
 
                         Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
-                            ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
-                                parentElement = element
+                            ParentGroup(parentElement.value, elementModifiersList, onChange = { element, modifiers ->
+                                parentElement.value = element
                                 elementModifiersList.clear()
                                 elementModifiersList.addAll(modifiers)
                                 childScopeModifiersList.clear()
@@ -156,7 +156,7 @@ fun Playground(
                                 Divider()
                                 ChildGroup(
                                     getChildElementHeader(element),
-                                    parentElement.type,
+                                    parentElement.value.type,
                                     scopeModifiersList = childScopeModifiersList[i].toMutableList(),
                                     modifiersList = childModifiersList[i].toMutableList(),
                                     onChange = { scopeModifiers, modifiers ->
