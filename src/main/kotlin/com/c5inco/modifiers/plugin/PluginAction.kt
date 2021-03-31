@@ -9,7 +9,7 @@ import com.c5inco.modifiers.Application
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.openapi.ui.FrameWrapper
 import java.awt.Dimension
 import javax.swing.JComponent
 
@@ -18,17 +18,13 @@ class PluginAction : DumbAwareAction() {
         DemoDialog(e.project).show()
     }
 
-    class DemoDialog(project: Project?) : DialogWrapper(project) {
+    class DemoDialog(project: Project?) : FrameWrapper(project) {
         init {
             title = "Modifiers Playground"
-            init()
+            component = createCenterPanel()
         }
 
-        override fun getStyle(): DialogStyle {
-            return DialogStyle.COMPACT
-        }
-
-        override fun createCenterPanel(): JComponent {
+        fun createCenterPanel(): JComponent {
             val dialog = this
             return ComposePanel().apply {
                 preferredSize = Dimension(1100, 800)
