@@ -54,7 +54,7 @@ fun Playground(
     activeTemplate: Template,
     onTemplateChange: (Template) -> Unit
 ) {
-    var parentElement = mutableStateOf(activeTemplate.parentElement)
+    var parentElement by remember(activeTemplate) { mutableStateOf(activeTemplate.parentElement) }
     var elementModifiersList = activeTemplate.parentModifiers.toMutableStateList()
     val childElements = activeTemplate.childElements
     var childModifiersList = activeTemplate.childModifiers.toMutableStateList()
@@ -73,7 +73,7 @@ fun Playground(
                 Column {
                     PreviewCanvas(
                         Modifier.weight(2f).fillMaxSize(),
-                        parentElement.value,
+                        parentElement,
                         childElements,
                         childScopeModifiersList,
                         childModifiersList,
@@ -87,7 +87,7 @@ fun Playground(
                             Modifier
                                 .weight(1f)
                                 .fillMaxSize(),
-                            parentElement.value,
+                            parentElement,
                             elementModifiersList,
                             childElements,
                             childModifiersList,
@@ -139,14 +139,26 @@ fun Playground(
                                 }
                             )
                         },
-                        modifier = Modifier.shadow(elevation = 3.dp)
+                        modifier = Modifier.shadow(elevation = 3.dp),
+                        actions = {
+                            ResetDefaultModifiersAction(onClick = {
+                                parentElement = activeTemplate.parentElement
+                                elementModifiersList.clear()
+                                elementModifiersList.addAll(activeTemplate.parentModifiers)
+                                childModifiersList.clear()
+                                childModifiersList.addAll(activeTemplate.childModifiers)
+                                childScopeModifiersList.clear()
+                                childScopeModifiersList.addAll(activeTemplate.childScopeModifiers)
+                            })
+                            Spacer(Modifier.width(12.dp))
+                        }
                     )
                     Box {
                         val verticalScrollState = rememberScrollState(0)
 
                         Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
-                            ParentGroup(parentElement.value, elementModifiersList, onChange = { element, modifiers ->
-                                parentElement.value = element
+                            ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
+                                parentElement = element
                                 elementModifiersList.clear()
                                 elementModifiersList.addAll(modifiers)
                                 childScopeModifiersList.clear()
@@ -157,7 +169,7 @@ fun Playground(
                                 Divider()
                                 ChildGroup(
                                     getChildElementHeader(element),
-                                    parentElement.value.type,
+                                    parentElement.type,
                                     scopeModifiersList = childScopeModifiersList[i].toMutableList(),
                                     modifiersList = childModifiersList[i].toMutableList(),
                                     onChange = { scopeModifiers, modifiers ->
@@ -572,7 +584,8 @@ private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
         Icon(
             imageVector = Icons.Outlined.RestartAlt,
             contentDescription = "Reset default modifiers",
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier.size(18.dp),
+            tint = MaterialTheme.colors.onPrimary
         )
     }
 }

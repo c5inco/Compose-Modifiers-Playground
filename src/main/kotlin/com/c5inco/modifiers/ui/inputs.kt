@@ -444,7 +444,7 @@ fun DpInput(
     label: @Composable () -> Unit = {},
     onValueChange: (Int) -> Unit
 ) {
-    var text by remember { mutableStateOf(value.toString()) }
+    var text by remember(value) { mutableStateOf(value.toString()) }
     var hovered by remember { mutableStateOf(false) }
     var focused by remember { mutableStateOf(false) }
 
@@ -523,7 +523,7 @@ fun FloatInput(
     label: @Composable () -> Unit = {},
     onValueChange: (Float) -> Unit
 ) {
-    var text by remember { mutableStateOf(value.toString()) }
+    var text by remember(value) { mutableStateOf(value.toString()) }
     var hovered by remember { mutableStateOf(false) }
     var focused by remember { mutableStateOf(false) }
 
