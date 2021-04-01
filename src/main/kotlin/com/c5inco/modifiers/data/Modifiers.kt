@@ -22,9 +22,9 @@ enum class AvailableHorizontalArrangements {
     Start,
     End,
     Center,
-    SpacedEvenly,
-    SpacedAround,
-    SpacedBetween,
+    SpaceEvenly,
+    SpaceAround,
+    SpaceBetween,
     SpacedBy
 }
 
@@ -34,9 +34,9 @@ fun getHorizontalArrangementObject(arrangement: AvailableHorizontalArrangements,
     when (arrangement) {
         AvailableHorizontalArrangements.End -> ha = Arrangement.End
         AvailableHorizontalArrangements.Center -> ha = Arrangement.Center
-        AvailableHorizontalArrangements.SpacedEvenly -> ha = Arrangement.SpaceEvenly
-        AvailableHorizontalArrangements.SpacedAround -> ha = Arrangement.SpaceAround
-        AvailableHorizontalArrangements.SpacedBetween -> ha = Arrangement.SpaceBetween
+        AvailableHorizontalArrangements.SpaceEvenly -> ha = Arrangement.SpaceEvenly
+        AvailableHorizontalArrangements.SpaceAround -> ha = Arrangement.SpaceAround
+        AvailableHorizontalArrangements.SpaceBetween -> ha = Arrangement.SpaceBetween
         AvailableHorizontalArrangements.SpacedBy -> ha = Arrangement.spacedBy(spacing.dp)
     }
 
@@ -47,9 +47,9 @@ enum class AvailableVerticalArrangements {
     Top,
     Bottom,
     Center,
-    SpacedEvenly,
-    SpacedAround,
-    SpacedBetween,
+    SpaceEvenly,
+    SpaceAround,
+    SpaceBetween,
     SpacedBy
 }
 
@@ -59,9 +59,9 @@ fun getVerticalArrangementObject(arrangement: AvailableVerticalArrangements, spa
     when (arrangement) {
         AvailableVerticalArrangements.Bottom -> va = Arrangement.Bottom
         AvailableVerticalArrangements.Center -> va = Arrangement.Center
-        AvailableVerticalArrangements.SpacedEvenly -> va = Arrangement.SpaceEvenly
-        AvailableVerticalArrangements.SpacedAround -> va = Arrangement.SpaceAround
-        AvailableVerticalArrangements.SpacedBetween -> va = Arrangement.SpaceBetween
+        AvailableVerticalArrangements.SpaceEvenly -> va = Arrangement.SpaceEvenly
+        AvailableVerticalArrangements.SpaceAround -> va = Arrangement.SpaceAround
+        AvailableVerticalArrangements.SpaceBetween -> va = Arrangement.SpaceBetween
         AvailableVerticalArrangements.SpacedBy -> va = Arrangement.spacedBy(spacing.dp)
     }
 

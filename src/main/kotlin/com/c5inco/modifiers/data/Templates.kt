@@ -9,7 +9,7 @@ object Templates {
         parentElement = ElementModel(
             AvailableElements.Row,
             RowElementData(
-                horizontalArrangement = AvailableHorizontalArrangements.SpacedAround,
+                horizontalArrangement = AvailableHorizontalArrangements.SpaceAround,
                 verticalAlignment = AvailableVerticalAlignments.CenterVertically)
         ),
         parentModifiers = listOf(
@@ -82,7 +82,7 @@ object Templates {
         parentElement = ElementModel(
             AvailableElements.Column,
             ColumnElementData(
-                verticalArrangement = AvailableVerticalArrangements.SpacedEvenly,
+                verticalArrangement = AvailableVerticalArrangements.SpaceEvenly,
                 horizontalAlignment = AvailableHorizontalAlignments.CenterHorizontally)
         ),
         parentModifiers = listOf(
