@@ -53,33 +53,33 @@ fun formatCode(str: String) = buildAnnotatedString {
     withStyle(EditorStyles.simple) {
         var strFormatted = str.replace("\t", "    ")
         append(strFormatted)
-        addStyle(EditorStyles.simple, strFormatted, Regex("[\\[\\]\\(\\)\\.{}]"))
+
         addStyle(EditorStyles.punctuation, strFormatted, "=")
         addStyle(EditorStyles.punctuation, strFormatted, ":")
         addStyle(EditorStyles.namedArgument, strFormatted, Regex("[a-zA-z]+\\s="))
-        addStyle(EditorStyles.keyword, strFormatted, Regex("[a-zA-z]+\\.]"))
+        addStyle(EditorStyles.keyword, strFormatted, Regex("[a-zA-z]+\\."))
         addStyle(EditorStyles.function, strFormatted, Regex("[a-zA-z]+\\("))
         addStyle(EditorStyles.function, strFormatted, Regex("\\.[a-zA-z]+\\("))
         addStyle(EditorStyles.property, strFormatted, Regex("\\.[a-zA-z]+"))
+        addStyle(EditorStyles.simple, strFormatted, Regex("[\\[\\]\\(\\)\\.\\{\\}]"))
         addStyle(EditorStyles.extension, strFormatted, Regex("(RectangleShape|CircleShape)[^\\(]"))
         addStyle(EditorStyles.value, strFormatted, "Modifier")
-        addStyle(EditorStyles.number, strFormatted, Regex("(\\d+.dp)"))
-        addStyle(EditorStyles.extension, strFormatted, Regex("(.dp|.sp)"))
-        addStyle(EditorStyles.annotation, strFormatted, Regex("^@[a-zA-Z_]*"))
+        addStyle(EditorStyles.number, strFormatted, Regex("(-*\\df*)"))
+        addStyle(EditorStyles.extension, strFormatted, Regex("(\\.dp|\\.sp)"), 1)
+        addStyle(EditorStyles.annotation, strFormatted, Regex("^@[a-zA-Z_]+"))
         addStyle(EditorStyles.comment, strFormatted, Regex("^\\s*//.*"))
-        addStyle(EditorStyles.punctuation, strFormatted, ".")
         addStyle(EditorStyles.keyword, strFormatted, ",")
         addStyle(EditorStyles.string, strFormatted, "\"")
     }
 }
 
-private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: String) {
-    addStyle(style, text, Regex.fromLiteral(regexp))
+private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: String, skip: Int = 0) {
+    addStyle(style, text, Regex.fromLiteral(regexp), skip)
 }
 
-private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: Regex) {
+private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: Regex, skip: Int = 0) {
     for (result in regexp.findAll(text)) {
-        addStyle(style, result.range.first, result.range.last + 1)
+        addStyle(style, result.range.first + skip, result.range.last + 1)
     }
 }
 
