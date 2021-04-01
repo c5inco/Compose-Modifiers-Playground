@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.2"
+version = "0.1.3"
 
 repositories {
     jcenter()
@@ -40,7 +40,7 @@ intellij {
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Fix issue with changing parent element, make modeless dialog!""")
+      Fix bug with scope modifiers, polishing""")
     sinceBuild("201")
     untilBuild("203.*")
 }
