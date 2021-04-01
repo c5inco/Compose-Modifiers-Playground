@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.utils.chunk
 import java.awt.Cursor
+import kotlin.math.absoluteValue
 
 @Composable
 fun ColorInput(colorValue: Color, onValueChange: (Color) -> Unit) {
@@ -439,9 +440,55 @@ fun ContentAlignmentInput(
 @Composable
 fun DpInput(
     value: Int,
-    modifier: Modifier = Modifier,
+    canBeNegative: Boolean = false,
+    modifier: Modifier = Modifier.width(54.dp),
     label: @Composable () -> Unit = {},
     onValueChange: (Int) -> Unit
+) {
+    TextInput(
+        modifier = modifier,
+        value = value,
+        label = label,
+        convert = {
+            it.toIntOrNull()
+        },
+        onValueChange = {
+            if (it != null) {
+                onValueChange(if (canBeNegative) it else it.absoluteValue)
+            } else {
+                onValueChange(value)
+            }
+        }
+    )
+}
+
+@Composable
+fun FloatInput(
+    value: Float,
+    modifier: Modifier = Modifier.width(60.dp),
+    label: @Composable () -> Unit = {},
+    onValueChange: (Float) -> Unit
+) {
+    TextInput(
+        modifier = modifier,
+        value = value,
+        label = label,
+        convert = {
+            it.toFloatOrNull()
+        },
+        onValueChange = {
+            onValueChange(it ?: value)
+        }
+    )
+}
+
+@Composable
+fun <T> TextInput(
+    modifier: Modifier = Modifier,
+    value: T,
+    label: @Composable () -> Unit = {},
+    convert: (String) -> T,
+    onValueChange: (T) -> Unit
 ) {
     var text by remember(value) { mutableStateOf(value.toString()) }
     var hovered by remember { mutableStateOf(false) }
@@ -455,11 +502,12 @@ fun DpInput(
     }
 
     fun saveText() {
-        val convertedValue = text.toIntOrNull()
+        val convertedValue: T = convert(text)
         if (convertedValue != null) {
             onValueChange(convertedValue)
         } else {
             text = value.toString()
+            onValueChange(value)
         }
     }
 
@@ -511,74 +559,7 @@ fun DpInput(
                     false
                 }
             )
-            .size(height = 24.dp, width = 54.dp),
-        textStyle = MaterialTheme.typography.body2
-    )
-}
-
-@Composable
-fun FloatInput(
-    value: Float,
-    label: @Composable () -> Unit = {},
-    onValueChange: (Float) -> Unit
-) {
-    var text by remember(value) { mutableStateOf(value.toString()) }
-    var hovered by remember { mutableStateOf(false) }
-    var focused by remember { mutableStateOf(false) }
-
-    fun getBorderColor(): Color {
-        if (focused) return Color.Blue
-        if (hovered) return Color.LightGray
-        return Color.Transparent
-    }
-    fun saveText() {
-        val convertedValue = text.toFloatOrNull()
-        if (convertedValue != null) {
-            onValueChange(convertedValue)
-        } else {
-            text = value.toString()
-        }
-    }
-
-    BasicTextField(
-        value = text,
-        onValueChange = { text = it },
-        singleLine = true,
-        decorationBox = { innerTextField ->
-            Row(
-                modifier = Modifier
-                    .background(MaterialTheme.colors.surface)
-                    .border(width = 1.dp, color = getBorderColor())
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                label()
-                innerTextField()
-            }
-        },
-        modifier = Modifier
-            .shortcuts {
-                on(Key.Enter) {
-                    saveText()
-                }
-                on(Key.NumPadEnter) {
-                    saveText()
-                }
-                on(Key.Escape) {
-                    text = value.toString()
-                }
-            }
-            .onFocusChanged {
-                if (it == FocusState.Active) {
-                    focused = true
-                }
-                if (it == FocusState.Inactive) {
-                    focused = false
-                    saveText()
-                }
-            }
-            .width(60.dp)
+            .height(24.dp)
         ,
         textStyle = MaterialTheme.typography.body2
     )

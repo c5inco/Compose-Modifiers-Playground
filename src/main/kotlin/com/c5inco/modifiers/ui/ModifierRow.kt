@@ -190,6 +190,7 @@ fun OffsetDesignModifier(xValue: Int, yValue: Int, onChange: (OffsetDesignModifi
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             DpInput(
                 xValue,
+                canBeNegative = true,
                 label = {
                     Text(
                         "X",
@@ -203,6 +204,7 @@ fun OffsetDesignModifier(xValue: Int, yValue: Int, onChange: (OffsetDesignModifi
             )
             DpInput(
                 yValue,
+                canBeNegative = true,
                 label = {
                     Text(
                         "Y",
