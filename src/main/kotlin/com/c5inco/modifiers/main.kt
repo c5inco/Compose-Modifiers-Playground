@@ -157,11 +157,14 @@ fun Playground(
 
                         Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
                             ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
-                                parentElement = element
                                 elementModifiersList.clear()
                                 elementModifiersList.addAll(modifiers)
-                                childScopeModifiersList.clear()
-                                childScopeModifiersList.addAll(activeTemplate.childScopeModifiers.toList())
+                                if (parentElement.type != element.type) {
+                                    childScopeModifiersList.forEach {
+                                        it.clear()
+                                    }
+                                }
+                                parentElement = element
                             })
 
                             childElements.forEachIndexed { i, element ->
@@ -169,8 +172,8 @@ fun Playground(
                                 ChildGroup(
                                     getChildElementHeader(element),
                                     parentElement.type,
-                                    scopeModifiersList = childScopeModifiersList[i].toMutableList(),
-                                    modifiersList = childModifiersList[i].toMutableList(),
+                                    scopeModifiersList = childScopeModifiersList[i],
+                                    modifiersList = childModifiersList[i],
                                     onChange = { scopeModifiers, modifiers ->
                                         childScopeModifiersList.set(i, scopeModifiers.toMutableList())
                                         childModifiersList.set(i, modifiers.toMutableList())
@@ -366,9 +369,9 @@ fun ChildGroup(
                     })
             }
         ) {
-            for (i in 0 until modifiersList.size) {
+            modifiersList.forEachIndexed { i, modifier ->
                 ModifierEntry(
-                    modifierData = modifiersList[i],
+                    modifierData = modifier,
                     order = i,
                     size = modifiersList.size,
                     move = { index, up ->
