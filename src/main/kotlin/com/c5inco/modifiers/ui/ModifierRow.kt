@@ -266,6 +266,7 @@ fun RotateModifier(degreesValue: Float, onChange: (RotateModifierData) -> Unit) 
                         modifier = Modifier.size(18.dp)
                     )
                 },
+                modifier = Modifier.width(64.dp),
                 onValueChange = {
                     onChange(RotateModifierData(it))
                 }
