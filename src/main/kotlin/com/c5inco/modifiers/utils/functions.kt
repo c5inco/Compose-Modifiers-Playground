@@ -12,7 +12,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import com.c5inco.modifiers.ui.EditorTheme
+import com.c5inco.modifiers.ui.theme.EditorStyles
 import kotlin.math.roundToInt
 
 fun Float.roundToDecimals(decimals: Int): Float {
@@ -50,27 +50,26 @@ fun downTo(start: Int, end: Int, incrementStep: Int, body: (idx: Int) -> Unit) {
 }
 
 fun formatCode(str: String) = buildAnnotatedString {
-    withStyle(EditorTheme.code.simple) {
+    withStyle(EditorStyles.simple) {
         var strFormatted = str.replace("\t", "    ")
         append(strFormatted)
-        addStyle(EditorTheme.code.simple, strFormatted, Regex("[\\[\\]\\(\\)\\.{}]"))
-        addStyle(EditorTheme.code.punctuation, strFormatted, "=")
-        addStyle(EditorTheme.code.punctuation, strFormatted, ":")
-        addStyle(EditorTheme.code.namedArgument, strFormatted, Regex("[a-zA-z]+\\s="))
-        addStyle(EditorTheme.code.keyword, strFormatted, Regex("[a-zA-z]+\\.]"))
-        addStyle(EditorTheme.code.function, strFormatted, Regex("[a-zA-z]+\\("))
-        addStyle(EditorTheme.code.function, strFormatted, Regex("\\.[a-zA-z]+\\("))
-        //addStyle(EditorTheme.code.composable, strFormatted, Regex("^\\s*[a-zA-z]+\\("))
-        addStyle(EditorTheme.code.property, strFormatted, Regex("\\.[a-zA-z]+"))
-        addStyle(EditorTheme.code.extension, strFormatted, Regex("(RectangleShape|CircleShape)[^\\(]"))
-        addStyle(EditorTheme.code.value, strFormatted, "Modifier")
-        addStyle(EditorTheme.code.number, strFormatted, Regex("(\\d+.dp)"))
-        addStyle(EditorTheme.code.extension, strFormatted, Regex("(.dp|.sp)"))
-        addStyle(EditorTheme.code.annotation, strFormatted, Regex("^@[a-zA-Z_]*"))
-        addStyle(EditorTheme.code.comment, strFormatted, Regex("^\\s*//.*"))
-        addStyle(EditorTheme.code.punctuation, strFormatted, ".")
-        addStyle(EditorTheme.code.keyword, strFormatted, ",")
-        addStyle(EditorTheme.code.string, strFormatted, "\"")
+        addStyle(EditorStyles.simple, strFormatted, Regex("[\\[\\]\\(\\)\\.{}]"))
+        addStyle(EditorStyles.punctuation, strFormatted, "=")
+        addStyle(EditorStyles.punctuation, strFormatted, ":")
+        addStyle(EditorStyles.namedArgument, strFormatted, Regex("[a-zA-z]+\\s="))
+        addStyle(EditorStyles.keyword, strFormatted, Regex("[a-zA-z]+\\.]"))
+        addStyle(EditorStyles.function, strFormatted, Regex("[a-zA-z]+\\("))
+        addStyle(EditorStyles.function, strFormatted, Regex("\\.[a-zA-z]+\\("))
+        addStyle(EditorStyles.property, strFormatted, Regex("\\.[a-zA-z]+"))
+        addStyle(EditorStyles.extension, strFormatted, Regex("(RectangleShape|CircleShape)[^\\(]"))
+        addStyle(EditorStyles.value, strFormatted, "Modifier")
+        addStyle(EditorStyles.number, strFormatted, Regex("(\\d+.dp)"))
+        addStyle(EditorStyles.extension, strFormatted, Regex("(.dp|.sp)"))
+        addStyle(EditorStyles.annotation, strFormatted, Regex("^@[a-zA-Z_]*"))
+        addStyle(EditorStyles.comment, strFormatted, Regex("^\\s*//.*"))
+        addStyle(EditorStyles.punctuation, strFormatted, ".")
+        addStyle(EditorStyles.keyword, strFormatted, ",")
+        addStyle(EditorStyles.string, strFormatted, "\"")
     }
 }
 

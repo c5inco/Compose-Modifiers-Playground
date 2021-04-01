@@ -27,8 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.*
 import com.c5inco.modifiers.ui.controls.CompactDropdownItem
-import com.c5inco.modifiers.ui.theme.appLightColors
-import com.c5inco.modifiers.ui.theme.blue700
+import com.c5inco.modifiers.ui.theme.pink400
 import com.c5inco.modifiers.utils.DottedLine
 
 fun main() = Window(
@@ -62,9 +61,7 @@ fun Playground(
 
     var showCode by remember { mutableStateOf(false) }
 
-    PlaygroundTheme(
-        colors = appLightColors
-    ) {
+    PlaygroundTheme {
         Row {
             Surface(
                 modifier = Modifier.weight(1f),
@@ -474,7 +471,7 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
     ) {
         Canvas(Modifier.width(4.dp).fillMaxHeight()) {
             drawRoundRect(
-                color = blue700,
+                color = pink400,
                 size = Size(width = size.width, height = size.height),
                 cornerRadius = CornerRadius(50f)
             )

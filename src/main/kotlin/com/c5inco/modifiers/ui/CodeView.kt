@@ -17,6 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.ui.theme.EditorColors
 import com.c5inco.modifiers.ui.theme.Fonts
 import com.c5inco.modifiers.utils.formatCode
 import java.awt.Toolkit
@@ -52,7 +53,7 @@ fun CodeView(
             Column(
                 Modifier
                     .fillMaxSize()
-                    .background(EditorTheme.colors.backgroundDark)
+                    .background(EditorColors.backgroundDark)
                     .verticalScroll(verticalScrollState)
             ) {
                 when (elementModel.type) {
