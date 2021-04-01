@@ -48,7 +48,7 @@ fun CodeView(
     ) {
         Box {
             var code = ""
-            var verticalScrollState = rememberScrollState(0)
+            val verticalScrollState = rememberScrollState(0)
 
             Column(
                 Modifier
@@ -140,7 +140,7 @@ private fun copyCode(code: String) {
 }
 
 private fun generateArrangementString(arrangement: Any, spacing: Int): String {
-    var str = "Arrangement."
+    val str = "Arrangement."
 
     if (arrangement == AvailableHorizontalArrangements.SpacedBy || arrangement == AvailableVerticalArrangements.SpacedBy) {
         return str + "spacedBy($spacing.dp)"
@@ -343,7 +343,7 @@ private fun generateChildElementString(element: Any): String {
             val (text, style, alpha) = element
             code += "\tText(\n"
             code += "\t\t\"$text\",\n"
-            code += "\t\tstyle = ${generateTextStyleString(style)}),\n"
+            code += "\t\tstyle = ${generateTextStyleString(style)},\n"
             code += "\t\tcolor = LocalContentColor.current.copy(alpha = ContentAlpha.${alpha.toString().toLowerCase()}),\n"
         }
         is ImageChildData -> {
