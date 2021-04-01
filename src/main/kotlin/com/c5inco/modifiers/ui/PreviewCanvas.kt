@@ -39,54 +39,59 @@ fun PreviewCanvas(
         val content: @Composable () -> Unit = {
             childElements.forEachIndexed { idx, childData ->
                 var sm: Modifier = Modifier
-                when (element) {
-                    AvailableElements.Column -> {
-                        ColumnScope.apply {
-                            childScopeModifiersList[idx].forEach {
-                                val (data, visible) = it
-                                if (visible) {
-                                    when (data) {
-                                        is WeightModifierData -> {
-                                            val (weight) = data
-                                            sm = sm.then(Modifier.weight(weight))
-                                        }
-                                        is AlignColumnModifierData -> {
-                                            val (alignment) = data
-                                            sm = sm.then(Modifier.align(getHorizontalAlignments(alignment)))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    AvailableElements.Row -> {
-                        RowScope.apply {
-                            childScopeModifiersList[idx].forEach {
-                                val (data, visible) = it
-                                if (visible) {
-                                    when (data) {
-                                        is WeightModifierData -> {
-                                            val (weight) = data
-                                            sm = sm.then(Modifier.weight(weight))
-                                        }
-                                        is AlignRowModifierData -> {
-                                            val (alignment) = data
-                                            sm = sm.then(Modifier.align(getVerticalAlignments(alignment)))
+                var scopeModifiers = childScopeModifiersList.getOrNull(idx)
+                var childModifiers = childModifiersList.getOrNull(idx)
+
+                scopeModifiers?.let {
+                    when (element) {
+                        AvailableElements.Column -> {
+                            ColumnScope.apply {
+                                it.forEach {
+                                    val (data, visible) = it
+                                    if (visible) {
+                                        when (data) {
+                                            is WeightModifierData -> {
+                                                val (weight) = data
+                                                sm = sm.then(Modifier.weight(weight))
+                                            }
+                                            is AlignColumnModifierData -> {
+                                                val (alignment) = data
+                                                sm = sm.then(Modifier.align(getHorizontalAlignments(alignment)))
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    else -> {
-                        BoxScope.apply {
-                            childScopeModifiersList[idx].forEach {
-                                val (data, visible) = it
-                                if (visible) {
-                                    when (data) {
-                                        is AlignBoxModifierData -> {
-                                            val (alignment) = data
-                                            sm = sm.then(Modifier.align(getContentAlignments(alignment)))
+                        AvailableElements.Row -> {
+                            RowScope.apply {
+                                it.forEach {
+                                    val (data, visible) = it
+                                    if (visible) {
+                                        when (data) {
+                                            is WeightModifierData -> {
+                                                val (weight) = data
+                                                sm = sm.then(Modifier.weight(weight))
+                                            }
+                                            is AlignRowModifierData -> {
+                                                val (alignment) = data
+                                                sm = sm.then(Modifier.align(getVerticalAlignments(alignment)))
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else -> {
+                            BoxScope.apply {
+                                it.forEach {
+                                    val (data, visible) = it
+                                    if (visible) {
+                                        when (data) {
+                                            is AlignBoxModifierData -> {
+                                                val (alignment) = data
+                                                sm = sm.then(Modifier.align(getContentAlignments(alignment)))
+                                            }
                                         }
                                     }
                                 }
@@ -95,18 +100,20 @@ fun PreviewCanvas(
                     }
                 }
 
-                when (childData) {
-                    is TextChildData -> {
-                        val (text, style, alpha) = childData
-                        TextChildElement(text, style, alpha, sm.then(buildModifiers(childModifiersList[idx])))
-                    }
-                    is ImageChildData -> {
-                        val (imagePath) = childData
-                        ImageChildElement(imagePath, sm.then(buildModifiers(childModifiersList[idx])))
-                    }
-                    else -> {
-                        val (emoji) = childData as EmojiChildData
-                        EmojiChildElement(emoji, sm.then(buildModifiers(childModifiersList[idx])))
+                childModifiers?.let {
+                    when (childData) {
+                        is TextChildData -> {
+                            val (text, style, alpha) = childData
+                            TextChildElement(text, style, alpha, sm.then(buildModifiers(it)))
+                        }
+                        is ImageChildData -> {
+                            val (imagePath) = childData
+                            ImageChildElement(imagePath, sm.then(buildModifiers(it)))
+                        }
+                        else -> {
+                            val (emoji) = childData as EmojiChildData
+                            EmojiChildElement(emoji, sm.then(buildModifiers(it)))
+                        }
                     }
                 }
             }
