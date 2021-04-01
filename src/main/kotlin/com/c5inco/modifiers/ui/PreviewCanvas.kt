@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import com.c5inco.modifiers.buildModifiers
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.utils.DotsBackground
 
@@ -168,4 +167,18 @@ fun PreviewCanvas(
             )
         }
     }
+}
+
+private fun buildModifiers(modifiersList: List<Pair<Any, Boolean>>): Modifier {
+    var modifier: Modifier = Modifier
+
+    modifiersList.forEach {
+        val visible = it.second
+
+        if (visible) {
+            modifier = modifier.then(getModifier(it.first))
+        }
+    }
+
+    return modifier
 }

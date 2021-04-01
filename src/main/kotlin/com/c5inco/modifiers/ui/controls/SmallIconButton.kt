@@ -1,4 +1,4 @@
-package com.c5inco.modifiers.ui
+package com.c5inco.modifiers.ui.controls
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

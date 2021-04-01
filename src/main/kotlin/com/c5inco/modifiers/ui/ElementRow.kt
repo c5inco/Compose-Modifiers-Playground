@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.ui.controls.*
 
 @Composable
 fun ElementRow(

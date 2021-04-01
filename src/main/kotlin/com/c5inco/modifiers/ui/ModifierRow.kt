@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.ui.controls.*
 
 @Composable
 fun AlphaModifier(alphaValue: Float, onChange: (AlphaModifierData) -> Unit) {

@@ -1,4 +1,4 @@
-package com.c5inco.modifiers.ui
+package com.c5inco.modifiers.ui.controls
 
 import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.foundation.Canvas
@@ -30,7 +30,6 @@ import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
-import com.c5inco.modifiers.ui.controls.CompactDropdownItem
 import com.c5inco.modifiers.utils.chunk
 import java.awt.Cursor
 

@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.*
 import com.c5inco.modifiers.ui.controls.CompactDropdownItem
+import com.c5inco.modifiers.ui.controls.DropdownInput
+import com.c5inco.modifiers.ui.controls.SmallIconButton
 import com.c5inco.modifiers.ui.theme.pink400
 import com.c5inco.modifiers.utils.DottedLine
 
@@ -445,20 +447,6 @@ fun PropertiesSection(
     }
 }
 
-fun buildModifiers(modifiersList: List<Pair<Any, Boolean>>): Modifier {
-    var modifier: Modifier = Modifier
-
-    modifiersList.forEach {
-        val visible = it.second
-
-        if (visible) {
-            modifier = modifier.then(getModifier(it.first))
-        }
-    }
-
-    return modifier
-}
-
 @Composable
 private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Unit) {
     val expandAnim by animateFloatAsState(if (expanded) 180f else 0f)
@@ -493,90 +481,6 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
         }
     }
 }
-
-private fun getNewModifierData(modifierType: ModifierEntry): Any = (
-    when (modifierType) {
-        ModifierEntry.Alpha -> {
-            AlphaModifierData()
-        }
-        ModifierEntry.Padding -> {
-            PaddingModifierData()
-        }
-        ModifierEntry.Height -> {
-            HeightModifierData()
-        }
-        ModifierEntry.Width -> {
-            WidthModifierData()
-        }
-        ModifierEntry.Background -> {
-            BackgroundModifierData()
-        }
-        ModifierEntry.Border -> {
-            BorderModifierData()
-        }
-        ModifierEntry.Shadow -> {
-            ShadowModifierData()
-        }
-        ModifierEntry.Offset -> {
-            OffsetDesignModifierData()
-        }
-        ModifierEntry.Clickable -> {
-            ClickableModifierData()
-        }
-        ModifierEntry.Clip -> {
-            ClipModifierData()
-        }
-        ModifierEntry.Rotate -> {
-            RotateModifierData()
-        }
-        ModifierEntry.Scale -> {
-            ScaleModifierData()
-        }
-        ModifierEntry.AspectRatio -> {
-            AspectRatioModifierData()
-        }
-        ModifierEntry.FillMaxWidth -> {
-            FillMaxWidthModifierData()
-        }
-        ModifierEntry.FillMaxHeight -> {
-            FillMaxHeightModifierData()
-        }
-        ModifierEntry.FillMaxSize -> {
-            FillMaxSizeModifierData()
-        }
-        ModifierEntry.WrapContentHeight -> {
-            WrapContentHeightModifierData()
-        }
-        ModifierEntry.WrapContentWidth -> {
-            WrapContentWidthModifierData()
-        }
-        ModifierEntry.WrapContentSize -> {
-            WrapContentSizeModifierData()
-        }
-        else -> {
-            SizeModifierData()
-        }
-    }
-)
-
-private fun getNewScopeModifierData(modifierType: Any): Any = (
-    when (modifierType) {
-        ColumnScopeModifierEntry.Weight,
-        RowScopeModifierEntry.Weight -> {
-            WeightModifierData()
-        }
-        BoxScopeModifierEntry.Align -> {
-            AlignBoxModifierData()
-        }
-        ColumnScopeModifierEntry.Align -> {
-            AlignColumnModifierData()
-        }
-        RowScopeModifierEntry.Align -> {
-            AlignRowModifierData()
-        }
-        else -> { }
-    }
-)
 
 @Composable
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {

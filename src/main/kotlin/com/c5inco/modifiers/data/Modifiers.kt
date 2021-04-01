@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.c5inco.modifiers.ui.getShape
+import com.c5inco.modifiers.ui.*
 
 enum class AvailableShapes {
     Circle,
@@ -391,5 +391,89 @@ fun getModifier(data: Any): Modifier = (
         else -> {
             Modifier
         }
+    }
+)
+
+fun getNewModifierData(modifierType: ModifierEntry): Any = (
+    when (modifierType) {
+        ModifierEntry.Alpha -> {
+            AlphaModifierData()
+        }
+        ModifierEntry.Padding -> {
+            PaddingModifierData()
+        }
+        ModifierEntry.Height -> {
+            HeightModifierData()
+        }
+        ModifierEntry.Width -> {
+            WidthModifierData()
+        }
+        ModifierEntry.Background -> {
+            BackgroundModifierData()
+        }
+        ModifierEntry.Border -> {
+            BorderModifierData()
+        }
+        ModifierEntry.Shadow -> {
+            ShadowModifierData()
+        }
+        ModifierEntry.Offset -> {
+            OffsetDesignModifierData()
+        }
+        ModifierEntry.Clickable -> {
+            ClickableModifierData()
+        }
+        ModifierEntry.Clip -> {
+            ClipModifierData()
+        }
+        ModifierEntry.Rotate -> {
+            RotateModifierData()
+        }
+        ModifierEntry.Scale -> {
+            ScaleModifierData()
+        }
+        ModifierEntry.AspectRatio -> {
+            AspectRatioModifierData()
+        }
+        ModifierEntry.FillMaxWidth -> {
+            FillMaxWidthModifierData()
+        }
+        ModifierEntry.FillMaxHeight -> {
+            FillMaxHeightModifierData()
+        }
+        ModifierEntry.FillMaxSize -> {
+            FillMaxSizeModifierData()
+        }
+        ModifierEntry.WrapContentHeight -> {
+            WrapContentHeightModifierData()
+        }
+        ModifierEntry.WrapContentWidth -> {
+            WrapContentWidthModifierData()
+        }
+        ModifierEntry.WrapContentSize -> {
+            WrapContentSizeModifierData()
+        }
+        else -> {
+            SizeModifierData()
+        }
+    }
+)
+
+fun getNewScopeModifierData(modifierType: Any): Any = (
+    when (modifierType) {
+        ColumnScopeModifierEntry.Weight,
+        RowScopeModifierEntry.Weight -> {
+            WeightModifierData()
+        }
+        BoxScopeModifierEntry.Align -> {
+            AlignBoxModifierData()
+        }
+        ColumnScopeModifierEntry.Align -> {
+            AlignColumnModifierData()
+        }
+        RowScopeModifierEntry.Align -> {
+            AlignRowModifierData()
+        }
+        else -> { }
     }
 )

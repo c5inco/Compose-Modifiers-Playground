@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.ui.controls.SmallIconButton
 
 @Composable
 fun ModifierEntry(
