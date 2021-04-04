@@ -1,4 +1,5 @@
 import org.jetbrains.compose.compose
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -29,6 +30,14 @@ tasks.withType<KotlinCompile>() {
 compose.desktop {
     application {
         mainClass = "com.c5inco.modifiers.MainKt"
+        nativeDistributions {
+            macOS {
+                iconFile.set(project.file("src/main/resources").resolve("META-INF/macosicon.icns"))
+            }
+            targetFormats(TargetFormat.Dmg)
+            packageName = "com.c5inco.modifiers"
+            packageVersion = "1.0.3"
+        }
     }
 }
 
