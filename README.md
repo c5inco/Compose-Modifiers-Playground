@@ -5,6 +5,9 @@ Source code for Compose Modifiers Playground IDEA plugin
 
 Learn how to use Jetpack Compose modifiers through this interactive playground!
 
+- Quickly reorder, hide/show, and experiment with modifiers 
+- Code is generated as you go, allowing you to copy/paste directly to Android Studio.
+
 The playground comes with several templates to start experimenting from. The tool can be found under the **Tools menu**.
 
 Available modifiers to use:

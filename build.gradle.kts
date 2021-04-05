@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.3"
+version = "0.1.4"
 
 repositories {
     jcenter()
@@ -36,7 +36,7 @@ compose.desktop {
             }
             targetFormats(TargetFormat.Dmg)
             packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.3"
+            packageVersion = "1.0.4"
         }
     }
 }
@@ -49,7 +49,7 @@ intellij {
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Fix bug with scope modifiers, polishing""")
+      Fix bug with type code gen, make inputs bigger""")
     sinceBuild("201")
     untilBuild("203.*")
 }

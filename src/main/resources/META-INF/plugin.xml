@@ -4,7 +4,10 @@
     <vendor email="csinco.design@gmail.com" url="https://csinco.com">Chris Sinco</vendor>
     <description><![CDATA[
         Learn how to use Jetpack Compose modifiers through this interactive playground!
-        <br><br>
+        <ul>
+            <li>Quickly reorder, hide/show, and experiment with modifiers</li>
+            <li>Code is generated as you go, allowing you to copy/paste directly to Android Studio.</li>
+        </ul>
         The playground comes with several templates to start experimenting from. The tool can be found under the <b>Tools menu</b>.
         <br><br>
         Available modifiers to use:
