@@ -51,5 +51,5 @@ tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
       Fix bug with type code gen, make inputs bigger""")
     sinceBuild("201")
-    untilBuild("203.*")
+    untilBuild("211.*")
 }
