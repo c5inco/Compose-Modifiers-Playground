@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.4"
+version = "0.1.5"
 
 repositories {
     jcenter()
@@ -19,7 +19,10 @@ repositories {
 }
 
 dependencies {
-    implementation(compose.desktop.currentOs)
+    implementation(compose.desktop.linux_x64)
+    implementation(compose.desktop.windows_x64)
+    implementation(compose.desktop.macos_x64)
+    implementation(compose.desktop.macos_arm64)
     implementation(compose.materialIconsExtended)
 }
 
@@ -36,7 +39,7 @@ compose.desktop {
             }
             targetFormats(TargetFormat.Dmg)
             packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.4"
+            packageVersion = "1.0.5"
         }
     }
 }
@@ -49,7 +52,10 @@ intellij {
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Fix bug with type code gen, make inputs bigger""")
+      Properly include native dependencies for Windows, Linux, and ARM macOS to avoid runtime crashes!
+      <br>
+      Bump support for 2021.1!
+    """)
     sinceBuild("201")
-    untilBuild("203.*")
+    untilBuild("211")
 }
