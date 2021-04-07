@@ -56,6 +56,6 @@ tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
       <br>
       Bump support for 2021.1!
     """)
-    sinceBuild("201")
-    untilBuild("211")
+    sinceBuild("201.*")
+    untilBuild("211.*")
 }
