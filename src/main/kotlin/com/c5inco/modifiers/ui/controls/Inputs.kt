@@ -10,8 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +28,7 @@ import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
+import com.c5inco.modifiers.ui.AppIcons
 import com.c5inco.modifiers.utils.chunk
 import java.awt.Cursor
 import kotlin.math.absoluteValue
@@ -177,7 +176,7 @@ fun ShapeInput(
             cornerValue,
             label = {
                 Icon(
-                    imageVector = Icons.Outlined.RoundedCorner,
+                    painter = AppIcons.RoundedCorner,
                     contentDescription = "Corner icon",
                     tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                     modifier = Modifier.size(18.dp)
@@ -197,9 +196,9 @@ fun PaddingInput(
     onValueChange: (type: AvailablePadding, corners: CornerValues) -> Unit,
 ) {
     val shapesList = listOf(
-        Pair(Icons.Outlined.CropSquare, AvailablePadding.All),
-        Pair(Icons.Outlined.GridGoldenratio, AvailablePadding.Sides),
-        Pair(Icons.Outlined.Fullscreen, AvailablePadding.Individual),
+        Pair(AppIcons.CropSquare, AvailablePadding.All),
+        Pair(AppIcons.GridGoldenratio, AvailablePadding.Sides),
+        Pair(AppIcons.Fullscreen, AvailablePadding.Individual),
     )
     var hovered = remember { mutableStateOf(false) }
 
@@ -232,7 +231,7 @@ fun PaddingInput(
                     onClick = { onValueChange(pair.second, cornerValues) }
                 ) {
                     Icon(
-                        imageVector = pair.first,
+                        painter = pair.first,
                         contentDescription = "${pair.first} icon",
                         modifier = Modifier.size(18.dp)
                     )
@@ -602,7 +601,7 @@ fun <T> DropdownInput(
         ) {
             Text("$activeItem", style = MaterialTheme.typography.body2)
             Icon(
-                imageVector = Icons.Outlined.KeyboardArrowDown,
+                painter = AppIcons.ExpandMore,
                 contentDescription = "Dropdown icon",
                 modifier = Modifier.size(18.dp)
             )

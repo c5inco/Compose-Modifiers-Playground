@@ -9,12 +9,6 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +54,7 @@ fun ModifierEntry(
                     .offset(x = (-18).dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
+                    painter = AppIcons.ExpandLess,
                     contentDescription = "Move modifier up",
                     tint = LocalContentColor.current.copy(alpha = if (order != 0) 1f else ContentAlpha.disabled),
                     modifier = Modifier
@@ -70,7 +64,7 @@ fun ModifierEntry(
                         })
                 Spacer(Modifier.width(4.dp))
                 Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
+                    painter = AppIcons.ExpandMore,
                     contentDescription = "Move modifier down",
                     tint = LocalContentColor.current.copy(alpha = if (order < size - 1) 1f else ContentAlpha.disabled),
                     modifier = Modifier
@@ -294,7 +288,7 @@ fun ModifierEntry(
                     onModifierChange(order, Pair(modifierData.first, !visible))
                 }) {
                     Icon(
-                        imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                        painter = if (visible) AppIcons.Visibility else AppIcons.VisibilityOff,
                         contentDescription = "Toggle visibility",
                         modifier = Modifier.size(18.dp)
                     )
@@ -304,7 +298,7 @@ fun ModifierEntry(
                     onRemove(order)
                 }) {
                     Icon(
-                        imageVector = Icons.Outlined.Remove,
+                        painter = AppIcons.Remove,
                         contentDescription = "Remove modifier",
                         modifier = Modifier.size(18.dp)
                     )
@@ -389,7 +383,7 @@ fun RowColumnScopeModifierEntry(
                     onModifierChange(order, Pair(modifierData.first, !visible))
                 }) {
                     Icon(
-                        imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                        painter = if (visible) AppIcons.Visibility else AppIcons.VisibilityOff,
                         contentDescription = "Toggle visibility",
                         modifier = Modifier.size(18.dp)
                     )
@@ -399,7 +393,7 @@ fun RowColumnScopeModifierEntry(
                     onRemove(order)
                 }) {
                     Icon(
-                        imageVector = Icons.Outlined.Remove,
+                        painter = AppIcons.Remove,
                         contentDescription = "Remove modifier",
                         modifier = Modifier.size(18.dp)
                     )
