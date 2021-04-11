@@ -88,7 +88,8 @@ fun Playground(
                     }
                 )
                 .width(350.dp)
-                .shadow(4.dp)
+                .shadow(4.dp),
+            elevation = 2.dp
         ) {
             Column {
                 TopAppBar(
@@ -118,16 +119,18 @@ fun Playground(
                     },
                     modifier = Modifier.shadow(elevation = 3.dp),
                     actions = {
-                        ResetDefaultModifiersAction(onClick = {
-                            parentElement = activeTemplate.parentElement
-                            elementModifiersList.clear()
-                            elementModifiersList.addAll(activeTemplate.parentModifiers)
-                            childModifiersList.clear()
-                            childModifiersList.addAll(activeTemplate.childModifiers)
-                            childScopeModifiersList.clear()
-                            childScopeModifiersList.addAll(activeTemplate.childScopeModifiers)
-                        })
-                        Spacer(androidx.compose.ui.Modifier.width(12.dp))
+                        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
+                            ResetDefaultModifiersAction(onClick = {
+                                parentElement = activeTemplate.parentElement
+                                elementModifiersList.clear()
+                                elementModifiersList.addAll(activeTemplate.parentModifiers)
+                                childModifiersList.clear()
+                                childModifiersList.addAll(activeTemplate.childModifiers)
+                                childScopeModifiersList.clear()
+                                childScopeModifiersList.addAll(activeTemplate.childScopeModifiers)
+                            })
+                            Spacer(Modifier.width(12.dp))
+                        }
                     }
                 )
                 Box {
@@ -471,7 +474,7 @@ private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
             imageVector = Icons.Outlined.RestartAlt,
             contentDescription = "Reset default modifiers",
             modifier = Modifier.size(18.dp),
-            tint = MaterialTheme.colors.onPrimary
+            tint = LocalContentColor.current.copy(alpha = ContentAlpha.high)
         )
     }
 }

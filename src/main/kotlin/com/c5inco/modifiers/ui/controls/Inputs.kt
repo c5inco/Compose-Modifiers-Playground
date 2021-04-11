@@ -158,7 +158,8 @@ fun ShapeInput(
     ) {
         for (pair in shapesList) {
             var mod: Modifier = Modifier
-            if (shapeValue == pair.second) mod = mod.background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp))
+            val active = shapeValue == pair.second
+            if (active) mod = mod.background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp))
 
             SmallIconButton(
                 modifier = mod,
@@ -167,7 +168,8 @@ fun ShapeInput(
                 Icon(
                     painter = svgResource("icons/${pair.first}.svg"),
                     contentDescription = "${pair.first} shape button",
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(18.dp),
+                    tint = if (active) contentColorFor(MaterialTheme.colors.secondary) else LocalContentColor.current
                 )
             }
         }
@@ -225,7 +227,8 @@ fun PaddingInput(
         ) {
             for (pair in shapesList) {
                 var mod: Modifier = Modifier
-                if (typeValue == pair.second) mod =
+                val active = typeValue == pair.second
+                if (active) mod =
                     mod.background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp))
 
                 SmallIconButton(
@@ -235,7 +238,8 @@ fun PaddingInput(
                     Icon(
                         imageVector = pair.first,
                         contentDescription = "${pair.first} icon",
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(18.dp),
+                        tint = if (active) contentColorFor(MaterialTheme.colors.secondary) else LocalContentColor.current
                     )
                 }
             }
@@ -519,7 +523,6 @@ fun <T> TextInput(
         decorationBox = { innerTextField ->
             Row(
                 modifier = Modifier
-                    .background(MaterialTheme.colors.surface)
                     .border(width = 1.dp, color = getBorderColor())
                     .padding(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),

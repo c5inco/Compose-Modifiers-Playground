@@ -1,6 +1,5 @@
 package com.c5inco.modifiers.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -11,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
@@ -158,20 +158,25 @@ fun PreviewCanvas(
             }
         }
 
-        IconButton(
-            onClick = { onShowCode(!showCode) },
+        Surface(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 8.dp, bottom = 8.dp)
-                .shadow(elevation = 6.dp, shape = RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colors.surface)
-                .size(32.dp)
+                .shadow(4.dp, shape = RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(8.dp))
+                .size(32.dp),
+            elevation = 2.dp
         ) {
-            Icon(
-                imageVector = if (showCode) Icons.Outlined.CodeOff else Icons.Outlined.Code,
-                contentDescription = "Toggle code on or off",
-                tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-            )
+
+            IconButton(
+                onClick = { onShowCode(!showCode) }
+            ) {
+                Icon(
+                    imageVector = if (showCode) Icons.Outlined.CodeOff else Icons.Outlined.Code,
+                    contentDescription = "Toggle code on or off",
+                    tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                )
+            }
         }
     }
 }

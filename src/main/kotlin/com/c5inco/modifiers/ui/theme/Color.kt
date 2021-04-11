@@ -13,6 +13,19 @@ val pink400: Color = Color(0xffec407a)
 val pink400Light: Color = Color(0xffff77a9)
 val lightGray: Color = Color(0xfff2f2f2)
 
+val Colors.secondarySurface: Color get() = if (isLight) secondary else surface
+
+val appLightColors: Colors = lightColors(
+    primary = pink400,
+    secondary = pink400.copy(alpha = 0.5f),
+    background = lightGray
+)
+
+val appDarkColors: Colors = darkColors(
+    primary = pink200,
+    secondary = pink200
+)
+
 // Code colors (dark theme)
 object EditorColors {
     val backgroundDark: Color = Color(0xFF2B2B2B)
@@ -30,14 +43,3 @@ object EditorColors {
     val namedArgumentColor: Color = Color(0xFF467CDA)
     val extensionColor: Color = Color(0xFF9876AA)
 }
-
-val appLightColors: Colors = lightColors(
-    primary = pink400,
-    secondary = pink400.copy(alpha = 0.5f),
-    background = lightGray
-)
-
-val appDarkColors: Colors = darkColors(
-    primary = pink200,
-    secondary = pink200
-)
