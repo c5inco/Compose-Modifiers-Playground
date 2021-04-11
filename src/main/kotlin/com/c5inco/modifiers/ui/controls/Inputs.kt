@@ -152,7 +152,7 @@ fun ShapeInput(
             )
             .border(
                 width = 1.dp,
-                color = if (hovered.value) Color.LightGray else Color.Transparent,
+                color = if (hovered.value) LocalContentColor.current.copy(alpha = ContentAlpha.disabled) else Color.Transparent,
                 shape = RoundedCornerShape(4.dp)
             ),
     ) {
@@ -219,7 +219,7 @@ fun PaddingInput(
                 )
                 .border(
                     width = 1.dp,
-                    color = if (hovered.value) Color.LightGray else Color.Transparent,
+                    color = if (hovered.value) LocalContentColor.current.copy(alpha = ContentAlpha.disabled) else Color.Transparent,
                     shape = RoundedCornerShape(4.dp)
                 ),
         ) {
@@ -498,7 +498,7 @@ fun <T> TextInput(
     @Composable
     fun getBorderColor(): Color {
         if (focused) return MaterialTheme.colors.primary
-        if (hovered) return Color.LightGray
+        if (hovered) return LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
         return Color.Transparent
     }
 
@@ -575,7 +575,7 @@ fun <T> DropdownInput(
     items: List<T>,
     shape: Shape = RectangleShape,
     hoverBackgroundColor: Color = Color.Transparent,
-    hoverBorderColor: Color = Color.LightGray,
+    hoverBorderColor: Color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
     activeItem: T,
     onSelect: (T) -> Unit
 ) {

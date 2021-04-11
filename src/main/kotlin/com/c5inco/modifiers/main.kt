@@ -2,6 +2,8 @@ package com.c5inco.modifiers
 
 import androidx.compose.desktop.Window
 import androidx.compose.ui.unit.IntSize
+import com.c5inco.modifiers.ui.PlaygroundTheme
+import com.c5inco.modifiers.ui.theme.appLightColors
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -13,7 +15,9 @@ fun main() {
         size = IntSize(width = 1100, height = 800),
         icon = image
     ) {
-        Application()
+        PlaygroundTheme(colors = appLightColors) {
+            Application()
+        }
     }
 }
 

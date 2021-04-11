@@ -8,11 +8,10 @@ import androidx.compose.ui.graphics.Color
 val blue200: Color = Color(0xff90caf9)
 val blue300: Color = Color(0xff64b5f6)
 val blue700: Color = Color(0xff1976d2)
+val pink200: Color = Color(0xfff48fb1)
 val pink400: Color = Color(0xffec407a)
 val pink400Light: Color = Color(0xffff77a9)
-
-val hoverLightColor: Color = Color.Black.copy(alpha = 0.1f)
-val hoverDarkColor: Color = Color.White.copy(alpha = 0.1f)
+val lightGray: Color = Color(0xfff2f2f2)
 
 // Code colors (dark theme)
 object EditorColors {
@@ -34,8 +33,11 @@ object EditorColors {
 
 val appLightColors: Colors = lightColors(
     primary = pink400,
-    secondary = pink400.copy(alpha = 0.5f)
+    secondary = pink400.copy(alpha = 0.5f),
+    background = lightGray
 )
 
 val appDarkColors: Colors = darkColors(
+    primary = pink200,
+    secondary = pink200
 )

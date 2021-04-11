@@ -26,7 +26,6 @@ import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.controls.CompactDropdownItem
 import com.c5inco.modifiers.ui.controls.DropdownInput
 import com.c5inco.modifiers.ui.controls.SmallIconButton
-import com.c5inco.modifiers.ui.theme.pink400
 import com.c5inco.modifiers.utils.DottedLine
 
 @Composable
@@ -42,132 +41,131 @@ fun Playground(
 
     var showCode by remember { mutableStateOf(false) }
 
-    PlaygroundTheme {
-        Row {
-            Surface(
-                modifier = Modifier.weight(1f),
-                color = MaterialTheme.colors.background
-            ) {
-                Column {
-                    PreviewCanvas(
-                        Modifier.weight(2f).fillMaxSize(),
-                        parentElement,
-                        childElements,
-                        childScopeModifiersList,
-                        childModifiersList,
-                        elementModifiersList,
-                        showCode,
-                        onShowCode = { showCode = it }
-                    )
+    Row {
+        Surface(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colors.background
+        ) {
+            Column {
+                PreviewCanvas(
+                    Modifier.weight(2f).fillMaxSize(),
+                    parentElement,
+                    childElements,
+                    childScopeModifiersList,
+                    childModifiersList,
+                    elementModifiersList,
+                    showCode,
+                    onShowCode = { showCode = it }
+                )
 
-                    if (showCode) {
-                        CodeView(
-                            Modifier
-                                .weight(1f)
-                                .fillMaxSize(),
-                            parentElement,
-                            elementModifiersList,
-                            childElements,
-                            childModifiersList,
-                            childScopeModifiersList
-                        )
-                    }
+                if (showCode) {
+                    Divider(color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
+                    CodeView(
+                        Modifier
+                            .weight(1f)
+                            .fillMaxSize(),
+                        parentElement,
+                        elementModifiersList,
+                        childElements,
+                        childModifiersList,
+                        childScopeModifiersList
+                    )
                 }
             }
+        }
 
-            var propertiesHovered by remember { mutableStateOf(false) }
-            Surface(
-                Modifier
-                    .pointerMoveFilter(
-                        onEnter = {
-                            propertiesHovered = true
-                            false
-                        },
-                        onExit = {
-                            propertiesHovered = false
-                            false
-                        }
-                    )
-                    .width(350.dp)
-                    .shadow(4.dp)
-            ) {
-                Column {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                "Template //",
-                                style = MaterialTheme.typography.body2,
-                                color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-                            )
-                            Spacer(Modifier.width(4.dp))
-                            DropdownInput(
-                                modifier = Modifier.weight(1f),
-                                items = listOf(
-                                    Templates.PinkSquare,
-                                    Templates.Rainbow,
-                                    Templates.Sun,
-                                    Templates.SimpleCard
-                                ),
-                                shape = RoundedCornerShape(6.dp),
-                                hoverBackgroundColor = Color.Black.copy(alpha = 0.2f),
-                                hoverBorderColor = Color.Transparent,
-                                activeItem = activeTemplate,
-                                onSelect = {
-                                    onTemplateChange(it)
-                                }
-                            )
-                        },
-                        modifier = Modifier.shadow(elevation = 3.dp),
-                        actions = {
-                            ResetDefaultModifiersAction(onClick = {
-                                parentElement = activeTemplate.parentElement
-                                elementModifiersList.clear()
-                                elementModifiersList.addAll(activeTemplate.parentModifiers)
-                                childModifiersList.clear()
-                                childModifiersList.addAll(activeTemplate.childModifiers)
-                                childScopeModifiersList.clear()
-                                childScopeModifiersList.addAll(activeTemplate.childScopeModifiers)
-                            })
-                            Spacer(androidx.compose.ui.Modifier.width(12.dp))
-                        }
-                    )
-                    Box {
-                        val verticalScrollState = rememberScrollState(0)
-
-                        Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
-                            ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
-                                elementModifiersList.clear()
-                                elementModifiersList.addAll(modifiers)
-                                if (parentElement.type != element.type) {
-                                    childScopeModifiersList.forEach {
-                                        it.clear()
-                                    }
-                                }
-                                parentElement = element
-                            })
-
-                            childElements.forEachIndexed { i, element ->
-                                Divider()
-                                ChildGroup(
-                                    getChildElementHeader(element),
-                                    parentElement.type,
-                                    scopeModifiersList = childScopeModifiersList[i],
-                                    modifiersList = childModifiersList[i],
-                                    onChange = { scopeModifiers, modifiers ->
-                                        childScopeModifiersList.set(i, scopeModifiers.toMutableList())
-                                        childModifiersList.set(i, modifiers.toMutableList())
-                                    }
-                                )
+        var propertiesHovered by remember { mutableStateOf(false) }
+        Surface(
+            Modifier
+                .pointerMoveFilter(
+                    onEnter = {
+                        propertiesHovered = true
+                        false
+                    },
+                    onExit = {
+                        propertiesHovered = false
+                        false
+                    }
+                )
+                .width(350.dp)
+                .shadow(4.dp)
+        ) {
+            Column {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "Template //",
+                            style = MaterialTheme.typography.body2,
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        DropdownInput(
+                            modifier = Modifier.weight(1f),
+                            items = listOf(
+                                Templates.PinkSquare,
+                                Templates.Rainbow,
+                                Templates.Sun,
+                                Templates.SimpleCard
+                            ),
+                            shape = RoundedCornerShape(6.dp),
+                            hoverBackgroundColor = Color.Black.copy(alpha = 0.2f),
+                            hoverBorderColor = Color.Transparent,
+                            activeItem = activeTemplate,
+                            onSelect = {
+                                onTemplateChange(it)
                             }
-                        }
+                        )
+                    },
+                    modifier = Modifier.shadow(elevation = 3.dp),
+                    actions = {
+                        ResetDefaultModifiersAction(onClick = {
+                            parentElement = activeTemplate.parentElement
+                            elementModifiersList.clear()
+                            elementModifiersList.addAll(activeTemplate.parentModifiers)
+                            childModifiersList.clear()
+                            childModifiersList.addAll(activeTemplate.childModifiers)
+                            childScopeModifiersList.clear()
+                            childScopeModifiersList.addAll(activeTemplate.childScopeModifiers)
+                        })
+                        Spacer(androidx.compose.ui.Modifier.width(12.dp))
+                    }
+                )
+                Box {
+                    val verticalScrollState = rememberScrollState(0)
 
-                        if (propertiesHovered) {
-                            VerticalScrollbar(
-                                modifier = Modifier.align(Alignment.CenterEnd)
-                                    .fillMaxHeight(),
-                                adapter = rememberScrollbarAdapter(verticalScrollState),
+                    Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
+                        ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
+                            elementModifiersList.clear()
+                            elementModifiersList.addAll(modifiers)
+                            if (parentElement.type != element.type) {
+                                childScopeModifiersList.forEach {
+                                    it.clear()
+                                }
+                            }
+                            parentElement = element
+                        })
+
+                        childElements.forEachIndexed { i, element ->
+                            Divider()
+                            ChildGroup(
+                                getChildElementHeader(element),
+                                parentElement.type,
+                                scopeModifiersList = childScopeModifiersList[i],
+                                modifiersList = childModifiersList[i],
+                                onChange = { scopeModifiers, modifiers ->
+                                    childScopeModifiersList.set(i, scopeModifiers.toMutableList())
+                                    childModifiersList.set(i, modifiers.toMutableList())
+                                }
                             )
                         }
+                    }
+
+                    if (propertiesHovered) {
+                        VerticalScrollbar(
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                                .fillMaxHeight(),
+                            adapter = rememberScrollbarAdapter(verticalScrollState),
+                        )
                     }
                 }
             }
@@ -440,9 +438,10 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val primaryColor = MaterialTheme.colors.primary
         Canvas(androidx.compose.ui.Modifier.width(4.dp).fillMaxHeight()) {
             drawRoundRect(
-                color = pink400,
+                color = primaryColor,
                 size = Size(width = size.width, height = size.height),
                 cornerRadius = CornerRadius(50f)
             )

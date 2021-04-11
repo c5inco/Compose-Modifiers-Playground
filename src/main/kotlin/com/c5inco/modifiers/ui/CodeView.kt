@@ -101,6 +101,8 @@ fun CodeView(
             }
 
             if (editorHovered) {
+                val scrollThumbColor = Color.LightGray
+
                 VerticalScrollbar(
                     modifier = Modifier.align(Alignment.CenterEnd)
                         .fillMaxHeight(),
@@ -109,8 +111,8 @@ fun CodeView(
                         thickness = 8.dp,
                         shape = MaterialTheme.shapes.small,
                         hoverDurationMillis = 300,
-                        unhoverColor = Color.LightGray.copy(alpha = 0.4f),
-                        hoverColor = Color.LightGray.copy(alpha = 0.6f)
+                        unhoverColor = scrollThumbColor.copy(alpha = 0.4f),
+                        hoverColor = scrollThumbColor.copy(alpha = 0.6f)
                     ),
                     adapter = rememberScrollbarAdapter(verticalScrollState),
                 )
