@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.CodeOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -165,7 +168,7 @@ fun PreviewCanvas(
                 .size(32.dp)
         ) {
             Icon(
-                painter = if (showCode) AppIcons.CodeOff else AppIcons.Code,
+                imageVector = if (showCode) Icons.Outlined.CodeOff else Icons.Outlined.Code,
                 contentDescription = "Toggle code on or off",
                 tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
             )

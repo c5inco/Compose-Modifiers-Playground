@@ -5,6 +5,10 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -453,7 +457,7 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
         )
         SmallIconButton(onClick = { onExpand() }) {
             Icon(
-                painter = AppIcons.ExpandMore,
+                imageVector = Icons.Outlined.KeyboardArrowDown,
                 contentDescription = "Expand/collapse component group",
                 modifier = Modifier.rotate(expandAnim)
             )
@@ -465,7 +469,7 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
     SmallIconButton(onClick = { onClick() }) {
         Icon(
-            painter = AppIcons.RestartAlt,
+            imageVector = Icons.Outlined.RestartAlt,
             contentDescription = "Reset default modifiers",
             modifier = Modifier.size(18.dp),
             tint = MaterialTheme.colors.onPrimary
@@ -480,7 +484,7 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
     Box {
         SmallIconButton(onClick = { expanded = true }) {
             Icon(
-                painter = AppIcons.Add,
+                imageVector = Icons.Outlined.Add,
                 contentDescription = "Add modifier",
                 modifier = Modifier.size(18.dp)
             )
@@ -517,7 +521,7 @@ private fun AddChildModifierAction(parentType: AvailableElements, onSelect: (Any
     Box {
         SmallIconButton(onClick = { expanded = true }) {
             Icon(
-                painter = AppIcons.Add,
+                imageVector = Icons.Outlined.Add,
                 contentDescription = "Add child modifier",
                 modifier = Modifier.size(18.dp)
             )

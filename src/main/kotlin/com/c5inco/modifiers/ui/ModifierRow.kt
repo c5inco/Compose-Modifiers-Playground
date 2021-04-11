@@ -2,6 +2,10 @@ package com.c5inco.modifiers.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.LineWeight
+import androidx.compose.material.icons.outlined.RotateLeft
+import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -256,7 +260,7 @@ fun RotateModifier(degreesValue: Float, onChange: (RotateModifierData) -> Unit) 
                 degreesValue,
                 label = {
                     Icon(
-                        painter = AppIcons.RotateLeft,
+                        imageVector = Icons.Outlined.RotateLeft,
                         contentDescription = "Rotate icon",
                         tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                         modifier = Modifier.size(18.dp)
@@ -280,7 +284,7 @@ fun ScaleModifier(scaleValue: Float, onChange: (ScaleModifierData) -> Unit) {
                 scaleValue,
                 label = {
                     Icon(
-                        painter = AppIcons.SquareFoot,
+                        imageVector = Icons.Outlined.SquareFoot,
                         contentDescription = "Scale icon",
                         tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                         modifier = Modifier.size(18.dp)
@@ -411,7 +415,7 @@ fun WeightModifier(weightValue: Float, onChange: (WeightModifierData) -> Unit) {
                 weightValue,
                 label = {
                     Icon(
-                        painter = AppIcons.LineWeight,
+                        imageVector = Icons.Outlined.LineWeight,
                         contentDescription = "Weight icon",
                         tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                         modifier = Modifier.size(18.dp)

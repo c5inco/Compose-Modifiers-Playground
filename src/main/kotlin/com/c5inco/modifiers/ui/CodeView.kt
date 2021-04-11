@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -122,7 +124,7 @@ fun CodeView(
                 onClick = { copyCode(code) }
             ) {
                 Icon(
-                    painter = AppIcons.ContentCopy,
+                    imageVector = Icons.Outlined.ContentCopy,
                     contentDescription = "Copy code",
                     tint = Color.White
                 )
