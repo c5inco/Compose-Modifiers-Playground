@@ -9,7 +9,7 @@ import com.intellij.util.ui.UIUtil
 import javax.swing.UIManager
 import java.awt.Color as AWTColor
 
-interface SwingColor {
+interface SwingColors {
     val background: Color
     val onBackground: Color
     val surface: Color
@@ -17,8 +17,8 @@ interface SwingColor {
 }
 
 @Composable
-fun SwingColor(): SwingColor {
-    val swingColor = remember { SwingColorImpl() }
+fun SwingColors(): SwingColors {
+    val swingColor = remember { SwingColorsImpl() }
 
     val messageBus = remember {
         ApplicationManager.getApplication().messageBus.connect()
@@ -40,7 +40,7 @@ fun SwingColor(): SwingColor {
     return swingColor
 }
 
-private class SwingColorImpl : SwingColor {
+private class SwingColorsImpl : SwingColors {
     private val _backgroundState: MutableState<Color> = mutableStateOf(getBackgroundColor)
     private val _onBackgroundState: MutableState<Color> = mutableStateOf(getOnBackgroundColor)
     private val _surfaceState: MutableState<Color> = mutableStateOf(getSurfaceColor)
