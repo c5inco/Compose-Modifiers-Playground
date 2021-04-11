@@ -3,6 +3,7 @@ package com.c5inco.modifiers.utils
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -49,6 +50,14 @@ fun downTo(start: Int, end: Int, incrementStep: Int, body: (idx: Int) -> Unit) {
     }
 }
 
+fun rgba2rgb(rgbBg: Color, rgbFg: Color, alpha: Float): Color {
+    return Color(
+        (1 - alpha) * rgbBg.red + alpha * rgbFg.red,
+        (1 - alpha) * rgbBg.green + alpha * rgbFg.green,
+        (1 - alpha) * rgbBg.blue + alpha * rgbFg.blue
+    )
+}
+
 fun formatCode(str: String) = buildAnnotatedString {
     withStyle(EditorStyles.simple) {
         var strFormatted = str.replace("\t", "    ")
@@ -85,12 +94,18 @@ private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, reg
 
 @Composable
 fun DotsBackground(modifier: Modifier) {
+    val contentColor = rgba2rgb(
+        MaterialTheme.colors.background,
+        MaterialTheme.colors.onBackground,
+        0.15f
+    )
+
     Canvas(
         modifier.fillMaxSize()
     ) {
         val canvasWidth = size.width
         val canvasHeight = size.height
-        val circleColor = SolidColor(Color.LightGray)
+        val circleColor = SolidColor(contentColor)
         val circleRadius = 2f
         val circleStep = 20
 

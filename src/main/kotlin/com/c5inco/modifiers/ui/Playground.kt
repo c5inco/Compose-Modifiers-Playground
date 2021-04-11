@@ -42,7 +42,7 @@ fun Playground(
         Row {
             Surface(
                 modifier = Modifier.weight(1f),
-                color = Color(0xffe5e5e5)
+                color = MaterialTheme.colors.background
             ) {
                 Column {
                     PreviewCanvas(
@@ -95,7 +95,7 @@ fun Playground(
                                 style = MaterialTheme.typography.body2,
                                 color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                             )
-                            Spacer(androidx.compose.ui.Modifier.width(4.dp))
+                            Spacer(Modifier.width(4.dp))
                             DropdownInput(
                                 modifier = Modifier.weight(1f),
                                 items = listOf(

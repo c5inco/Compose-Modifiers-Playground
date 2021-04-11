@@ -21,6 +21,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.shortcuts
 import androidx.compose.ui.input.pointer.pointerMoveFilter
@@ -560,7 +561,10 @@ fun <T> TextInput(
             )
             .height(24.dp)
         ,
-        textStyle = MaterialTheme.typography.body2
+        textStyle = MaterialTheme.typography.body2.copy(
+            color = MaterialTheme.colors.onSurface
+        ),
+        cursorBrush = SolidColor(MaterialTheme.colors.onSurface)
     )
 }
 
