@@ -26,7 +26,8 @@ data class RowElementData(
 
 data class ElementModel(
     val type: AvailableElements,
-    val data: Any
+    val data: Any,
+    val themeAware: Boolean = true
 )
 
 data class EmojiChildData(

@@ -6,6 +6,7 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorXmlResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
@@ -23,6 +24,7 @@ fun EmojiChildElement(
 fun TextChildElement(
     text: String,
     style: TextStyle,
+    color: Color = LocalContentColor.current,
     alpha: AvailableContentAlphas,
     modifier: Modifier
 ) {
@@ -40,7 +42,7 @@ fun TextChildElement(
     Text(
         text,
         style = style,
-        color = LocalContentColor.current.copy(alpha = ca),
+        color = color.copy(alpha = ca),
         modifier = modifier
     )
 }

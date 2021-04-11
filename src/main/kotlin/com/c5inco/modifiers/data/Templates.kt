@@ -105,7 +105,8 @@ object Templates {
         name = "Simple card",
         parentElement = ElementModel(
             AvailableElements.Column,
-            ColumnElementData()
+            ColumnElementData(),
+            false
         ),
         parentModifiers = listOf(
             Pair(SizeModifierData(width = 320, height = 400), true),

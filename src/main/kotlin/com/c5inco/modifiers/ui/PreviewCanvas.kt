@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.utils.DotsBackground
@@ -104,7 +105,13 @@ fun PreviewCanvas(
                     when (childData) {
                         is TextChildData -> {
                             val (text, style, alpha) = childData
-                            TextChildElement(text, style, alpha, sm.then(buildModifiers(it)))
+                            TextChildElement(
+                                text,
+                                style,
+                                if (!parentElement.themeAware) Color.Black else LocalContentColor.current,
+                                alpha,
+                                sm.then(buildModifiers(it))
+                            )
                         }
                         is ImageChildData -> {
                             val (imagePath) = childData
