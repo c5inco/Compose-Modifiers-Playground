@@ -109,7 +109,7 @@ fun Playground(
                                 Templates.SimpleCard
                             ),
                             shape = RoundedCornerShape(6.dp),
-                            hoverBackgroundColor = Color.Black.copy(alpha = 0.2f),
+                            hoverBackgroundColor = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
                             hoverBorderColor = Color.Transparent,
                             activeItem = activeTemplate,
                             onSelect = {
