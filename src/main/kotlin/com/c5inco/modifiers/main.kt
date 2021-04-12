@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -20,6 +17,8 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
+val DarkActive = compositionLocalOf { false }
+
 fun main() {
     val image = getWindowIcon()
     Window(
@@ -28,9 +27,12 @@ fun main() {
         icon = image
     ) {
         var darkTheme by remember { mutableStateOf(false) }
-        PlaygroundTheme(colors = if (darkTheme) appLightColors else appDarkColors) {
+
+        PlaygroundTheme(colors = if (darkTheme) appDarkColors else appLightColors) {
             Box(Modifier.fillMaxSize()) {
-                Application()
+                CompositionLocalProvider(DarkActive provides darkTheme) {
+                    Application()
+                }
                 Column(
                     Modifier
                         .size(24.dp)
