@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.5"
+version = "0.1.6"
 
 repositories {
     jcenter()
@@ -39,7 +39,7 @@ compose.desktop {
             }
             targetFormats(TargetFormat.Dmg)
             packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.5"
+            packageVersion = "1.0.6"
         }
     }
 }
@@ -52,9 +52,9 @@ intellij {
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Properly include native dependencies for Windows, Linux, and ARM macOS to avoid runtime crashes!
+      Theme now matches IDE theme (light and dark)
       <br>
-      Bump support for 2021.1!
+      Bug fixes with dot grid on canvas
     """)
     sinceBuild("201.*")
     untilBuild("211.*")
