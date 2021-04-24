@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -99,6 +100,7 @@ fun DotsBackground(modifier: Modifier) {
         MaterialTheme.colors.onBackground,
         0.15f
     )
+    val density = LocalDensity.current.density
 
     Canvas(
         modifier.fillMaxSize()
@@ -106,8 +108,8 @@ fun DotsBackground(modifier: Modifier) {
         val canvasWidth = size.width
         val canvasHeight = size.height
         val circleColor = SolidColor(contentColor)
-        val circleRadius = 2f
-        val circleStep = 20
+        val circleRadius = 2f * density
+        val circleStep = (20 * density).toInt()
 
         val circle: (Int, Int) -> Unit = { x, y ->
             drawCircle(
