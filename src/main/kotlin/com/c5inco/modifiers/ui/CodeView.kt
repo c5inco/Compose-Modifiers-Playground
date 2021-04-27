@@ -29,8 +29,8 @@ fun CodeView(
     elementModel: ElementModel,
     elementModifiers: List<Pair<Any, Boolean>>,
     childElements: List<Any>,
-    childModifiersList: MutableList<MutableList<Pair<Any, Boolean>>>,
-    childScopeModifiersList: MutableList<MutableList<Pair<Any, Boolean>>>
+    childModifiersList: List<List<Pair<Any, Boolean>>>,
+    childScopeModifiersList: List<List<Pair<Any, Boolean>>>
 ) {
     var editorHovered by remember { mutableStateOf( false) }
 
