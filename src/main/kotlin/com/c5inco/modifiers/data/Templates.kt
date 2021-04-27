@@ -22,20 +22,20 @@ object Templates {
             Pair(BackgroundModifierData(color = Color.White), true),
         ),
         childModifiers = listOf(
-            mutableListOf(
+            listOf(
                 Pair(BackgroundModifierData(color = Color.Red), true),
             ),
-            mutableListOf(
+            listOf(
                 Pair(BackgroundModifierData(color = Color.Cyan), true),
             ),
-            mutableListOf(
+            listOf(
                 Pair(BackgroundModifierData(color = Color.Green), true),
             )
         ),
         childScopeModifiers = listOf(
-            mutableListOf(),
-            mutableListOf(),
-            mutableListOf()
+            listOf(),
+            listOf(),
+            listOf()
         )
     )
 
@@ -65,13 +65,13 @@ object Templates {
             Pair(BackgroundModifierData(color = Color.Magenta, shape = AvailableShapes.Circle), true),
         ),
         childModifiers = listOf(
-            mutableListOf(
+            listOf(
                 Pair(OffsetDesignModifierData(y = -24), true),
             ),
-            mutableListOf(
+            listOf(
                 Pair(OffsetDesignModifierData(y = -24), true),
             ),
-            mutableListOf(
+            listOf(
                 Pair(OffsetDesignModifierData(y = -24), true),
             )
         ),
@@ -124,26 +124,26 @@ object Templates {
             ),
         ),
         childModifiers = listOf(
-            mutableListOf(
+            listOf(
                 Pair(BackgroundModifierData(color = Color.Gray), true),
                 Pair(HeightModifierData(180), true),
                 Pair(FillMaxWidthModifierData(), true),
             ),
-            mutableListOf(
+            listOf(
                 Pair(PaddingModifierData(16, 16, 16, 0), true),
             ),
-            mutableListOf(
+            listOf(
                 Pair(PaddingModifierData(16, 0), true),
             ),
-            mutableListOf(
+            listOf(
                 Pair(PaddingModifierData(16, 16), true),
             ),
         ),
         childScopeModifiers = listOf(
-            mutableListOf(),
-            mutableListOf(),
-            mutableListOf(),
-            mutableListOf(),
+            listOf(),
+            listOf(),
+            listOf(),
+            listOf(),
         ),
     )
 }
@@ -157,15 +157,16 @@ data class Template(
         EmojiChildData("☕"),
         EmojiChildData("🤖"),
     ),
-    val childModifiers: List<MutableList<Pair<Any, Boolean>>> = listOf(
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf()
+    val
+    childModifiers: List<List<Pair<Any, Boolean>>> = listOf(
+        listOf(),
+        listOf(),
+        listOf()
     ),
-    val childScopeModifiers: List<MutableList<Pair<Any, Boolean>>> = listOf(
-        mutableListOf(),
-        mutableListOf(),
-        mutableListOf()
+    val childScopeModifiers: List<List<Pair<Any, Boolean>>> = listOf(
+        listOf(),
+        listOf(),
+        listOf()
     ),
 ) {
     override fun toString(): String {

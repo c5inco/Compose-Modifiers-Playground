@@ -34,10 +34,10 @@ fun Playground(
     onTemplateChange: (Template) -> Unit
 ) {
     var parentElement by remember(activeTemplate) { mutableStateOf(activeTemplate.parentElement) }
-    var elementModifiersList = activeTemplate.parentModifiers.toMutableStateList()
+    var elementModifiersList by remember(activeTemplate) { mutableStateOf(activeTemplate.parentModifiers) }
     val childElements = activeTemplate.childElements
-    var childModifiersList = activeTemplate.childModifiers.toMutableStateList()
-    var childScopeModifiersList = activeTemplate.childScopeModifiers.toMutableStateList()
+    var childModifiersList by remember(activeTemplate) { mutableStateOf(activeTemplate.childModifiers) }
+    var childScopeModifiersList by remember(activeTemplate) { mutableStateOf(activeTemplate.childScopeModifiers) }
 
     var showCode by remember { mutableStateOf(false) }
 
@@ -122,12 +122,9 @@ fun Playground(
                         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
                             ResetDefaultModifiersAction(onClick = {
                                 parentElement = activeTemplate.parentElement
-                                elementModifiersList.clear()
-                                elementModifiersList.addAll(activeTemplate.parentModifiers)
-                                childModifiersList.clear()
-                                childModifiersList.addAll(activeTemplate.childModifiers)
-                                childScopeModifiersList.clear()
-                                childScopeModifiersList.addAll(activeTemplate.childScopeModifiers)
+                                elementModifiersList = activeTemplate.parentModifiers.toList()
+                                childModifiersList = activeTemplate.childModifiers.toList()
+                                childScopeModifiersList = activeTemplate.childScopeModifiers.toList()
                             })
                             Spacer(Modifier.width(12.dp))
                         }
@@ -138,12 +135,9 @@ fun Playground(
 
                     Column(Modifier.fillMaxSize().verticalScroll(verticalScrollState)) {
                         ParentGroup(parentElement, elementModifiersList, onChange = { element, modifiers ->
-                            elementModifiersList.clear()
-                            elementModifiersList.addAll(modifiers)
+                            elementModifiersList = modifiers.toList()
                             if (parentElement.type != element.type) {
-                                childScopeModifiersList.forEach {
-                                    it.clear()
-                                }
+                                childScopeModifiersList = childScopeModifiersList.map { listOf() }
                             }
                             parentElement = element
                         })
@@ -156,8 +150,12 @@ fun Playground(
                                 scopeModifiersList = childScopeModifiersList[i],
                                 modifiersList = childModifiersList[i],
                                 onChange = { scopeModifiers, modifiers ->
-                                    childScopeModifiersList.set(i, scopeModifiers.toMutableList())
-                                    childModifiersList.set(i, modifiers.toMutableList())
+                                    childScopeModifiersList = childScopeModifiersList.mapIndexed { idx, list ->
+                                        if (idx == i) scopeModifiers.toMutableList() else list
+                                    }
+                                    childModifiersList = childModifiersList.mapIndexed { idx, list ->
+                                        if (idx == i) modifiers.toMutableList() else list
+                                    }
                                 }
                             )
                         }
@@ -196,21 +194,23 @@ fun getChildElementHeader(data: Any): String = (
 @Composable
 fun ParentGroup(
     baseElement: ElementModel,
-    modifiersList: MutableList<Pair<Any, Boolean>>,
+    modifiersList: List<Pair<Any, Boolean>>,
     onChange: (ElementModel, List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
+    var modifiers = modifiersList.toMutableList()
+
     ComponentHeader("Parent element", expanded, onExpand = { expanded = !expanded })
 
     if (expanded) {
         PropertiesSection(
-            empty = modifiersList.isEmpty(),
+            empty = modifiers.isEmpty(),
             modifier = Modifier.padding(8.dp),
         ) {
             ElementRow(
                 model = baseElement,
                 onValueChange = {
-                    onChange(it.copy(), modifiersList.toList())
+                    onChange(it.copy(), modifiers.toList())
                 }
             )
         }
@@ -223,12 +223,12 @@ fun ParentGroup(
                 .padding(bottom = 16.dp)
                 .fillMaxHeight(),
             name = "Modifiers",
-            empty = modifiersList.isEmpty(),
+            empty = modifiers.isEmpty(),
             actions = {
                 AddModifierAction(
                     onSelect = {
-                        modifiersList.add(Pair(getNewModifierData(it), true))
-                        onChange(baseElement, modifiersList.toList())
+                        modifiers.add(Pair(getNewModifierData(it), true))
+                        onChange(baseElement, modifiers.toList())
                     })
             }
         ) {
@@ -236,26 +236,26 @@ fun ParentGroup(
                 ModifierEntry(
                     modifierData = modifier,
                     order = idx,
-                    size = modifiersList.size,
+                    size = modifiers.size,
                     move = { index, up ->
-                        val curr = modifiersList[index]
+                        val curr = modifiers[index]
                         val targetIndex = if (up) index - 1 else index + 1
 
-                        val prev = modifiersList.getOrNull(targetIndex)
+                        val prev = modifiers.getOrNull(targetIndex)
 
                         if (prev != null) {
-                            modifiersList.set(targetIndex, curr)
-                            modifiersList.set(index, prev)
+                            modifiers.set(targetIndex, curr)
+                            modifiers.set(index, prev)
                         }
-                        onChange(baseElement, modifiersList.toList())
+                        onChange(baseElement, modifiers.toList())
                     },
                     onModifierChange = { order, data ->
-                        modifiersList.set(order, data)
-                        onChange(baseElement, modifiersList.toList())
+                        modifiers.set(order, data)
+                        onChange(baseElement, modifiers.toList())
                     },
                     onRemove = { order ->
-                        modifiersList.removeAt(order)
-                        onChange(baseElement, modifiersList.toList())
+                        modifiers.removeAt(order)
+                        onChange(baseElement, modifiers.toList())
                     }
                 )
             }
@@ -267,39 +267,20 @@ fun ParentGroup(
 fun ChildGroup(
     name: String,
     parentElement: AvailableElements,
-    scopeModifiersList: MutableList<Pair<Any, Boolean>>,
-    modifiersList: MutableList<Pair<Any, Boolean>>,
+    scopeModifiersList: List<Pair<Any, Boolean>>,
+    modifiersList: List<Pair<Any, Boolean>>,
     onChange: (scopeModifiers: List<Pair<Any, Boolean>>, modifiers: List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
+    val scopeModifiers = scopeModifiersList.toMutableList()
+    val modifiers = modifiersList.toMutableList()
+
     ComponentHeader(name, expanded, onExpand = { expanded = !expanded })
 
     if (expanded) {
-        /*
-        PropertiesSection {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .background(
-                        EditorTheme.colors.backgroundDark,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                Text(
-                    formatCode("Text(\"$name\", fontSize = 48.sp)"),
-                    fontSize = 14.sp,
-                    fontFamily = Fonts.jetbrainsMono()
-                )
-            }
-        }
-
-        DottedLine(Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
-        Spacer(Modifier.height(8.dp))
-        */
         fun onAddChildModifier(newModifier: Any) {
-            scopeModifiersList.add(Pair(getNewScopeModifierData(newModifier), true))
-            onChange(scopeModifiersList.toList(), modifiersList.toList())
+            scopeModifiers.add(Pair(getNewScopeModifierData(newModifier), true))
+            onChange(scopeModifiers.toList(), modifiers.toList())
         }
 
         PropertiesSection(
@@ -307,7 +288,7 @@ fun ChildGroup(
                 .padding(bottom = 16.dp)
                 .fillMaxHeight(),
             name = "${parentElement}Scope modifiers",
-            empty = scopeModifiersList.isEmpty(),
+            empty = scopeModifiers.isEmpty(),
             actions = {
                 AddChildModifierAction(
                     parentElement,
@@ -315,64 +296,64 @@ fun ChildGroup(
                 )
             }
         ) {
-            scopeModifiersList.forEachIndexed { idx, modifier ->
+            scopeModifiers.forEachIndexed { idx, modifier ->
                 RowColumnScopeModifierEntry(
                     modifierData = modifier,
                     order = idx,
-                    size = scopeModifiersList.size,
+                    size = scopeModifiers.size,
                     onModifierChange = { order, data ->
-                        scopeModifiersList.set(order, data)
-                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                        scopeModifiers.set(order, data)
+                        onChange(scopeModifiers.toList(), modifiers.toList())
                     },
                     onRemove = { order ->
-                        scopeModifiersList.removeAt(order)
-                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                        scopeModifiers.removeAt(order)
+                        onChange(scopeModifiers.toList(), modifiers.toList())
                     }
                 )
             }
         }
 
         DottedLine(Modifier.padding(horizontal = 16.dp))
-        Spacer(androidx.compose.ui.Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp))
 
         PropertiesSection(
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .fillMaxHeight(),
             name = "Modifiers",
-            empty = modifiersList.isEmpty(),
+            empty = modifiers.isEmpty(),
             actions = {
                 AddModifierAction(
                     onSelect = {
-                        modifiersList.add(Pair(getNewModifierData(it), true))
-                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                        modifiers.add(Pair(getNewModifierData(it), true))
+                        onChange(scopeModifiers.toList(), modifiers.toList())
                     })
             }
         ) {
-            modifiersList.forEachIndexed { i, modifier ->
+            modifiers.forEachIndexed { i, modifier ->
                 ModifierEntry(
                     modifierData = modifier,
                     order = i,
-                    size = modifiersList.size,
+                    size = modifiers.size,
                     move = { index, up ->
-                        val curr = modifiersList[index]
+                        val curr = modifiers[index]
                         val targetIndex = if (up) index - 1 else index + 1
 
-                        val prev = modifiersList.getOrNull(targetIndex)
+                        val prev = modifiers.getOrNull(targetIndex)
 
                         if (prev != null) {
-                            modifiersList.set(targetIndex, curr)
-                            modifiersList.set(index, prev)
+                            modifiers.set(targetIndex, curr)
+                            modifiers.set(index, prev)
                         }
-                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                        onChange(scopeModifiers.toList(), modifiers.toList())
                     },
                     onModifierChange = { order, data ->
-                        modifiersList.set(order, data)
-                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                        modifiers.set(order, data)
+                        onChange(scopeModifiers.toList(), modifiers.toList())
                     },
                     onRemove = { order ->
-                        modifiersList.removeAt(order)
-                        onChange(scopeModifiersList.toList(), modifiersList.toList())
+                        modifiers.removeAt(order)
+                        onChange(scopeModifiers.toList(), modifiers.toList())
                     }
                 )
             }
@@ -442,14 +423,14 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
         verticalAlignment = Alignment.CenterVertically
     ) {
         val primaryColor = MaterialTheme.colors.primary
-        Canvas(androidx.compose.ui.Modifier.width(4.dp).fillMaxHeight()) {
+        Canvas(Modifier.width(4.dp).fillMaxHeight()) {
             drawRoundRect(
                 color = primaryColor,
                 size = Size(width = size.width, height = size.height),
                 cornerRadius = CornerRadius(50f)
             )
         }
-        Spacer(androidx.compose.ui.Modifier.width(6.dp))
+        Spacer(Modifier.width(6.dp))
         Text(
             name,
             style = MaterialTheme.typography.subtitle1,

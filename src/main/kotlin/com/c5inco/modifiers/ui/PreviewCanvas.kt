@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.CodeOff
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,9 +21,9 @@ fun PreviewCanvas(
     modifier: Modifier = Modifier,
     parentElement: ElementModel,
     childElements: List<Any>,
-    childScopeModifiersList: SnapshotStateList<MutableList<Pair<Any, Boolean>>>,
-    childModifiersList: SnapshotStateList<MutableList<Pair<Any, Boolean>>>,
-    elementModifiersList: SnapshotStateList<Pair<Any, Boolean>>,
+    childScopeModifiersList: List<List<Pair<Any, Boolean>>>,
+    childModifiersList: List<List<Pair<Any, Boolean>>>,
+    elementModifiersList: List<Pair<Any, Boolean>>,
     showCode: Boolean,
     onShowCode: (Boolean) -> Unit
 ) {
