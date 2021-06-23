@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.6"
+version = "0.1.8"
 
 repositories {
     jcenter()
@@ -39,7 +39,7 @@ compose.desktop {
             }
             targetFormats(TargetFormat.Dmg)
             packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.6"
+            packageVersion = "1.0.8"
         }
     }
 }
@@ -52,9 +52,7 @@ intellij {
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Theme now matches IDE theme (light and dark)
-      <br>
-      Bug fixes with dot grid on canvas
+      Update Compose Desktop dependency to 0.4.0
     """)
     sinceBuild("201.*")
     untilBuild("211.*")
