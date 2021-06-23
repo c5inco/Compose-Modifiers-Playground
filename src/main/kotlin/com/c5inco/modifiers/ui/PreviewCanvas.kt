@@ -35,95 +35,6 @@ fun PreviewCanvas(
         DotsBackground(Modifier.align(Alignment.Center))
 
         val element = parentElement.type
-
-        val content: @Composable () -> Unit = {
-            childElements.forEachIndexed { idx, childData ->
-                var sm: Modifier = Modifier
-                var scopeModifiers = childScopeModifiersList.getOrNull(idx)
-                var childModifiers = childModifiersList.getOrNull(idx)
-
-                scopeModifiers?.let {
-                    when (element) {
-                        AvailableElements.Column -> {
-                            ColumnScope.apply {
-                                it.forEach {
-                                    val (data, visible) = it
-                                    if (visible) {
-                                        when (data) {
-                                            is WeightModifierData -> {
-                                                val (weight) = data
-                                                sm = sm.then(Modifier.weight(weight))
-                                            }
-                                            is AlignColumnModifierData -> {
-                                                val (alignment) = data
-                                                sm = sm.then(Modifier.align(getHorizontalAlignments(alignment)))
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        AvailableElements.Row -> {
-                            RowScope.apply {
-                                it.forEach {
-                                    val (data, visible) = it
-                                    if (visible) {
-                                        when (data) {
-                                            is WeightModifierData -> {
-                                                val (weight) = data
-                                                sm = sm.then(Modifier.weight(weight))
-                                            }
-                                            is AlignRowModifierData -> {
-                                                val (alignment) = data
-                                                sm = sm.then(Modifier.align(getVerticalAlignments(alignment)))
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else -> {
-                            BoxScope.apply {
-                                it.forEach {
-                                    val (data, visible) = it
-                                    if (visible) {
-                                        when (data) {
-                                            is AlignBoxModifierData -> {
-                                                val (alignment) = data
-                                                sm = sm.then(Modifier.align(getContentAlignments(alignment)))
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                childModifiers?.let {
-                    when (childData) {
-                        is TextChildData -> {
-                            val (text, style, alpha) = childData
-                            TextChildElement(
-                                text,
-                                style,
-                                if (!parentElement.themeAware) Color.Black else LocalContentColor.current,
-                                alpha,
-                                sm.then(buildModifiers(it))
-                            )
-                        }
-                        is ImageChildData -> {
-                            val (imagePath) = childData
-                            ImageChildElement(imagePath, sm.then(buildModifiers(it)))
-                        }
-                        else -> {
-                            val (emoji) = childData as EmojiChildData
-                            EmojiChildElement(emoji, sm.then(buildModifiers(it)))
-                        }
-                    }
-                }
-            }
-        }
         val elementModifiersChain = buildModifiers(elementModifiersList)
 
         when (element) {
@@ -133,7 +44,20 @@ fun PreviewCanvas(
                     modifier = elementModifiersChain,
                     contentAlignment = getContentAlignments(data.contentAlignment)
                 ) {
-                    content()
+                    childElements.forEachIndexed { idx, childData ->
+                        var sm: Modifier = Modifier
+                        var scopeModifiers = childScopeModifiersList.getOrNull(idx)
+                        var childModifiers = childModifiersList.getOrNull(idx)
+
+                        scopeModifiers?.forEach {
+                            val (data, visible) = it
+                            if (visible) {
+                                sm = sm.then(applyBoxModifiers(data))
+                            }
+                        }
+
+                        emitChildren(childData, parentElement, sm, childModifiers)
+                    }
                 }
             }
             AvailableElements.Column -> {
@@ -146,7 +70,20 @@ fun PreviewCanvas(
                     ),
                     horizontalAlignment = getHorizontalAlignments(data.horizontalAlignment)
                 ) {
-                    content()
+                    childElements.forEachIndexed { idx, childData ->
+                        var sm: Modifier = Modifier
+                        var scopeModifiers = childScopeModifiersList.getOrNull(idx)
+                        var childModifiers = childModifiersList.getOrNull(idx)
+
+                        scopeModifiers?.forEach {
+                            val (data, visible) = it
+                            if (visible) {
+                                sm = sm.then(applyColumnModifiers(data))
+                            }
+                        }
+
+                        emitChildren(childData, parentElement, sm, childModifiers)
+                    }
                 }
             }
             AvailableElements.Row -> {
@@ -159,7 +96,20 @@ fun PreviewCanvas(
                     ),
                     verticalAlignment = getVerticalAlignments(data.verticalAlignment)
                 ) {
-                    content()
+                    childElements.forEachIndexed { idx, childData ->
+                        var sm: Modifier = Modifier
+                        var scopeModifiers = childScopeModifiersList.getOrNull(idx)
+                        var childModifiers = childModifiersList.getOrNull(idx)
+
+                        scopeModifiers?.forEach {
+                            val (data, visible) = it
+                            if (visible) {
+                                sm = sm.then(applyRowModifiers(data))
+                            }
+                        }
+
+                        emitChildren(childData, parentElement, sm, childModifiers)
+                    }
                 }
             }
         }
@@ -187,10 +137,83 @@ fun PreviewCanvas(
     }
 }
 
-private fun buildModifiers(modifiersList: List<Pair<Any, Boolean>>): Modifier {
+@Composable
+private fun emitChildren(
+    data: Any,
+    parentElement: ElementModel,
+    scopeModifier: Modifier,
+    modifiers: List<Pair<Any, Boolean>>?
+) {
+    when (data) {
+        is TextChildData -> {
+            val (text, style, alpha) = data
+            TextChildElement(
+                text,
+                style,
+                if (!parentElement.themeAware) Color.Black else LocalContentColor.current,
+                alpha,
+                scopeModifier.then(buildModifiers(modifiers))
+            )
+        }
+        is ImageChildData -> {
+            val (imagePath) = data
+            ImageChildElement(imagePath, scopeModifier.then(buildModifiers(modifiers)))
+        }
+        else -> {
+            val (emoji) = data as EmojiChildData
+            EmojiChildElement(emoji, scopeModifier.then(buildModifiers(modifiers)))
+        }
+    }
+}
+
+private fun ColumnScope.applyColumnModifiers(
+    data: Any,
+): Modifier {
+    when (data) {
+        is WeightModifierData -> {
+            val (weight) = data
+            return Modifier.weight(weight)
+        }
+        is AlignColumnModifierData -> {
+            val (alignment) = data
+            return Modifier.align(getHorizontalAlignments(alignment))
+        }
+    }
+    return Modifier
+}
+
+private fun RowScope.applyRowModifiers(
+    data: Any,
+): Modifier {
+    when (data) {
+        is WeightModifierData -> {
+            val (weight) = data
+            return Modifier.weight(weight)
+        }
+        is AlignRowModifierData -> {
+            val (alignment) = data
+            return Modifier.align(getVerticalAlignments(alignment))
+        }
+    }
+    return Modifier
+}
+
+private fun BoxScope.applyBoxModifiers(
+    data: Any,
+): Modifier {
+    when (data) {
+        is AlignBoxModifierData -> {
+            val (alignment) = data
+            return Modifier.align(getContentAlignments(alignment))
+        }
+    }
+    return Modifier
+}
+
+private fun buildModifiers(modifiersList: List<Pair<Any, Boolean>>?): Modifier {
     var modifier: Modifier = Modifier
 
-    modifiersList.forEach {
+    modifiersList?.forEach {
         val visible = it.second
 
         if (visible) {
