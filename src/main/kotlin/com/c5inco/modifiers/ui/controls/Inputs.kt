@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -545,11 +544,8 @@ fun <T> TextInput(
                 }
             }
             .onFocusChanged {
-                if (it == FocusState.Active) {
-                    focused = true
-                }
-                if (it == FocusState.Inactive) {
-                    focused = false
+                focused = it.isFocused
+                if (!focused) {
                     saveText()
                 }
             }
