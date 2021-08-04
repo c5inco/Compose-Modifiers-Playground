@@ -1,5 +1,5 @@
 # Compose Modifiers Playground
-Source code for Compose Modifiers Playground IDEA plugin
+Source code for [Compose Modifiers Playground IDEA plugin](https://plugins.jetbrains.com/plugin/16417-compose-modifiers-playground)
 
 ![App screenshot](./artwork/readme/screenshot.png)
 
