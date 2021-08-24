@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.8"
+version = "0.1.9"
 
 repositories {
     jcenter()
@@ -39,21 +39,21 @@ compose.desktop {
             }
             targetFormats(TargetFormat.Dmg)
             packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.8"
+            packageVersion = "1.0.9"
         }
     }
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2020.3.3"
+    version = "2020.3.4"
     type = "IC"
 }
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Update Compose Desktop dependency to 0.4.0
+      Bump supported IntelliJ version
     """)
     sinceBuild("201.*")
-    untilBuild("211.*")
+    untilBuild("212.*")
 }
