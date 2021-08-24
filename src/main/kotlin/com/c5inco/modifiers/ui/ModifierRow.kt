@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.RotateLeft
 import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.controls.*
 
+@ExperimentalComposeUiApi
 @Composable
 fun AlphaModifier(alphaValue: Float, onChange: (AlphaModifierData) -> Unit) {
     Column {
@@ -30,6 +32,7 @@ fun AlphaModifier(alphaValue: Float, onChange: (AlphaModifierData) -> Unit) {
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue: Int, onChange: (ShadowModifierData) -> Unit) {
     Column {
@@ -57,6 +60,7 @@ fun ShadowModifier(elevationValue: Int, shapeValue: AvailableShapes, cornerValue
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun HeightModifier(heightValue: Int, onChange: (HeightModifierData) -> Unit) {
     Column {
@@ -72,6 +76,7 @@ fun HeightModifier(heightValue: Int, onChange: (HeightModifierData) -> Unit) {
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun WidthModifier(widthValue: Int, onChange: (WidthModifierData) -> Unit) {
     Column {
@@ -87,6 +92,7 @@ fun WidthModifier(widthValue: Int, onChange: (WidthModifierData) -> Unit) {
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun SizeModifier(widthValue: Int, heightValue: Int, onChange: (SizeModifierData) -> Unit) {
     Column {
@@ -122,6 +128,7 @@ fun SizeModifier(widthValue: Int, heightValue: Int, onChange: (SizeModifierData)
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun BackgroundModifier(colorValue: Color, shapeValue: AvailableShapes, cornerValue: Int, onChange: (BackgroundModifierData) -> Unit) {
     Column {
@@ -139,6 +146,7 @@ fun BackgroundModifier(colorValue: Color, shapeValue: AvailableShapes, cornerVal
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShapes, cornerValue: Int, onChange: (BorderModifierData) -> Unit) {
     Column {
@@ -169,6 +177,7 @@ fun BorderModifier(widthValue: Int, colorValue: Color, shapeValue: AvailableShap
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun PaddingModifier(typeValue: AvailablePadding, cornerValues: CornerValues, onChange: (PaddingModifierData) -> Unit) {
     Column {
@@ -183,6 +192,7 @@ fun PaddingModifier(typeValue: AvailablePadding, cornerValues: CornerValues, onC
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun OffsetDesignModifier(xValue: Int, yValue: Int, onChange: (OffsetDesignModifierData) -> Unit) {
     Column {
@@ -239,6 +249,7 @@ fun ClickableModifier(enabledValue: Boolean, onChange: (ClickableModifierData) -
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun ClipModifier(shapeValue: AvailableShapes, cornerValue: Int, onChange: (ClipModifierData) -> Unit) {
     Column {
@@ -251,6 +262,7 @@ fun ClipModifier(shapeValue: AvailableShapes, cornerValue: Int, onChange: (ClipM
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun RotateModifier(degreesValue: Float, onChange: (RotateModifierData) -> Unit) {
     Column {
@@ -275,6 +287,7 @@ fun RotateModifier(degreesValue: Float, onChange: (RotateModifierData) -> Unit) 
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun ScaleModifier(scaleValue: Float, onChange: (ScaleModifierData) -> Unit) {
     Column {
@@ -298,6 +311,7 @@ fun ScaleModifier(scaleValue: Float, onChange: (ScaleModifierData) -> Unit) {
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun AspectRatioModifier(ratioValue: Float, onChange: (AspectRatioModifierData) -> Unit) {
     Column {
@@ -313,6 +327,7 @@ fun AspectRatioModifier(ratioValue: Float, onChange: (AspectRatioModifierData) -
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun FillMaxWidthModifier(fractionValue: Float, onChange: (FillMaxWidthModifierData) -> Unit) {
     Column {
@@ -325,6 +340,7 @@ fun FillMaxWidthModifier(fractionValue: Float, onChange: (FillMaxWidthModifierDa
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun FillMaxHeightModifier(fractionValue: Float, onChange: (FillMaxHeightModifierData) -> Unit) {
     Column {
@@ -337,6 +353,7 @@ fun FillMaxHeightModifier(fractionValue: Float, onChange: (FillMaxHeightModifier
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun FillMaxSizeModifier(fractionValue: Float, onChange: (FillMaxSizeModifierData) -> Unit) {
     Column {
@@ -406,6 +423,7 @@ fun WrapContentSizeModifier(unboundedValue: Boolean, onChange: (WrapContentSizeM
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun WeightModifier(weightValue: Float, onChange: (WeightModifierData) -> Unit) {
     Column {

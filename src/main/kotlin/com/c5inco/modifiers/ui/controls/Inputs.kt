@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
@@ -24,7 +25,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.shortcuts
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.DpOffset
@@ -123,6 +125,7 @@ private fun TransparentBackground() {
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun ShapeInput(
     shapeValue: AvailableShapes,
@@ -192,6 +195,7 @@ fun ShapeInput(
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun PaddingInput(
     typeValue: AvailablePadding,
@@ -327,6 +331,7 @@ fun PaddingInput(
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun HorizontalArrangementInput(
     arrangementValue: AvailableHorizontalArrangements = AvailableHorizontalArrangements.Start,
@@ -345,6 +350,7 @@ fun HorizontalArrangementInput(
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun VerticalArrangementInput(
     arrangementValue: AvailableVerticalArrangements = AvailableVerticalArrangements.Top,
@@ -363,6 +369,7 @@ fun VerticalArrangementInput(
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 private fun <T> ArrangementInput(
     spacedBy: Boolean,
@@ -441,6 +448,7 @@ fun ContentAlignmentInput(
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun DpInput(
     value: Int,
@@ -466,6 +474,7 @@ fun DpInput(
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun FloatInput(
     value: Float,
@@ -486,6 +495,7 @@ fun FloatInput(
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun <T> TextInput(
     modifier: Modifier = Modifier,
@@ -532,15 +542,18 @@ fun <T> TextInput(
             }
         },
         modifier = modifier
-            .shortcuts {
-                on(Key.Enter) {
-                    saveText()
-                }
-                on(Key.NumPadEnter) {
-                    saveText()
-                }
-                on(Key.Escape) {
-                    text = value.toString()
+            .onKeyEvent {
+                when(it.key) {
+                    Key.Enter,
+                    Key.NumPadEnter -> {
+                        saveText()
+                        true
+                    }
+                    Key.Escape -> {
+                        text = value.toString()
+                        true
+                    }
+                    else -> false
                 }
             }
             .onFocusChanged {

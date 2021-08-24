@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
@@ -28,6 +29,7 @@ import com.c5inco.modifiers.ui.controls.DropdownInput
 import com.c5inco.modifiers.ui.controls.SmallIconButton
 import com.c5inco.modifiers.utils.DottedLine
 
+@ExperimentalComposeUiApi
 @Composable
 fun Playground(
     activeTemplate: Template,
@@ -48,7 +50,7 @@ fun Playground(
         ) {
             Column {
                 PreviewCanvas(
-                    Modifier.weight(2f).fillMaxSize(),
+                    Modifier.weight(1f),
                     parentElement,
                     childElements,
                     childScopeModifiersList,
@@ -61,9 +63,7 @@ fun Playground(
                 if (showCode) {
                     Divider(color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
                     CodeView(
-                        Modifier
-                            .weight(1f)
-                            .fillMaxSize(),
+                        Modifier.fillMaxHeight(0.35f),
                         parentElement,
                         elementModifiersList,
                         childElements,
@@ -191,6 +191,7 @@ fun getChildElementHeader(data: Any): String = (
     }
 )
 
+@ExperimentalComposeUiApi
 @Composable
 fun ParentGroup(
     baseElement: ElementModel,
@@ -198,7 +199,7 @@ fun ParentGroup(
     onChange: (ElementModel, List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
-    var modifiers = modifiersList.toMutableList()
+    val modifiers = modifiersList.toMutableList()
 
     ComponentHeader("Parent element", expanded, onExpand = { expanded = !expanded })
 
@@ -216,7 +217,7 @@ fun ParentGroup(
         }
 
         DottedLine(Modifier.padding(horizontal = 16.dp))
-        Spacer(androidx.compose.ui.Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp))
 
         PropertiesSection(
             modifier = Modifier
@@ -263,6 +264,7 @@ fun ParentGroup(
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun ChildGroup(
     name: String,

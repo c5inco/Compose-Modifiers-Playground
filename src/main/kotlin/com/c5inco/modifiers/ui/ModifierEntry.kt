@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.RectangleShape
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.controls.SmallIconButton
 
+@ExperimentalComposeUiApi
 @Composable
 fun ModifierEntry(
     modifierData: Pair<Any, Boolean>,
@@ -315,6 +317,7 @@ fun ModifierEntry(
     if (order != size - 1) Divider(Modifier.padding(horizontal = 16.dp))
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun RowColumnScopeModifierEntry(
     modifierData: Pair<Any, Boolean>,
