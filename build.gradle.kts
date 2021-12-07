@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.9"
+version = "0.1.10"
 
 repositories {
     jcenter()
@@ -39,21 +39,21 @@ compose.desktop {
             }
             targetFormats(TargetFormat.Dmg)
             packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.9"
+            packageVersion = "1.0.10"
         }
     }
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2020.3.4"
+    version = "2021.1.3"
     type = "IC"
 }
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Bump supported IntelliJ version
+      Bump supported IntelliJ version to 2021.3
     """)
     sinceBuild("201.*")
-    untilBuild("212.*")
+    untilBuild("213.*")
 }
