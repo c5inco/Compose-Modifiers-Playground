@@ -443,14 +443,11 @@ enum class RowScopeModifierEntry {
     Weight,
 }
 
-fun getShape(shape: AvailableShapes, corner: Int): Shape {
-    var realShape: Shape = RectangleShape
-
+fun getShape(shape: AvailableShapes, corner: Int): Shape = (
     when (shape) {
-        AvailableShapes.Circle -> realShape = CircleShape
-        AvailableShapes.RoundedCorner -> realShape = RoundedCornerShape(size = corner.dp)
-        AvailableShapes.CutCorner -> realShape = CutCornerShape(size = corner.dp)
+        AvailableShapes.Circle -> CircleShape
+        AvailableShapes.RoundedCorner -> RoundedCornerShape(size = corner.dp)
+        AvailableShapes.CutCorner -> CutCornerShape(size = corner.dp)
+        else -> RectangleShape
     }
-
-    return realShape
-}
+)

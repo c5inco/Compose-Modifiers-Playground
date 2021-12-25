@@ -1,9 +1,9 @@
 package com.c5inco.modifiers.plugin
 
-import androidx.compose.desktop.ComposePanel
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.unit.IntSize
 import com.c5inco.modifiers.Application
 import com.intellij.openapi.actionSystem.AnActionEvent

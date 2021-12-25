@@ -1,9 +1,9 @@
 package com.c5inco.modifiers.plugin
 
-import androidx.compose.desktop.ComposePanel
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
