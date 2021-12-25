@@ -32,7 +32,7 @@ tasks.withType<KotlinCompile>() {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "com.c5inco.modifiers.MainKt"
         nativeDistributions {
             macOS {
                 iconFile.set(project.file("src/main/resources").resolve("META-INF/macosicon.icns"))
