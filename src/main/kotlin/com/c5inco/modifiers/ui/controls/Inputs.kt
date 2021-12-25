@@ -1,6 +1,7 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.c5inco.modifiers.ui.controls
 
-import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
@@ -13,8 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
@@ -23,9 +24,11 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.shortcuts
-import androidx.compose.ui.input.pointer.pointerMoveFilter
-import androidx.compose.ui.res.svgResource
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
@@ -156,7 +159,7 @@ fun ShapeInput(
                 onClick = { onValueChange(pair.second, cornerValue) }
             ) {
                 Icon(
-                    painter = svgResource("icons/${pair.first}.svg"),
+                    painter = painterResource("icons/${pair.first}.svg"),
                     contentDescription = "${pair.first} shape button",
                     modifier = Modifier.size(18.dp),
                     tint = if (active) contentColorFor(MaterialTheme.colors.secondary) else LocalContentColor.current
@@ -517,15 +520,18 @@ fun <T> TextInput(
             }
         },
         modifier = modifier
-            .shortcuts {
-                on(Key.Enter) {
-                    saveText()
-                }
-                on(Key.NumPadEnter) {
-                    saveText()
-                }
-                on(Key.Escape) {
-                    text = value.toString()
+            .onPreviewKeyEvent {
+                when(it.key) {
+                    Key.Enter,
+                    Key.NumPadEnter -> {
+                        saveText()
+                        true
+                    }
+                    Key.Escape -> {
+                        text = value.toString()
+                        true
+                    }
+                    else -> false
                 }
             }
             .onFocusChanged {
@@ -593,16 +599,5 @@ fun <T> DropdownInput(
     }
 }
 
-private fun Modifier.cursorForHorizontalResize(
-): Modifier = composed {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isHover by interactionSource.collectIsHoveredAsState()
-
-    if (isHover) {
-        LocalAppWindow.current.window.cursor = Cursor(Cursor.E_RESIZE_CURSOR)
-    } else {
-        LocalAppWindow.current.window.cursor = Cursor.getDefaultCursor()
-    }
-
-    hoverable(interactionSource)
-}
+private fun Modifier.cursorForHorizontalResize(isHorizontal: Boolean): Modifier =
+    pointerHoverIcon(PointerIcon(Cursor(if (isHorizontal) Cursor.E_RESIZE_CURSOR else Cursor.S_RESIZE_CURSOR)))
