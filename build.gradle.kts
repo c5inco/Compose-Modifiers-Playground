@@ -5,17 +5,17 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.jetbrains.intellij") version "0.6.5"
-    kotlin("jvm") version "1.5.10"
-    id("org.jetbrains.compose") version "0.4.0"
+    kotlin("jvm") version "1.5.31"
+    id("org.jetbrains.compose") version "1.0.0"
 }
 
 group = "me.c5inco"
 version = "0.1.10"
 
 repositories {
-    jcenter()
+    google()
     mavenCentral()
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
 dependencies {
@@ -32,7 +32,7 @@ tasks.withType<KotlinCompile>() {
 
 compose.desktop {
     application {
-        mainClass = "com.c5inco.modifiers.MainKt"
+        mainClass = "MainKt"
         nativeDistributions {
             macOS {
                 iconFile.set(project.file("src/main/resources").resolve("META-INF/macosicon.icns"))
