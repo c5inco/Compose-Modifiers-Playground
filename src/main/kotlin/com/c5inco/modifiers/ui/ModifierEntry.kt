@@ -1,6 +1,9 @@
 package com.c5inco.modifiers.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
@@ -15,13 +18,14 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.controls.SmallIconButton
@@ -35,21 +39,13 @@ fun ModifierEntry(
     onModifierChange: (Int, Pair<Any, Boolean>) -> Unit,
     onRemove: (Int) -> Unit,
 ) {
-    var rowHovered by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val rowHovered by interactionSource.collectIsHoveredAsState()
     val visible = modifierData.second
 
     Box(
         modifier = Modifier
-            .pointerMoveFilter(
-                onEnter = {
-                    rowHovered = true
-                    false
-                },
-                onExit = {
-                    rowHovered = false
-                    false
-                }
-            )
+            .hoverable(interactionSource)
             //.height(48.dp)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         contentAlignment = Alignment.CenterStart

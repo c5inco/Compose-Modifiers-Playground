@@ -1,10 +1,9 @@
 package com.c5inco.modifiers.ui.controls
 
 import androidx.compose.desktop.LocalAppWindow
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -135,23 +134,15 @@ fun ShapeInput(
         Pair("rounded-corner", AvailableShapes.RoundedCorner),
         Pair("cut-corner", AvailableShapes.CutCorner),
     )
-    var hovered = remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val hovered by interactionSource.collectIsHoveredAsState()
 
     Row(
         modifier = Modifier
-            .pointerMoveFilter(
-                onEnter = {
-                    hovered.value = true
-                    false
-                },
-                onExit = {
-                    hovered.value = false
-                    false
-                }
-            )
+            .hoverable(interactionSource)
             .border(
                 width = 1.dp,
-                color = if (hovered.value) LocalContentColor.current.copy(alpha = ContentAlpha.disabled) else Color.Transparent,
+                color = if (hovered) LocalContentColor.current.copy(alpha = ContentAlpha.disabled) else Color.Transparent,
                 shape = RoundedCornerShape(4.dp)
             ),
     ) {
@@ -203,24 +194,17 @@ fun PaddingInput(
         Pair(Icons.Outlined.GridGoldenratio, AvailablePadding.Sides),
         Pair(Icons.Outlined.Fullscreen, AvailablePadding.Individual),
     )
-    var hovered = remember { mutableStateOf(false) }
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val hovered by interactionSource.collectIsHoveredAsState()
 
     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         Row(
             modifier = Modifier
-                .pointerMoveFilter(
-                    onEnter = {
-                        hovered.value = true
-                        false
-                    },
-                    onExit = {
-                        hovered.value = false
-                        false
-                    }
-                )
+                .hoverable(interactionSource)
                 .border(
                     width = 1.dp,
-                    color = if (hovered.value) LocalContentColor.current.copy(alpha = ContentAlpha.disabled) else Color.Transparent,
+                    color = if (hovered) LocalContentColor.current.copy(alpha = ContentAlpha.disabled) else Color.Transparent,
                     shape = RoundedCornerShape(4.dp)
                 ),
         ) {
@@ -495,7 +479,8 @@ fun <T> TextInput(
     onValueChange: (T) -> Unit
 ) {
     var text by remember(value) { mutableStateOf(value.toString()) }
-    var hovered by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val hovered by interactionSource.collectIsHoveredAsState()
     var focused by remember { mutableStateOf(false) }
 
     @Composable
@@ -549,16 +534,7 @@ fun <T> TextInput(
                     saveText()
                 }
             }
-            .pointerMoveFilter(
-                onEnter = {
-                    hovered = true
-                    false
-                },
-                onExit = {
-                    hovered = false
-                    false
-                }
-            )
+            .hoverable(interactionSource)
             .height(24.dp)
         ,
         textStyle = MaterialTheme.typography.body2.copy(
@@ -579,23 +555,15 @@ fun <T> DropdownInput(
     onSelect: (T) -> Unit
 ) {
     Box {
-        var hovered by remember { mutableStateOf(false) }
+        val interactionSource = remember { MutableInteractionSource() }
+        val hovered by interactionSource.collectIsHoveredAsState()
         var expanded by remember { mutableStateOf(false) }
 
         Row(
             modifier
                 .clip(shape)
                 .clickable { expanded = true }
-                .pointerMoveFilter(
-                    onEnter = {
-                        hovered = true
-                        false
-                    },
-                    onExit = {
-                        hovered = false
-                        false
-                    }
-                )
+                .hoverable(interactionSource)
                 .then(if (hovered) Modifier.background(hoverBackgroundColor) else Modifier)
                 .height(24.dp)
                 .border(width = 1.dp, color = if (hovered) hoverBorderColor else Color.Transparent)
@@ -627,7 +595,8 @@ fun <T> DropdownInput(
 
 private fun Modifier.cursorForHorizontalResize(
 ): Modifier = composed {
-    var isHover by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHover by interactionSource.collectIsHoveredAsState()
 
     if (isHover) {
         LocalAppWindow.current.window.cursor = Cursor(Cursor.E_RESIZE_CURSOR)
@@ -635,8 +604,5 @@ private fun Modifier.cursorForHorizontalResize(
         LocalAppWindow.current.window.cursor = Cursor.getDefaultCursor()
     }
 
-    pointerMoveFilter(
-        onEnter = { isHover = true; true },
-        onExit = { isHover = false; true }
-    )
+    hoverable(interactionSource)
 }

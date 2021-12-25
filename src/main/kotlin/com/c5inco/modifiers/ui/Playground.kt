@@ -2,6 +2,8 @@ package com.c5inco.modifiers.ui
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -18,7 +20,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -74,19 +75,12 @@ fun Playground(
             }
         }
 
-        var propertiesHovered by remember { mutableStateOf(false) }
+        val interactionSource = remember { MutableInteractionSource() }
+        val propertiesHovered by interactionSource.collectIsHoveredAsState()
+
         Surface(
             Modifier
-                .pointerMoveFilter(
-                    onEnter = {
-                        propertiesHovered = true
-                        false
-                    },
-                    onExit = {
-                        propertiesHovered = false
-                        false
-                    }
-                )
+                .hoverable(interactionSource)
                 .width(350.dp)
                 .shadow(4.dp),
             elevation = 2.dp
@@ -198,7 +192,7 @@ fun ParentGroup(
     onChange: (ElementModel, List<Pair<Any, Boolean>>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(true) }
-    var modifiers = modifiersList.toMutableList()
+    val modifiers = modifiersList.toMutableList()
 
     ComponentHeader("Parent element", expanded, onExpand = { expanded = !expanded })
 
@@ -216,7 +210,7 @@ fun ParentGroup(
         }
 
         DottedLine(Modifier.padding(horizontal = 16.dp))
-        Spacer(androidx.compose.ui.Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp))
 
         PropertiesSection(
             modifier = Modifier
@@ -369,23 +363,15 @@ fun PropertiesSection(
     actions: @Composable RowScope.() -> Unit = { },
     content: @Composable ColumnScope.() -> Unit
 ) {
-    var hovered by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val hovered by interactionSource.collectIsHoveredAsState()
     val alphaAnim by animateFloatAsState(if (hovered || !empty) 1f else ContentAlpha.disabled)
 
     Column {
         name?.let {
             Row(
                 Modifier
-                    .pointerMoveFilter(
-                        onEnter = {
-                            hovered = true
-                            false
-                        },
-                        onExit = {
-                            hovered = false
-                            false
-                        }
-                    )
+                    .hoverable(interactionSource)
                     .fillMaxWidth()
                     .padding(top = 8.dp, start = 16.dp, end = 16.dp)
                     .alpha(alphaAnim),

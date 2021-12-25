@@ -1,18 +1,21 @@
 package com.c5inco.modifiers.ui
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,19 +35,11 @@ fun CodeView(
     childModifiersList: List<List<Pair<Any, Boolean>>>,
     childScopeModifiersList: List<List<Pair<Any, Boolean>>>
 ) {
-    var editorHovered by remember { mutableStateOf( false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val editorHovered by interactionSource.collectIsHoveredAsState()
 
     SelectionContainer(modifier
-        .pointerMoveFilter(
-            onEnter = {
-                editorHovered = true
-                false
-            },
-            onExit = {
-                editorHovered = false
-                false
-            }
-        )
+        .hoverable(interactionSource)
     ) {
         Box {
             var code = ""
