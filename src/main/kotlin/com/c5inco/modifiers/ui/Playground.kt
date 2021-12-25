@@ -47,9 +47,11 @@ fun Playground(
             modifier = Modifier.weight(1f),
             color = MaterialTheme.colors.background
         ) {
-            Column {
+            Column(
+                Modifier.fillMaxSize()
+            ) {
                 PreviewCanvas(
-                    Modifier.weight(2f).fillMaxSize(),
+                    Modifier.weight(2f),
                     parentElement,
                     childElements,
                     childScopeModifiersList,
@@ -62,9 +64,7 @@ fun Playground(
                 if (showCode) {
                     Divider(color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
                     CodeView(
-                        Modifier
-                            .weight(1f)
-                            .fillMaxSize(),
+                        Modifier.weight(1f),
                         parentElement,
                         elementModifiersList,
                         childElements,
@@ -82,6 +82,7 @@ fun Playground(
             Modifier
                 .hoverable(interactionSource)
                 .width(350.dp)
+                .fillMaxHeight()
                 .shadow(4.dp),
             elevation = 2.dp
         ) {
