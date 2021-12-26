@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
+@file:OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class)
 
 package com.c5inco.modifiers.ui.controls
 
@@ -187,7 +187,7 @@ fun ShapeInput(
 }
 
 @Composable
-fun PaddingInput(
+fun RowScope.PaddingInput(
     typeValue: AvailablePadding,
     cornerValues: CornerValues,
     onValueChange: (type: AvailablePadding, corners: CornerValues) -> Unit,
@@ -201,114 +201,112 @@ fun PaddingInput(
     val interactionSource = remember { MutableInteractionSource() }
     val hovered by interactionSource.collectIsHoveredAsState()
 
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        Row(
-            modifier = Modifier
-                .hoverable(interactionSource)
-                .border(
-                    width = 1.dp,
-                    color = if (hovered) LocalContentColor.current.copy(alpha = ContentAlpha.disabled) else Color.Transparent,
-                    shape = RoundedCornerShape(4.dp)
-                ),
-        ) {
-            for (pair in shapesList) {
-                var mod: Modifier = Modifier
-                val active = typeValue == pair.second
-                if (active) mod =
-                    mod.background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp))
+    Row(
+        modifier = Modifier
+            .hoverable(interactionSource)
+            .border(
+                width = 1.dp,
+                color = if (hovered) LocalContentColor.current.copy(alpha = ContentAlpha.disabled) else Color.Transparent,
+                shape = RoundedCornerShape(4.dp)
+            ),
+    ) {
+        for (pair in shapesList) {
+            var mod: Modifier = Modifier
+            val active = typeValue == pair.second
+            if (active) mod =
+                mod.background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp))
 
-                SmallIconButton(
-                    modifier = mod,
-                    onClick = { onValueChange(pair.second, cornerValues) }
-                ) {
-                    Icon(
-                        imageVector = pair.first,
-                        contentDescription = "${pair.first} icon",
-                        modifier = Modifier.size(18.dp),
-                        tint = if (active) contentColorFor(MaterialTheme.colors.secondary) else LocalContentColor.current
-                    )
-                }
+            SmallIconButton(
+                modifier = mod,
+                onClick = { onValueChange(pair.second, cornerValues) }
+            ) {
+                Icon(
+                    imageVector = pair.first,
+                    contentDescription = "${pair.first} icon",
+                    modifier = Modifier.size(18.dp),
+                    tint = if (active) contentColorFor(MaterialTheme.colors.secondary) else LocalContentColor.current
+                )
             }
         }
+    }
 
-        Row(
-            modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            when (typeValue) {
-                AvailablePadding.All -> {
-                    DpInput(
-                        cornerValues.top,
-                        label = {
-                            Text(
-                                "all",
-                                style = MaterialTheme.typography.body2,
-                                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-                            )
-                        },
-                        onValueChange = {
-                            onValueChange(typeValue, CornerValues(it))
-                        }
-                    )
-                }
-                AvailablePadding.Sides -> {
-                    DpInput(
-                        cornerValues.start,
-                        label = {
-                            Text(
-                                "H",
-                                style = MaterialTheme.typography.body2,
-                                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-                            )
-                        },
-                        onValueChange = {
-                            onValueChange(typeValue, CornerValues(horizontal = it, vertical = cornerValues.top))
-                        }
-                    )
-                    DpInput(
-                        cornerValues.top,
-                        label = {
-                            Text(
-                                "V",
-                                style = MaterialTheme.typography.body2,
-                                color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-                            )
-                        },
-                        onValueChange = {
-                            onValueChange(typeValue, CornerValues(horizontal = cornerValues.start, vertical = it))
-                        }
-                    )
-                }
-                AvailablePadding.Individual -> {
-                    DpInput(
-                        cornerValues.start,
-                        modifier = Modifier.weight(1f),
-                        onValueChange = {
-                            onValueChange(typeValue, cornerValues.copy(start = it))
-                        }
-                    )
-                    DpInput(
-                        cornerValues.top,
-                        modifier = Modifier.weight(1f),
-                        onValueChange = {
-                            onValueChange(typeValue, cornerValues.copy(top = it))
-                        }
-                    )
-                    DpInput(
-                        cornerValues.end,
-                        modifier = Modifier.weight(1f),
-                        onValueChange = {
-                            onValueChange(typeValue, cornerValues.copy(end = it))
-                        }
-                    )
-                    DpInput(
-                        cornerValues.bottom,
-                        modifier = Modifier.weight(1f),
-                        onValueChange = {
-                            onValueChange(typeValue, cornerValues.copy(bottom = it))
-                        }
-                    )
-                }
+    Row(
+        modifier = Modifier.weight(1f),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        when (typeValue) {
+            AvailablePadding.All -> {
+                DpInput(
+                    cornerValues.top,
+                    label = {
+                        Text(
+                            "all",
+                            style = MaterialTheme.typography.body2,
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+                        )
+                    },
+                    onValueChange = {
+                        onValueChange(typeValue, CornerValues(it))
+                    }
+                )
+            }
+            AvailablePadding.Sides -> {
+                DpInput(
+                    cornerValues.start,
+                    label = {
+                        Text(
+                            "H",
+                            style = MaterialTheme.typography.body2,
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+                        )
+                    },
+                    onValueChange = {
+                        onValueChange(typeValue, CornerValues(horizontal = it, vertical = cornerValues.top))
+                    }
+                )
+                DpInput(
+                    cornerValues.top,
+                    label = {
+                        Text(
+                            "V",
+                            style = MaterialTheme.typography.body2,
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
+                        )
+                    },
+                    onValueChange = {
+                        onValueChange(typeValue, CornerValues(horizontal = cornerValues.start, vertical = it))
+                    }
+                )
+            }
+            AvailablePadding.Individual -> {
+                DpInput(
+                    cornerValues.start,
+                    modifier = Modifier.weight(1f),
+                    onValueChange = {
+                        onValueChange(typeValue, cornerValues.copy(start = it))
+                    }
+                )
+                DpInput(
+                    cornerValues.top,
+                    modifier = Modifier.weight(1f),
+                    onValueChange = {
+                        onValueChange(typeValue, cornerValues.copy(top = it))
+                    }
+                )
+                DpInput(
+                    cornerValues.end,
+                    modifier = Modifier.weight(1f),
+                    onValueChange = {
+                        onValueChange(typeValue, cornerValues.copy(end = it))
+                    }
+                )
+                DpInput(
+                    cornerValues.bottom,
+                    modifier = Modifier.weight(1f),
+                    onValueChange = {
+                        onValueChange(typeValue, cornerValues.copy(bottom = it))
+                    }
+                )
             }
         }
     }
