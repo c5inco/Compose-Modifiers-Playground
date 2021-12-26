@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
@@ -87,12 +88,14 @@ fun CodeView(
 
             code += "}"
 
-            Text(
-                formatCode(code),
-                fontSize = 14.sp,
-                fontFamily = Fonts.jetbrainsMono(),
-                modifier = Modifier.padding(16.dp)
-            )
+            SelectionContainer {
+                Text(
+                    formatCode(code),
+                    fontSize = 14.sp,
+                    fontFamily = Fonts.jetbrainsMono(),
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
 
         if (editorHovered) {
