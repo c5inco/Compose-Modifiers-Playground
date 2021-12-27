@@ -466,7 +466,9 @@ fun FloatInput(
             it.toFloatOrNull()
         },
         onValueChange = {
-            onValueChange(it ?: value)
+            if (it != value) {
+                onValueChange(it ?: value)
+            }
         }
     )
 }
