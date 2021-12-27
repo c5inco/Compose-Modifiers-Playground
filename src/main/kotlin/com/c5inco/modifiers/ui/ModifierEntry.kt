@@ -36,12 +36,16 @@ fun ModifierEntry(
     order: Int,
     size: Int,
     move: (index: Int, up: Boolean) -> Unit,
-    onModifierChange: (Int, Pair<Any, Boolean>) -> Unit,
+    onChange: (Int, Pair<Any, Boolean>) -> Unit,
     onRemove: (Int) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val rowHovered by interactionSource.collectIsHoveredAsState()
     val visible = modifierData.second
+
+    fun modifierChange(data: Any) {
+        onChange(order, Pair(data, visible))
+    }
 
     Box(
         modifier = Modifier
@@ -87,10 +91,6 @@ fun ModifierEntry(
                 .weight(1f)
                 .padding(end = 16.dp)
             ) {
-                fun modifierChange(data: Any) {
-                    onModifierChange(order, Pair(data, visible))
-                }
-
                 when (modifierData.first) {
                     is AlphaModifierData -> {
                         val (alpha) = modifierData.first as AlphaModifierData
@@ -287,7 +287,7 @@ fun ModifierEntry(
             }
             Row {
                 SmallIconButton(onClick = {
-                    onModifierChange(order, Pair(modifierData.first, !visible))
+                    onChange(order, Pair(modifierData.first, !visible))
                 }) {
                     Icon(
                         imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
