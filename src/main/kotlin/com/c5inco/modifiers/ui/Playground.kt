@@ -244,7 +244,7 @@ fun ParentGroup(
                         }
                         onChange(baseElement, modifiers.toList())
                     },
-                    onModifierChange = { order, data ->
+                    onChange = { order, data ->
                         modifiers.set(order, data)
                         onChange(baseElement, modifiers.toList())
                     },
@@ -342,7 +342,7 @@ fun ChildGroup(
                         }
                         onChange(scopeModifiers.toList(), modifiers.toList())
                     },
-                    onModifierChange = { order, data ->
+                    onChange = { order, data ->
                         modifiers.set(order, data)
                         onChange(scopeModifiers.toList(), modifiers.toList())
                     },
