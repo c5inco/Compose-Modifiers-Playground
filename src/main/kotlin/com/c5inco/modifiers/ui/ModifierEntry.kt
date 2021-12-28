@@ -1,6 +1,7 @@
 package com.c5inco.modifiers.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
@@ -24,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
@@ -59,14 +62,20 @@ fun ModifierEntry(
                 modifier = Modifier
                     .offset(x = (-18).dp)
             ) {
+                val upRequester = remember { FocusRequester() }
+                val downRequester = remember { FocusRequester() }
+
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowUp,
                     contentDescription = "Move modifier up",
                     tint = LocalContentColor.current.copy(alpha = if (order != 0) 1f else ContentAlpha.disabled),
                     modifier = Modifier
                         .size(18.dp)
+                        .focusRequester(upRequester)
+                        .focusable()
                         .clickable(enabled = order != 0) {
                             move(order, true)
+                            upRequester.requestFocus()
                         })
                 Spacer(Modifier.width(4.dp))
                 Icon(
@@ -75,8 +84,11 @@ fun ModifierEntry(
                     tint = LocalContentColor.current.copy(alpha = if (order < size - 1) 1f else ContentAlpha.disabled),
                     modifier = Modifier
                         .size(18.dp)
+                        .focusRequester(downRequester)
+                        .focusable()
                         .clickable(enabled = order < size - 1) {
                             move(order, false)
+                            downRequester.requestFocus()
                         }
                 )
             }
@@ -286,9 +298,16 @@ fun ModifierEntry(
                 }
             }
             Row {
-                SmallIconButton(onClick = {
-                    onChange(order, Pair(modifierData.first, !visible))
-                }) {
+                val focusRequester = remember { FocusRequester() }
+                SmallIconButton(
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .focusable(),
+                    onClick = {
+                        focusRequester.requestFocus()
+                        onChange(order, Pair(modifierData.first, !visible))
+                    }
+                ) {
                     Icon(
                         imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                         contentDescription = "Toggle visibility",
