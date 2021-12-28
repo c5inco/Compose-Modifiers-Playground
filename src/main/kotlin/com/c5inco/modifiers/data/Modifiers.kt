@@ -4,12 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.c5inco.modifiers.ui.*
 
 enum class AvailableShapes {
     Circle,
@@ -17,6 +21,15 @@ enum class AvailableShapes {
     CutCorner,
     Rectangle
 }
+
+fun getShape(shape: AvailableShapes, corner: Int): Shape = (
+    when (shape) {
+        AvailableShapes.Circle -> CircleShape
+        AvailableShapes.RoundedCorner -> RoundedCornerShape(size = corner.dp)
+        AvailableShapes.CutCorner -> CutCornerShape(size = corner.dp)
+        else -> RectangleShape
+    }
+)
 
 enum class AvailableHorizontalArrangements {
     Start,
@@ -28,20 +41,17 @@ enum class AvailableHorizontalArrangements {
     SpacedBy
 }
 
-fun getHorizontalArrangementObject(arrangement: AvailableHorizontalArrangements, spacing: Int): Arrangement.Horizontal {
-    var ha: Arrangement.Horizontal = Arrangement.Start
-
+fun getHorizontalArrangementObject(arrangement: AvailableHorizontalArrangements, spacing: Int): Arrangement.Horizontal = (
     when (arrangement) {
-        AvailableHorizontalArrangements.End -> ha = Arrangement.End
-        AvailableHorizontalArrangements.Center -> ha = Arrangement.Center
-        AvailableHorizontalArrangements.SpaceEvenly -> ha = Arrangement.SpaceEvenly
-        AvailableHorizontalArrangements.SpaceAround -> ha = Arrangement.SpaceAround
-        AvailableHorizontalArrangements.SpaceBetween -> ha = Arrangement.SpaceBetween
-        AvailableHorizontalArrangements.SpacedBy -> ha = Arrangement.spacedBy(spacing.dp)
+        AvailableHorizontalArrangements.End -> Arrangement.End
+        AvailableHorizontalArrangements.Center -> Arrangement.Center
+        AvailableHorizontalArrangements.SpaceEvenly -> Arrangement.SpaceEvenly
+        AvailableHorizontalArrangements.SpaceAround -> Arrangement.SpaceAround
+        AvailableHorizontalArrangements.SpaceBetween -> Arrangement.SpaceBetween
+        AvailableHorizontalArrangements.SpacedBy -> Arrangement.spacedBy(spacing.dp)
+        else -> Arrangement.Start
     }
-
-    return ha
-}
+)
 
 enum class AvailableVerticalArrangements {
     Top,
@@ -53,20 +63,17 @@ enum class AvailableVerticalArrangements {
     SpacedBy
 }
 
-fun getVerticalArrangementObject(arrangement: AvailableVerticalArrangements, spacing: Int): Arrangement.Vertical {
-    var va: Arrangement.Vertical = Arrangement.Top
-
+fun getVerticalArrangementObject(arrangement: AvailableVerticalArrangements, spacing: Int): Arrangement.Vertical = (
     when (arrangement) {
-        AvailableVerticalArrangements.Bottom -> va = Arrangement.Bottom
-        AvailableVerticalArrangements.Center -> va = Arrangement.Center
-        AvailableVerticalArrangements.SpaceEvenly -> va = Arrangement.SpaceEvenly
-        AvailableVerticalArrangements.SpaceAround -> va = Arrangement.SpaceAround
-        AvailableVerticalArrangements.SpaceBetween -> va = Arrangement.SpaceBetween
-        AvailableVerticalArrangements.SpacedBy -> va = Arrangement.spacedBy(spacing.dp)
+        AvailableVerticalArrangements.Bottom -> Arrangement.Bottom
+        AvailableVerticalArrangements.Center -> Arrangement.Center
+        AvailableVerticalArrangements.SpaceEvenly -> Arrangement.SpaceEvenly
+        AvailableVerticalArrangements.SpaceAround -> Arrangement.SpaceAround
+        AvailableVerticalArrangements.SpaceBetween -> Arrangement.SpaceBetween
+        AvailableVerticalArrangements.SpacedBy -> Arrangement.spacedBy(spacing.dp)
+        else -> Arrangement.Top
     }
-
-    return va
-}
+)
 
 enum class AvailableHorizontalAlignments {
     Start,
@@ -156,6 +163,55 @@ enum class AvailablePadding {
     All,
     Sides,
     Individual
+}
+
+enum class ModifierChangeEvent {
+    ADD,
+    REMOVE,
+    REORDER,
+    EDIT
+}
+
+data class ModifierEntryData(
+    val order: Int,
+    val data: Pair<Any, Boolean>
+)
+
+enum class ModifierEntry {
+    Alpha,
+    AspectRatio,
+    Background,
+    Border,
+    Clickable,
+    Clip,
+    Height,
+    FillMaxHeight,
+    FillMaxSize,
+    FillMaxWidth,
+    Offset,
+    Padding,
+    Rotate,
+    Shadow,
+    Size,
+    Scale,
+    Width,
+    WrapContentHeight,
+    WrapContentSize,
+    WrapContentWidth,
+}
+
+enum class BoxScopeModifierEntry {
+    Align,
+}
+
+enum class ColumnScopeModifierEntry {
+    Align,
+    Weight,
+}
+
+enum class RowScopeModifierEntry {
+    Align,
+    Weight,
 }
 
 data class AlphaModifierData(
