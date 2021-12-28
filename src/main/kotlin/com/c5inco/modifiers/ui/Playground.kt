@@ -437,7 +437,10 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
 
 @Composable
 private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
-    SmallIconButton(onClick = { onClick() }) {
+    SmallIconButton(
+        requestFocus = false,
+        onClick = { onClick() }
+    ) {
         Icon(
             imageVector = Icons.Outlined.RestartAlt,
             contentDescription = "Reset default modifiers",

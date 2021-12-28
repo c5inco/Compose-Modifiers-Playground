@@ -298,13 +298,8 @@ fun ModifierEntry(
                 }
             }
             Row {
-                val focusRequester = remember { FocusRequester() }
                 SmallIconButton(
-                    modifier = Modifier
-                        .focusRequester(focusRequester)
-                        .focusable(),
                     onClick = {
-                        focusRequester.requestFocus()
                         onChange(order, Pair(modifierData.first, !visible))
                     }
                 ) {
@@ -315,9 +310,10 @@ fun ModifierEntry(
                     )
                 }
                 Spacer(Modifier.width(8.dp))
-                SmallIconButton(onClick = {
-                    onRemove(order)
-                }) {
+                SmallIconButton(
+                    requestFocus = false,
+                    onClick = { onRemove(order) }
+                ) {
                     Icon(
                         imageVector = Icons.Outlined.Remove,
                         contentDescription = "Remove modifier",

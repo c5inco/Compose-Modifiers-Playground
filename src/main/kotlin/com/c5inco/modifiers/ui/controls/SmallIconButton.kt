@@ -1,6 +1,7 @@
 package com.c5inco.modifiers.ui.controls
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -14,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 
@@ -23,14 +26,22 @@ fun SmallIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    requestFocus: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
+            .focusRequester(focusRequester)
+            .focusable()
             .clickable(
-                onClick = onClick,
+                onClick = {
+                    if (requestFocus) focusRequester.requestFocus()
+                    onClick()
+                },
                 enabled = enabled,
                 role = Role.Button,
                 interactionSource = interactionSource,
