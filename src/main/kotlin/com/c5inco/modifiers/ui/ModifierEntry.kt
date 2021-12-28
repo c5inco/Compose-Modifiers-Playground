@@ -6,9 +6,6 @@ import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -20,6 +17,7 @@ import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,27 +25,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import com.c5inco.modifiers.data.*
 import com.c5inco.modifiers.ui.controls.SmallIconButton
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+
+private data class OrderEvent(
+    val current: Int,
+    val target: Int
+)
 
 @Composable
 fun ModifierEntry(
     modifierData: Pair<Any, Boolean>,
     order: Int,
     size: Int,
-    move: (index: Int, up: Boolean) -> Unit,
-    onChange: (Int, Pair<Any, Boolean>) -> Unit,
+    move: (index: Int, targetIndex: Int, newData: Any) -> Unit = { i: Int, i1: Int, any: Any -> },
+    onChange: (ModifierEntryData) -> Unit,
     onRemove: (Int) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val rowHovered by interactionSource.collectIsHoveredAsState()
+    val orderEvent = MutableStateFlow(OrderEvent(order, order))
+    val changeEvent = MutableStateFlow(ModifierEntryData(order, modifierData))
+
+    LaunchedEffect(orderEvent, changeEvent) {
+        orderEvent.combine(changeEvent) { oEvt, cEvt ->
+            if (oEvt.target != cEvt.order) {
+                Pair(ModifierChangeEvent.REORDER, Pair(oEvt, cEvt.data))
+            } else {
+                Pair(ModifierChangeEvent.EDIT, cEvt)
+            }
+        }.collect { (evt, data) ->
+            if (evt == ModifierChangeEvent.REORDER) {
+                val (moveData, newData) = data as Pair<OrderEvent, Pair<Any, Boolean>>
+                move(moveData.current, moveData.target, newData)
+            } else {
+                onChange(data as ModifierEntryData)
+            }
+        }
+    }
+
     val visible = modifierData.second
 
     fun modifierChange(data: Any) {
-        onChange(order, Pair(data, visible))
+        changeEvent.value = ModifierEntryData(order, Pair(data, visible))
     }
 
     Box(
@@ -74,9 +98,10 @@ fun ModifierEntry(
                         .focusRequester(upRequester)
                         .focusable()
                         .clickable(enabled = order != 0) {
-                            move(order, true)
                             upRequester.requestFocus()
-                        })
+                            orderEvent.value = OrderEvent(order, order - 1)
+                        }
+                )
                 Spacer(Modifier.width(4.dp))
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
@@ -87,8 +112,8 @@ fun ModifierEntry(
                         .focusRequester(downRequester)
                         .focusable()
                         .clickable(enabled = order < size - 1) {
-                            move(order, false)
                             downRequester.requestFocus()
+                            orderEvent.value = OrderEvent(order, order + 1)
                         }
                 )
             }
@@ -295,12 +320,48 @@ fun ModifierEntry(
                             }
                         )
                     }
+                    is WeightModifierData -> {
+                        val (weight) = modifierData.first as WeightModifierData
+                        WeightModifier(
+                            weightValue = weight,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is AlignBoxModifierData -> {
+                        val (alignment) = modifierData.first as AlignBoxModifierData
+                        AlignBoxModifier(
+                            alignmentValue = alignment,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is AlignColumnModifierData -> {
+                        val (alignment) = modifierData.first as AlignColumnModifierData
+                        AlignColumnModifier(
+                            alignmentValue = alignment,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
+                    is AlignRowModifierData -> {
+                        val (alignment) = modifierData.first as AlignRowModifierData
+                        AlignRowModifier(
+                            alignmentValue = alignment,
+                            onChange = {
+                                modifierChange(it.copy())
+                            }
+                        )
+                    }
                 }
             }
             Row {
                 SmallIconButton(
                     onClick = {
-                        onChange(order, Pair(modifierData.first, !visible))
+                        changeEvent.value = ModifierEntryData(order, Pair(modifierData.first, !visible))
                     }
                 ) {
                     Icon(
@@ -325,144 +386,3 @@ fun ModifierEntry(
     }
     if (order != size - 1) Divider(Modifier.padding(horizontal = 16.dp))
 }
-
-@Composable
-fun RowColumnScopeModifierEntry(
-    modifierData: Pair<Any, Boolean>,
-    order: Int,
-    size: Int,
-    onModifierChange: (Int, Pair<Any, Boolean>) -> Unit,
-    onRemove: (Int) -> Unit,
-) {
-    val visible = modifierData.second
-
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Box(Modifier
-                .alpha(if (visible) 1f else 0.4f)
-                .weight(1f)
-                .padding(end = 16.dp)
-            ) {
-                fun modifierChange(data: Any) {
-                    onModifierChange(order, Pair(data, visible))
-                }
-
-                val data = modifierData.first
-                when (data) {
-                    is WeightModifierData -> {
-                        val (weight) = data
-                        WeightModifier(
-                            weightValue = weight,
-                            onChange = {
-                                modifierChange(it.copy())
-                            }
-                        )
-                    }
-                    is AlignBoxModifierData -> {
-                        val (alignment) = data
-                        AlignBoxModifier(
-                            alignmentValue = alignment,
-                            onChange = {
-                                modifierChange(it.copy())
-                            }
-                        )
-                    }
-                    is AlignColumnModifierData -> {
-                        val (alignment) = data
-                        AlignColumnModifier(
-                            alignmentValue = alignment,
-                            onChange = {
-                                modifierChange(it.copy())
-                            }
-                        )
-                    }
-                    is AlignRowModifierData -> {
-                        val (alignment) = data
-                        AlignRowModifier(
-                            alignmentValue = alignment,
-                            onChange = {
-                                modifierChange(it.copy())
-                            }
-                        )
-                    }
-                }
-            }
-            Row {
-                SmallIconButton(onClick = {
-                    onModifierChange(order, Pair(modifierData.first, !visible))
-                }) {
-                    Icon(
-                        imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
-                        contentDescription = "Toggle visibility",
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-                Spacer(Modifier.width(8.dp))
-                SmallIconButton(onClick = {
-                    onRemove(order)
-                }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Remove,
-                        contentDescription = "Remove modifier",
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-            }
-        }
-    }
-    if (order != size - 1) Divider(Modifier.padding(horizontal = 16.dp))
-}
-
-enum class ModifierEntry {
-    Alpha,
-    AspectRatio,
-    Background,
-    Border,
-    Clickable,
-    Clip,
-    Height,
-    FillMaxHeight,
-    FillMaxSize,
-    FillMaxWidth,
-    Offset,
-    Padding,
-    Rotate,
-    Shadow,
-    Size,
-    Scale,
-    Width,
-    WrapContentHeight,
-    WrapContentSize,
-    WrapContentWidth,
-}
-
-enum class BoxScopeModifierEntry {
-    Align,
-}
-
-enum class ColumnScopeModifierEntry {
-    Align,
-    Weight,
-}
-
-enum class RowScopeModifierEntry {
-    Align,
-    Weight,
-}
-
-fun getShape(shape: AvailableShapes, corner: Int): Shape = (
-    when (shape) {
-        AvailableShapes.Circle -> CircleShape
-        AvailableShapes.RoundedCorner -> RoundedCornerShape(size = corner.dp)
-        AvailableShapes.CutCorner -> CutCornerShape(size = corner.dp)
-        else -> RectangleShape
-    }
-)
