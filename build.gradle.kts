@@ -4,7 +4,7 @@ import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.jetbrains.intellij") version "0.6.5"
+    id("org.jetbrains.intellij") version "1.3.0"
     kotlin("jvm") version "1.5.31"
     id("org.jetbrains.compose") version "1.0.0"
 }
@@ -46,16 +46,16 @@ compose.desktop {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = "2021.1.3"
-    type = "IC"
+    version.set("2021.1.3")
+    type.set("IC")
 }
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
-    changeNotes("""
+    changeNotes.set("""
       - Upgrade Compose Desktop library to 1.0.0!
       - Bug fix with tracking focus and moving items up/down
       - Visual tweaks for new updates to 1.0.0 Material componentry
     """)
-    sinceBuild("201.*")
-    untilBuild("213.*")
+    sinceBuild.set("201.*")
+    untilBuild.set("213.*")
 }
