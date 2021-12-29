@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -16,7 +16,6 @@ fun ElementRow(
     model: ElementModel,
     onValueChange: (ElementModel) -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
     val element = model.type
     val elementData: Any = model.data
 
@@ -30,12 +29,10 @@ fun ElementRow(
                 items = AvailableElements.values().toList(),
                 activeItem = element,
                 onSelect = {
-                    //expanded = false
-                    var newElementData: Any = BoxElementData()
-
-                    when (it) {
-                        AvailableElements.Column -> newElementData = ColumnElementData()
-                        AvailableElements.Row -> newElementData = RowElementData()
+                    val newElementData: Any = when (it) {
+                        AvailableElements.Column -> ColumnElementData()
+                        AvailableElements.Row -> RowElementData()
+                        else -> BoxElementData()
                     }
 
                     onValueChange(ElementModel(it, newElementData))

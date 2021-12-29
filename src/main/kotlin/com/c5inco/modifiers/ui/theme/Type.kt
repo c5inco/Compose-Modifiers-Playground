@@ -19,7 +19,12 @@ import com.c5inco.modifiers.ui.theme.EditorColors.stringColor
 import com.c5inco.modifiers.ui.theme.EditorColors.valueColor
 
 @Composable
-fun Font(name: String, res: String, weight: FontWeight, style: FontStyle): Font =
+fun Font(
+    name: String,
+    res: String,
+    weight: FontWeight,
+    style: FontStyle,
+): Font =
     androidx.compose.ui.text.platform.Font("font/$res.ttf", weight, style)
 
 object Fonts {

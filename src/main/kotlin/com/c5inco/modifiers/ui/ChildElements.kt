@@ -28,15 +28,10 @@ fun TextChildElement(
     alpha: AvailableContentAlphas,
     modifier: Modifier
 ) {
-    var ca = ContentAlpha.high
-
-    when (alpha) {
-        AvailableContentAlphas.Medium -> {
-            ca = ContentAlpha.medium
-        }
-        AvailableContentAlphas.Disabled -> {
-            ca = ContentAlpha.disabled
-        }
+    val ca = when (alpha) {
+        AvailableContentAlphas.Medium -> ContentAlpha.medium
+        AvailableContentAlphas.Disabled -> ContentAlpha.disabled
+        else -> ContentAlpha.high
     }
 
     Text(

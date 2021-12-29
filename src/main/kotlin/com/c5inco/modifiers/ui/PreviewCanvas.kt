@@ -46,13 +46,13 @@ fun PreviewCanvas(
                 ) {
                     childElements.forEachIndexed { idx, childData ->
                         var sm: Modifier = Modifier
-                        var scopeModifiers = childScopeModifiersList.getOrNull(idx)
-                        var childModifiers = childModifiersList.getOrNull(idx)
+                        val scopeModifiers = childScopeModifiersList.getOrNull(idx)
+                        val childModifiers = childModifiersList.getOrNull(idx)
 
                         scopeModifiers?.forEach {
-                            val (data, visible) = it
+                            val (modifierData, visible) = it
                             if (visible) {
-                                sm = sm.then(applyBoxModifiers(data))
+                                sm = sm.then(applyBoxModifiers(modifierData))
                             }
                         }
 
@@ -72,13 +72,13 @@ fun PreviewCanvas(
                 ) {
                     childElements.forEachIndexed { idx, childData ->
                         var sm: Modifier = Modifier
-                        var scopeModifiers = childScopeModifiersList.getOrNull(idx)
-                        var childModifiers = childModifiersList.getOrNull(idx)
+                        val scopeModifiers = childScopeModifiersList.getOrNull(idx)
+                        val childModifiers = childModifiersList.getOrNull(idx)
 
                         scopeModifiers?.forEach {
-                            val (data, visible) = it
+                            val (modifierData, visible) = it
                             if (visible) {
-                                sm = sm.then(applyColumnModifiers(data))
+                                sm = sm.then(applyColumnModifiers(modifierData))
                             }
                         }
 
@@ -98,13 +98,13 @@ fun PreviewCanvas(
                 ) {
                     childElements.forEachIndexed { idx, childData ->
                         var sm: Modifier = Modifier
-                        var scopeModifiers = childScopeModifiersList.getOrNull(idx)
-                        var childModifiers = childModifiersList.getOrNull(idx)
+                        val scopeModifiers = childScopeModifiersList.getOrNull(idx)
+                        val childModifiers = childModifiersList.getOrNull(idx)
 
                         scopeModifiers?.forEach {
-                            val (data, visible) = it
+                            val (modifierData, visible) = it
                             if (visible) {
-                                sm = sm.then(applyRowModifiers(data))
+                                sm = sm.then(applyRowModifiers(modifierData))
                             }
                         }
 

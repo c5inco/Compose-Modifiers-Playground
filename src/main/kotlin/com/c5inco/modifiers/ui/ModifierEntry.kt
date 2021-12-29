@@ -42,7 +42,7 @@ fun ModifierEntry(
     modifierData: Pair<Any, Boolean>,
     order: Int,
     size: Int,
-    move: (index: Int, targetIndex: Int, newData: Any) -> Unit = { i: Int, i1: Int, any: Any -> },
+    move: (index: Int, targetIndex: Int, newData: Any) -> Unit,
     onChange: (ModifierEntryData) -> Unit,
     onRemove: (Int) -> Unit,
 ) {
