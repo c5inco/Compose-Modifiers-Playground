@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.LineWeight
 import androidx.compose.material.icons.outlined.RotateLeft
 import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -231,13 +232,12 @@ fun ClickableModifier(
     onChange: (ClickableModifierData) -> Unit,
 ) {
     ModifierRow(label = "clickable") {
-        Checkbox(
+        CheckboxInput(
             checked = enabledValue,
             onCheckedChange = {
                 onChange(ClickableModifierData(it))
             }
         )
-        Text("Enabled", style = MaterialTheme.typography.body2)
     }
 }
 
@@ -358,13 +358,13 @@ fun WrapContentHeightModifier(
     onChange: (WrapContentHeightModifierData) -> Unit,
 ) {
     ModifierRow(label = "wrapContentHeight") {
-        Checkbox(
+        CheckboxInput(
+            label = "Unbounded",
             checked = unboundedValue,
             onCheckedChange = {
                 onChange(WrapContentHeightModifierData(it))
             }
         )
-        Text("Unbounded", style = MaterialTheme.typography.body2)
     }
 }
 
@@ -374,13 +374,13 @@ fun WrapContentWidthModifier(
     onChange: (WrapContentWidthModifierData) -> Unit,
 ) {
     ModifierRow(label = "wrapContentWidth") {
-        Checkbox(
+        CheckboxInput(
+            label = "Unbounded",
             checked = unboundedValue,
             onCheckedChange = {
                 onChange(WrapContentWidthModifierData(it))
             }
         )
-        Text("Unbounded", style = MaterialTheme.typography.body2)
     }
 }
 
@@ -390,13 +390,13 @@ fun WrapContentSizeModifier(
     onChange: (WrapContentSizeModifierData) -> Unit,
 ) {
     ModifierRow(label = "wrapContentSize") {
-        Checkbox(
+        CheckboxInput(
+            label = "Unbounded",
             checked = unboundedValue,
             onCheckedChange = {
                 onChange(WrapContentSizeModifierData(it))
             }
         )
-        Text("Unbounded", style = MaterialTheme.typography.body2)
     }
 }
 
@@ -480,7 +480,8 @@ private fun ModifierRow(
         ModifierLabel(label)
         Row(
             modifier = modifier,
-            horizontalArrangement = arrangement
+            horizontalArrangement = arrangement,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             content()
         }

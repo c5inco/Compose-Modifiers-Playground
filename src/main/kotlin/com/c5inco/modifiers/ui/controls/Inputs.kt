@@ -599,5 +599,26 @@ fun <T> DropdownInput(
     }
 }
 
+@Composable
+fun CheckboxInput(
+    modifier: Modifier = Modifier,
+    label: String = "Enabled",
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .height(24.dp)
+            .offset(x = (-12).dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange
+        )
+        Text(label, style = MaterialTheme.typography.body2)
+    }
+}
+
 private fun Modifier.cursorForHorizontalResize(isHorizontal: Boolean): Modifier =
     pointerHoverIcon(PointerIcon(Cursor(if (isHorizontal) Cursor.E_RESIZE_CURSOR else Cursor.S_RESIZE_CURSOR)))
