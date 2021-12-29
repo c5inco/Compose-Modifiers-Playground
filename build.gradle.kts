@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.c5inco"
-version = "0.1.10"
+version = "0.1.11"
 
 repositories {
     google()
@@ -39,7 +39,7 @@ compose.desktop {
             }
             targetFormats(TargetFormat.Dmg)
             packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.10"
+            packageVersion = "1.0.11"
         }
     }
 }
@@ -52,7 +52,9 @@ intellij {
 
 tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
-      Bump supported IntelliJ version to 2021.3
+      - Upgrade Compose Desktop library to 1.0.0!
+      - Bug fix with tracking focus and moving items up/down
+      - Visual tweaks for new updates to 1.0.0 Material componentry
     """)
     sinceBuild("201.*")
     untilBuild("213.*")
