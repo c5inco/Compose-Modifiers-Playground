@@ -5,12 +5,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.jetbrains.intellij") version "1.3.0"
-    kotlin("jvm") version "1.5.31"
-    id("org.jetbrains.compose") version "1.0.0"
+    kotlin("jvm") version "1.6.10"
+    id("org.jetbrains.compose") version "1.1.1"
 }
 
 group = "me.c5inco"
-version = "0.1.12"
+version = "0.1.13"
 
 repositories {
     google()
@@ -39,7 +39,7 @@ compose.desktop {
             }
             targetFormats(TargetFormat.Dmg)
             packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.12"
+            packageVersion = "1.0.13"
         }
     }
 }
@@ -55,5 +55,5 @@ tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
       - Bump supported IntelliJ plugin version
     """)
     sinceBuild.set("201.*")
-    untilBuild.set("221.*")
+    untilBuild.set("231.*")
 }
