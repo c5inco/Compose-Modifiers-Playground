@@ -1,15 +1,16 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.intellij.tasks.PatchPluginXmlTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+fun properties(key: String) = providers.gradleProperty(key)
 
 plugins {
-    id("org.jetbrains.intellij") version "1.3.0"
-    kotlin("jvm") version "1.7.20"
-    id("org.jetbrains.compose") version "1.2.2"
+    id("org.jetbrains.intellij") version "1.14.1"
+    id("org.jetbrains.changelog") version "2.1.0"
+    kotlin("jvm") version "1.8.20"
+    id("org.jetbrains.compose") version "1.4.0"
 }
 
-group = "me.c5inco"
-version = "0.1.13"
+group = properties("pluginGroup")
+version = properties("pluginVersion")
 
 repositories {
     google()
@@ -25,10 +26,6 @@ dependencies {
     implementation(compose.materialIconsExtended)
 }
 
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "11"
-}
-
 compose.desktop {
     application {
         mainClass = "com.c5inco.modifiers.MainKt"
@@ -37,22 +34,34 @@ compose.desktop {
                 iconFile.set(project.file("src/main/resources").resolve("META-INF/macosicon.icns"))
             }
             targetFormats(TargetFormat.Dmg)
-            packageName = "com.c5inco.modifiers"
-            packageVersion = "1.0.13"
+            packageName = properties("pluginGroup").get()
+            packageVersion = properties("pluginVersion").get()
         }
     }
 }
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
-intellij {
-    version.set("2021.1.3")
-    type.set("IC")
+kotlin {
+    jvmToolchain(17)
 }
 
-tasks.getByName<PatchPluginXmlTask>("patchPluginXml") {
-    changeNotes.set("""
-      - Bump supported IntelliJ plugin version
-    """)
-    sinceBuild.set("201.*")
-    untilBuild.set("231.*")
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    pluginName = properties("pluginName")
+    version = properties("platformVersion")
+    type = properties("platformType")
+}
+
+tasks {
+    wrapper {
+        gradleVersion = properties("gradleVersion").get()
+    }
+    patchPluginXml {
+        version = properties("pluginVersion")
+        sinceBuild = properties("pluginSinceBuild")
+        untilBuild = properties("pluginUntilBuild")
+
+        changeNotes.set("""
+            Bumped IntelliJ plugin versions (min: 223, max: 233.*), Compose Desktop dependencies to 1.4.0
+        """)
+    }
 }
