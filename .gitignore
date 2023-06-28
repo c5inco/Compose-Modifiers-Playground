@@ -13,7 +13,7 @@
 !/.idea/codeStyles/codeStyleConfig.xml
 
 .DS_Store
-/build
+build/
 /captures
 .externalNativeBuild
 .cxx
