@@ -17,5 +17,6 @@ pluginManagement {
 }
 rootProject.name = "ModifiersPlayground"
 
-include(":desktopApp")
 include(":shared")
+include(":desktopApp")
+include(":jsApp")
