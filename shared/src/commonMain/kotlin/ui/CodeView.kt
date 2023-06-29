@@ -1,17 +1,19 @@
 package ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsHoveredAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.Typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,8 +22,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.*
+import ui.controls.ScrollableColumn
 import ui.theme.EditorColors
-// import ui.theme.Fonts
 import utils.formatCode
 
 @Composable
@@ -33,59 +35,62 @@ fun CodeView(
     childModifiersList: List<List<Pair<Any, Boolean>>>,
     childScopeModifiersList: List<List<Pair<Any, Boolean>>>
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val editorHovered by interactionSource.collectIsHoveredAsState()
+    var code = ""
+    when (elementModel.type) {
+        AvailableElements.Box -> {
+            val data = elementModel.data as BoxElementData
+            code += "Box(\n"
+            code += "\tcontentAlignment = Alignment.${data.contentAlignment},\n"
+        }
+
+        AvailableElements.Column -> {
+            val data = elementModel.data as ColumnElementData
+            code += "Column(\n"
+            code += "\tverticalArrangement = ${
+                generateArrangementString(
+                    data.verticalArrangement,
+                    data.verticalSpacing
+                )
+            },\n"
+            code += "\thorizontalAlignment = Alignment.${data.horizontalAlignment},\n"
+        }
+
+        AvailableElements.Row -> {
+            val data = elementModel.data as RowElementData
+            code += "Row(\n"
+            code += "\thorizontalArrangement = ${
+                generateArrangementString(
+                    data.horizontalArrangement,
+                    data.horizontalSpacing
+                )
+            },\n"
+            code += "\tverticalAlignment = Alignment.${data.verticalAlignment},\n"
+        }
+    }
+
+    code += generateModifiersString(elementModifiers, 1)
+    code += ") {\n"
+
+    childElements.forEachIndexed { idx, child ->
+        code += generateChildElementString(child)
+
+        val allChildModifiers = childScopeModifiersList[idx].toMutableList()
+        allChildModifiers.addAll(childModifiersList[idx].toList())
+
+        code += generateModifiersString(allChildModifiers, indent = 2)
+        code += "\t)\n"
+    }
+
+    code += "}"
 
     Box(
         modifier
             .fillMaxSize()
-            .hoverable(interactionSource)
+            .background(EditorColors.backgroundDark)
     ) {
-        var code = ""
-        val verticalScrollState = rememberScrollState(0)
-
-        Column(
-            Modifier
-                .background(EditorColors.backgroundDark)
-                .fillMaxWidth()
-                .verticalScroll(verticalScrollState)
+        ScrollableColumn(
+            Modifier.fillMaxSize()
         ) {
-            when (elementModel.type) {
-                AvailableElements.Box -> {
-                    val data = elementModel.data as BoxElementData
-                    code += "Box(\n"
-                    code += "\tcontentAlignment = Alignment.${data.contentAlignment},\n"
-                }
-                AvailableElements.Column -> {
-                    val data = elementModel.data as ColumnElementData
-                    code += "Column(\n"
-                    code += "\tverticalArrangement = ${generateArrangementString(data.verticalArrangement, data.verticalSpacing)},\n"
-                    code += "\thorizontalAlignment = Alignment.${data.horizontalAlignment},\n"
-                }
-
-                AvailableElements.Row -> {
-                    val data = elementModel.data as RowElementData
-                    code += "Row(\n"
-                    code += "\thorizontalArrangement = ${generateArrangementString(data.horizontalArrangement, data.horizontalSpacing)},\n"
-                    code += "\tverticalAlignment = Alignment.${data.verticalAlignment},\n"
-                }
-            }
-
-            code += generateModifiersString(elementModifiers, 1)
-            code += ") {\n"
-
-            childElements.forEachIndexed { idx, child ->
-                code += generateChildElementString(child)
-
-                val allChildModifiers = childScopeModifiersList[idx].toMutableList()
-                allChildModifiers.addAll(childModifiersList[idx].toList())
-
-                code += generateModifiersString(allChildModifiers, indent = 2)
-                code += "\t)\n"
-            }
-
-            code += "}"
-
             SelectionContainer {
                 Text(
                     formatCode(code),
@@ -96,24 +101,6 @@ fun CodeView(
             }
         }
 
-        // if (editorHovered) {
-        //     val scrollThumbColor = Color.LightGray
-        //
-        //     // VerticalScrollbar(
-        //     //     modifier = Modifier
-        //     //         .align(Alignment.CenterEnd)
-        //     //         .fillMaxHeight(),
-        //     //     style = ScrollbarStyle(
-        //     //         minimalHeight = 16.dp,
-        //     //         thickness = 8.dp,
-        //     //         shape = MaterialTheme.shapes.small,
-        //     //         hoverDurationMillis = 300,
-        //     //         unhoverColor = scrollThumbColor.copy(alpha = 0.4f),
-        //     //         hoverColor = scrollThumbColor.copy(alpha = 0.6f)
-        //     //     ),
-        //     //     adapter = rememberScrollbarAdapter(verticalScrollState),
-        //     // )
-        // }
         IconButton(
             modifier = Modifier
                 .align(Alignment.TopEnd)

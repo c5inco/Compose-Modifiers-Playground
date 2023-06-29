@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import data.*
 import ui.controls.CompactDropdownItem
 import ui.controls.DropdownInput
+import ui.controls.ScrollableColumn
 import ui.controls.SmallIconButton
 import utils.DottedLine
 
@@ -125,24 +126,75 @@ fun Playground(
                         }
                     }
                 )
-                Box {
-                    val verticalScrollState = rememberScrollState(0)
+                ScrollableColumn {
+                    ParentGroup(
+                        baseElement = parentElement,
+                        modifiersList = elementModifiersList,
+                        onElementChange = { element ->
+                            if (parentElement.type != element.type) {
+                                childScopeModifiersList = childScopeModifiersList.map { listOf() }
+                            }
+                            parentElement = element
+                        },
+                        onModifierChange = { event, data ->
+                            val newList = elementModifiersList.toMutableList()
 
-                    Column(Modifier
-                        .fillMaxSize()
-                        .verticalScroll(verticalScrollState)
-                    ) {
-                        ParentGroup(
-                            baseElement = parentElement,
-                            modifiersList = elementModifiersList,
-                            onElementChange = { element ->
-                                if (parentElement.type != element.type) {
-                                    childScopeModifiersList = childScopeModifiersList.map { listOf() }
+                            if (event == ModifierChangeEvent.ADD) {
+                                newList.add(Pair(getNewModifierData(data as ModifierEntry), true))
+                            }
+                            if (event == ModifierChangeEvent.REMOVE) {
+                                newList.removeAt(data as Int)
+                            }
+                            if (event == ModifierChangeEvent.EDIT) {
+                                val entry = data as ModifierEntryData
+                                newList[entry.order] = entry.data
+                            }
+                            if (event == ModifierChangeEvent.REORDER) {
+                                val (idx, targetIdx, newData) = data as Triple<Int, Int, Pair<Any, Boolean>>
+                                val prev = newList[targetIdx]
+
+                                newList[targetIdx] = newData
+                                newList[idx] = prev
+                            }
+
+                            elementModifiersList = newList.toList()
+                        },
+                    )
+
+                    childElements.forEachIndexed { i, element ->
+                        Divider()
+                        ChildGroup(
+                            name = getChildElementHeader(element),
+                            parentElement = parentElement.type,
+                            scopeModifiersList = childScopeModifiersList[i],
+                            modifiersList = childModifiersList[i],
+                            onScopeModifierChange = { event, data ->
+                                val newList = childScopeModifiersList[i].toMutableList()
+
+                                if (event == ModifierChangeEvent.ADD) {
+                                    newList.add(Pair(getNewScopeModifierData(data), true))
                                 }
-                                parentElement = element
+                                if (event == ModifierChangeEvent.REMOVE) {
+                                    newList.removeAt(data as Int)
+                                }
+                                if (event == ModifierChangeEvent.EDIT) {
+                                    val entry = data as ModifierEntryData
+                                    newList[entry.order] = entry.data
+                                }
+                                if (event == ModifierChangeEvent.REORDER) {
+                                    val (idx, targetIdx, newData) = data as Triple<Int, Int, Pair<Any, Boolean>>
+                                    val prev = newList[targetIdx]
+
+                                    newList[targetIdx] = newData
+                                    newList[idx] = prev
+                                }
+
+                                childScopeModifiersList = childScopeModifiersList.mapIndexed { idx, list ->
+                                    if (idx == i) newList.toList() else list
+                                }
                             },
                             onModifierChange = { event, data ->
-                                val newList = elementModifiersList.toMutableList()
+                                val newList = childModifiersList[i].toMutableList()
 
                                 if (event == ModifierChangeEvent.ADD) {
                                     newList.add(Pair(getNewModifierData(data as ModifierEntry), true))
@@ -162,78 +214,12 @@ fun Playground(
                                     newList[idx] = prev
                                 }
 
-                                elementModifiersList = newList.toList()
-                            },
-                        )
-
-                        childElements.forEachIndexed { i, element ->
-                            Divider()
-                            ChildGroup(
-                                name = getChildElementHeader(element),
-                                parentElement = parentElement.type,
-                                scopeModifiersList = childScopeModifiersList[i],
-                                modifiersList = childModifiersList[i],
-                                onScopeModifierChange = { event, data ->
-                                    val newList = childScopeModifiersList[i].toMutableList()
-
-                                    if (event == ModifierChangeEvent.ADD) {
-                                        newList.add(Pair(getNewScopeModifierData(data), true))
-                                    }
-                                    if (event == ModifierChangeEvent.REMOVE) {
-                                        newList.removeAt(data as Int)
-                                    }
-                                    if (event == ModifierChangeEvent.EDIT) {
-                                        val entry = data as ModifierEntryData
-                                        newList[entry.order] = entry.data
-                                    }
-                                    if (event == ModifierChangeEvent.REORDER) {
-                                        val (idx, targetIdx, newData) = data as Triple<Int, Int, Pair<Any, Boolean>>
-                                        val prev = newList[targetIdx]
-
-                                        newList[targetIdx] = newData
-                                        newList[idx] = prev
-                                    }
-
-                                    childScopeModifiersList = childScopeModifiersList.mapIndexed { idx, list ->
-                                        if (idx == i) newList.toList() else list
-                                    }
-                                },
-                                onModifierChange = { event, data ->
-                                    val newList = childModifiersList[i].toMutableList()
-
-                                    if (event == ModifierChangeEvent.ADD) {
-                                        newList.add(Pair(getNewModifierData(data as ModifierEntry), true))
-                                    }
-                                    if (event == ModifierChangeEvent.REMOVE) {
-                                        newList.removeAt(data as Int)
-                                    }
-                                    if (event == ModifierChangeEvent.EDIT) {
-                                        val entry = data as ModifierEntryData
-                                        newList[entry.order] = entry.data
-                                    }
-                                    if (event == ModifierChangeEvent.REORDER) {
-                                        val (idx, targetIdx, newData) = data as Triple<Int, Int, Pair<Any, Boolean>>
-                                        val prev = newList[targetIdx]
-
-                                        newList[targetIdx] = newData
-                                        newList[idx] = prev
-                                    }
-
-                                    childModifiersList = childModifiersList.mapIndexed { idx, list ->
-                                        if (idx == i) newList.toList() else list
-                                    }
+                                childModifiersList = childModifiersList.mapIndexed { idx, list ->
+                                    if (idx == i) newList.toList() else list
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
-
-                    // if (propertiesHovered) {
-                    //     VerticalScrollbar(
-                    //         modifier = Modifier.align(Alignment.CenterEnd)
-                    //             .fillMaxHeight(),
-                    //         adapter = rememberScrollbarAdapter(verticalScrollState),
-                    //     )
-                    // }
                 }
             }
         }
