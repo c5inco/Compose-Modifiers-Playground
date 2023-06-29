@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import data.*
 import utils.chunk
 import kotlin.math.absoluteValue
+import ui.controls.DropdownMenu as DropdownMenuMp
 
 @Composable
 fun ColorInput(colorValue: Color, onValueChange: (Color) -> Unit) {
@@ -53,38 +54,37 @@ fun ColorInput(colorValue: Color, onValueChange: (Color) -> Unit) {
     val swatchSize = 24
     val horizontalPadding = 6
 
-    Box() {
+    Box {
         ColorSwatch(swatchSize, colorValue, onClick = { expanded = true })
 
-        // TODO: commonMain issue with DropdownMenu
-        // DropdownMenu(
-        //     modifier = Modifier.padding(horizontal = horizontalPadding.dp),
-        //     expanded = expanded,
-        //     offset = DpOffset(x = (-horizontalPadding).dp, 4.dp),
-        //     onDismissRequest = { expanded = false }
-        // ) {
-        //     val chunkSize = 4
-        //     val spacerSize = 4
-        //
-        //     Column(
-        //         Modifier.width((swatchSize * chunkSize + spacerSize * (chunkSize - 1)).dp),
-        //         verticalArrangement = Arrangement.spacedBy(spacerSize.dp)
-        //     ) {
-        //         val chunkedColors = chunk(availableColors, chunkSize)
-        //         chunkedColors.forEach { colors ->
-        //             Row(
-        //                 horizontalArrangement = Arrangement.spacedBy(spacerSize.dp)
-        //             ) {
-        //                 colors.forEach {
-        //                     ColorSwatch(swatchSize, it, onClick = {
-        //                         onValueChange(it)
-        //                         expanded = false
-        //                     })
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        DropdownMenuMp(
+            modifier = Modifier.padding(horizontal = horizontalPadding.dp),
+            expanded = expanded,
+            offset = DpOffset(x = (-horizontalPadding).dp, 4.dp),
+            onDismissRequest = { expanded = false }
+        ) {
+            val chunkSize = 4
+            val spacerSize = 4
+
+            Column(
+                Modifier.width((swatchSize * chunkSize + spacerSize * (chunkSize - 1)).dp),
+                verticalArrangement = Arrangement.spacedBy(spacerSize.dp)
+            ) {
+                val chunkedColors = chunk(availableColors, chunkSize)
+                chunkedColors.forEach { colors ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(spacerSize.dp)
+                    ) {
+                        colors.forEach {
+                            ColorSwatch(swatchSize, it, onClick = {
+                                onValueChange(it)
+                                expanded = false
+                            })
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -586,18 +586,17 @@ fun <T> DropdownInput(
             )
         }
 
-        // TODO: commonMain issue with DropdownMenu
-        // DropdownMenu(
-        //     expanded,
-        //     onDismissRequest = { expanded = false }
-        // ) {
-        //     items.forEach {
-        //         CompactDropdownItem(it, onClick = { item ->
-        //             onSelect(item)
-        //             expanded = false
-        //         })
-        //     }
-        // }
+        DropdownMenuMp(
+            expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            items.forEach {
+                CompactDropdownItem(it, onClick = { item ->
+                    onSelect(item)
+                    expanded = false
+                })
+            }
+        }
     }
 }
 

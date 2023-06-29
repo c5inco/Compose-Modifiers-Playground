@@ -24,11 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import data.*
-import ui.controls.CompactDropdownItem
-import ui.controls.DropdownInput
+import ui.controls.*
 import ui.controls.ScrollableColumn
-import ui.controls.SmallIconButton
 import utils.DottedLine
+import ui.controls.DropdownMenu as DropdownMenuMp
 
 @Composable
 fun Playground(
@@ -494,25 +493,24 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
         val defaultVerticalPadding = 8
         val dropdownHeight = 32
 
-        // TODO: commonMain issue with DropdownMenu
-        // DropdownMenu(
-        //     modifier = Modifier
-        //         .sizeIn(
-        //             minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
-        //             maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
-        //         ),
-        //     expanded = expanded,
-        //     onDismissRequest = { expanded = false }
-        // ) {
-        //     val select: (ModifierEntry) -> Unit = {
-        //         onSelect(it)
-        //         expanded = false
-        //     }
-        //
-        //     ModifierEntry.values().toList().forEach { entry ->
-        //         CompactDropdownItem(entry, onClick = { select(entry) })
-        //     }
-        // }
+        DropdownMenuMp(
+            modifier = Modifier
+                .sizeIn(
+                    minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
+                    maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
+                ),
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            val select: (ModifierEntry) -> Unit = {
+                onSelect(it)
+                expanded = false
+            }
+
+            ModifierEntry.values().toList().forEach { entry ->
+                CompactDropdownItem(entry, onClick = { select(entry) })
+            }
+        }
     }
 }
 
@@ -550,35 +548,35 @@ private fun AddScopeModifiersDropdownMenu(
     val defaultVerticalPadding = 8
     val dropdownHeight = 32
 
-    // DropdownMenu(
-    //     modifier = Modifier
-    //         .sizeIn(
-    //             minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
-    //             maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
-    //         ),
-    //     expanded = expanded,
-    //     onDismissRequest = { onDismiss() }
-    // ) {
-    //     val select: (Any) -> Unit = {
-    //         onSelect(it)
-    //     }
-    //
-    //     when (parentType) {
-    //         AvailableElements.Box -> {
-    //             BoxScopeModifierEntry.values().toList().forEach { entry ->
-    //                 CompactDropdownItem(entry, onClick = { select(entry) })
-    //             }
-    //         }
-    //         AvailableElements.Column -> {
-    //             ColumnScopeModifierEntry.values().toList().forEach { entry ->
-    //                 CompactDropdownItem(entry, onClick = { select(entry) })
-    //             }
-    //         }
-    //         AvailableElements.Row -> {
-    //             RowScopeModifierEntry.values().toList().forEach { entry ->
-    //                 CompactDropdownItem(entry, onClick = { select(entry) })
-    //             }
-    //         }
-    //     }
-    // }
+    DropdownMenuMp(
+        modifier = Modifier
+            .sizeIn(
+                minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
+                maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
+            ),
+        expanded = expanded,
+        onDismissRequest = { onDismiss() }
+    ) {
+        val select: (Any) -> Unit = {
+            onSelect(it)
+        }
+
+        when (parentType) {
+            AvailableElements.Box -> {
+                BoxScopeModifierEntry.values().toList().forEach { entry ->
+                    CompactDropdownItem(entry, onClick = { select(entry) })
+                }
+            }
+            AvailableElements.Column -> {
+                ColumnScopeModifierEntry.values().toList().forEach { entry ->
+                    CompactDropdownItem(entry, onClick = { select(entry) })
+                }
+            }
+            AvailableElements.Row -> {
+                RowScopeModifierEntry.values().toList().forEach { entry ->
+                    CompactDropdownItem(entry, onClick = { select(entry) })
+                }
+            }
+        }
+    }
 }
