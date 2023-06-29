@@ -494,6 +494,7 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
         val defaultVerticalPadding = 8
         val dropdownHeight = 32
 
+        // TODO: commonMain issue with DropdownMenu
         // DropdownMenu(
         //     modifier = Modifier
         //         .sizeIn(

@@ -92,6 +92,7 @@ fun CodeView(
             Modifier.fillMaxSize()
         ) {
             SelectionContainer {
+                // TODO: commonMain issue with custom fonts
                 Text(
                     formatCode(code),
                     fontSize = 14.sp,
@@ -120,6 +121,7 @@ fun CodeView(
 
 
 private fun copyCode(code: String) {
+    // TODO: commonMain issue with clipboard
     // val clipboard = Toolkit.getDefaultToolkit().systemClipboard
     // clipboard.setContents(StringSelection(code), null)
 }

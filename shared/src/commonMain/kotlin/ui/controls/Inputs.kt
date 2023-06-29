@@ -55,6 +55,8 @@ fun ColorInput(colorValue: Color, onValueChange: (Color) -> Unit) {
 
     Box() {
         ColorSwatch(swatchSize, colorValue, onClick = { expanded = true })
+
+        // TODO: commonMain issue with DropdownMenu
         // DropdownMenu(
         //     modifier = Modifier.padding(horizontal = horizontalPadding.dp),
         //     expanded = expanded,
@@ -156,6 +158,7 @@ fun ShapeInput(
                 modifier = mod,
                 onClick = { onValueChange(pair.second, cornerValue) }
             ) {
+                // TODO: commonMain issue with painterResource
                 // Icon(
                 //     painter = painterResource("icons/${pair.first}.svg"),
                 //     contentDescription = "${pair.first} shape button",
@@ -583,6 +586,7 @@ fun <T> DropdownInput(
             )
         }
 
+        // TODO: commonMain issue with DropdownMenu
         // DropdownMenu(
         //     expanded,
         //     onDismissRequest = { expanded = false }
@@ -618,5 +622,6 @@ fun CheckboxInput(
     }
 }
 
+// TODO: commonMain issue with Cursor
 // private fun Modifier.cursorForHorizontalResize(isHorizontal: Boolean): Modifier =
 //     pointerHoverIcon(PointerIcon(Cursor(if (isHorizontal) Cursor.E_RESIZE_CURSOR else Cursor.S_RESIZE_CURSOR)))

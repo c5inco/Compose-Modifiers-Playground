@@ -46,6 +46,7 @@ fun ImageChildElement(
     imageName: String,
     modifier: Modifier
 ) {
+    // TODO: commonMain issue with painterResource
     // Image(
     //     painter = painterResource("images/$imageName"),
     //     contentDescription = "$imageName image",
