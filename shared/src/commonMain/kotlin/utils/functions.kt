@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
@@ -14,8 +15,40 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntSize
 import ui.theme.EditorStyles
 import kotlin.math.roundToInt
+
+data class DpRect(
+    val top: Dp,
+    val left: Dp,
+    val right: Dp,
+    val bottom: Dp,
+)
+
+@Composable
+fun Rect.toDp(): DpRect {
+    return with(LocalDensity.current) {
+        DpRect(top.toDp(), left.toDp(), right.toDp(), bottom.toDp())
+    }
+}
+
+@Composable
+fun Offset.toDp(): DpOffset {
+    return with(LocalDensity.current) {
+        DpOffset(x = x.toDp(), y = y.toDp())
+    }
+}
+
+@Composable
+fun IntSize.toDp(): DpSize {
+    return with(LocalDensity.current) {
+        DpSize(width = width.toDp(), height = height.toDp())
+    }
+}
 
 fun Float.roundToDecimals(decimals: Int): Float {
     var dotAt = 1

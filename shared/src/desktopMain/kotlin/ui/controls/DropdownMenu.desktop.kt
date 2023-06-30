@@ -2,6 +2,7 @@ package ui.controls
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 
@@ -11,6 +12,7 @@ internal actual fun DropdownMenuEx(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier,
+    alignment: Alignment,
     offset: DpOffset,
     properties: PopupProperties,
     content: @Composable ColumnScope.() -> Unit,

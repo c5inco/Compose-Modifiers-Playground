@@ -478,38 +478,37 @@ private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
 }
 
 @Composable
-private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
+private fun AddModifierAction(onSelect: (Any) -> Unit) {
+    DropdownAction(
+        onSelect = { onSelect(it) },
+        onDismiss = { },
+        menuContent = { handleSelect ->
+            val defaultVerticalPadding = 8
+            val dropdownHeight = 32
 
-    Box {
-        SmallIconButton(onClick = { expanded = true }) {
+            Column(
+                modifier = Modifier
+                    .sizeIn(
+                        minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
+                        maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
+                    ),
+            ) {
+                val select: (ModifierEntry) -> Unit = {
+                    handleSelect(it)
+                }
+
+                ModifierEntry.values().toList().forEach { entry ->
+                    CompactDropdownItem(entry, onClick = { select(entry) })
+                }
+            }
+        }
+    ) {
+        SmallIconButton(onClick = it) {
             Icon(
                 imageVector = Icons.Outlined.Add,
                 contentDescription = "Add modifier",
                 modifier = Modifier.size(18.dp)
             )
-        }
-
-        val defaultVerticalPadding = 8
-        val dropdownHeight = 32
-
-        DropdownMenuMp(
-            modifier = Modifier
-                .sizeIn(
-                    minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
-                    maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
-                ),
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            val select: (ModifierEntry) -> Unit = {
-                onSelect(it)
-                expanded = false
-            }
-
-            ModifierEntry.values().toList().forEach { entry ->
-                CompactDropdownItem(entry, onClick = { select(entry) })
-            }
         }
     }
 }

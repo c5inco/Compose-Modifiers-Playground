@@ -3,6 +3,7 @@ package ui.controls
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,12 +15,16 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 
+val DropdownMinWidth = 200.dp
+val DropdownMaxWidth = 400.dp
+
 @Composable
 @Suppress("ModifierParameter")
 internal actual fun DropdownMenuEx(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier,
+    alignment: Alignment,
     offset: DpOffset,
     properties: PopupProperties,
     content: @Composable ColumnScope.() -> Unit,
@@ -31,7 +36,7 @@ internal actual fun DropdownMenuEx(
     // TODO: Implement JS version
     if (expanded) {
         Popup(
-            alignment = Alignment.TopStart,
+            alignment = alignment,
             offset = intOffset,
             onDismissRequest = onDismissRequest,
             focusable = properties.focusable,
@@ -39,6 +44,7 @@ internal actual fun DropdownMenuEx(
             Column(
                 Modifier
                     .shadow(8.dp)
+                    .sizeIn(maxWidth = DropdownMaxWidth)
                     .background(Color.White)
             ) {
                 content()
