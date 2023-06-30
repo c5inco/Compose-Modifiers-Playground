@@ -516,67 +516,50 @@ private fun AddModifierAction(onSelect: (ModifierEntry) -> Unit) {
 
 @Composable
 private fun AddChildModifierAction(parentType: AvailableElements, onSelect: (Any) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
+    DropdownAction(
+        onSelect = { onSelect(it) },
+        onDismiss = { },
+        menuContent = { handleSelect ->
+            val defaultVerticalPadding = 8
+            val dropdownHeight = 32
 
-    Box {
-        SmallIconButton(onClick = { expanded = true }) {
+            Column(
+                modifier = Modifier
+                    .sizeIn(
+                        minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
+                        maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
+                    ),
+            ) {
+                val select: (Any) -> Unit = {
+                    handleSelect(it)
+                }
+
+                when (parentType) {
+                    AvailableElements.Box -> {
+                        BoxScopeModifierEntry.values().toList().forEach { entry ->
+                            CompactDropdownItem(entry, onClick = { select(entry) })
+                        }
+                    }
+                    AvailableElements.Column -> {
+                        ColumnScopeModifierEntry.values().toList().forEach { entry ->
+                            CompactDropdownItem(entry, onClick = { select(entry) })
+                        }
+                    }
+                    AvailableElements.Row -> {
+                        RowScopeModifierEntry.values().toList().forEach { entry ->
+                            CompactDropdownItem(entry, onClick = { select(entry) })
+                        }
+                    }
+                }
+            }
+        }
+    ) {
+        SmallIconButton(onClick = it) {
             Icon(
                 imageVector = Icons.Outlined.Add,
                 contentDescription = "Add child modifier",
                 modifier = Modifier.size(18.dp)
             )
-        }
-
-        AddScopeModifiersDropdownMenu(
-            expanded,
-            parentType,
-            onDismiss = { expanded = false },
-            onSelect = {
-                onSelect(it)
-                expanded = false
-            })
-    }
-}
-
-@Composable
-private fun AddScopeModifiersDropdownMenu(
-    expanded: Boolean,
-    parentType: AvailableElements,
-    onDismiss: () -> Unit,
-    onSelect: (Any) -> Unit
-) {
-    val defaultVerticalPadding = 8
-    val dropdownHeight = 32
-
-    DropdownMenuMp(
-        modifier = Modifier
-            .sizeIn(
-                minHeight = (defaultVerticalPadding * 2 + dropdownHeight).dp,
-                maxHeight = (defaultVerticalPadding * 2 + dropdownHeight * 10.5).dp
-            ),
-        expanded = expanded,
-        onDismissRequest = { onDismiss() }
-    ) {
-        val select: (Any) -> Unit = {
-            onSelect(it)
-        }
-
-        when (parentType) {
-            AvailableElements.Box -> {
-                BoxScopeModifierEntry.values().toList().forEach { entry ->
-                    CompactDropdownItem(entry, onClick = { select(entry) })
-                }
-            }
-            AvailableElements.Column -> {
-                ColumnScopeModifierEntry.values().toList().forEach { entry ->
-                    CompactDropdownItem(entry, onClick = { select(entry) })
-                }
-            }
-            AvailableElements.Row -> {
-                RowScopeModifierEntry.values().toList().forEach { entry ->
-                    CompactDropdownItem(entry, onClick = { select(entry) })
-                }
-            }
         }
     }
 }
