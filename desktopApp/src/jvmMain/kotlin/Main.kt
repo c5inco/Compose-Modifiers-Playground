@@ -20,7 +20,10 @@ fun main() =
         val defaultTemplate = Templates.Sun
         var activeTemplate by remember { mutableStateOf(defaultTemplate) }
 
-        Playground(activeTemplate, onTemplateChange = {
-            activeTemplate = it.copy()
-        })
+        Playground(
+            activeTemplate = activeTemplate,
+            onTemplateChange = {
+                activeTemplate = it.copy()
+            }
+        )
     }

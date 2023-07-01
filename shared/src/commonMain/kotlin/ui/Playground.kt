@@ -31,6 +31,7 @@ import ui.controls.DropdownMenu as DropdownMenuMp
 
 @Composable
 fun Playground(
+    modifier: Modifier = Modifier,
     activeTemplate: Template,
     onTemplateChange: (Template) -> Unit
 ) {
@@ -42,7 +43,7 @@ fun Playground(
 
     var showCode by remember { mutableStateOf(false) }
 
-    Row {
+    Row(modifier = modifier) {
         Surface(
             modifier = Modifier.weight(1f),
             color = MaterialTheme.colors.background
