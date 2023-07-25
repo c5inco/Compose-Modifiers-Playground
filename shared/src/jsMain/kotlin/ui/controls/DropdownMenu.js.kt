@@ -29,22 +29,24 @@ internal actual fun DropdownMenuEx(
     properties: PopupProperties,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val intOffset = with(LocalDensity.current) {
-        IntOffset(x = offset.x.roundToPx(), y = offset.y.roundToPx())
-    }
-
     // TODO: Implement JS version
     if (expanded) {
+        val popupPositionProvider = DesktopDropdownMenuPositionProvider(
+            contentOffset = offset,
+            density = LocalDensity.current
+        ) { parentBounds, menuBounds ->
+            // transformOriginState.value = calculateTransformOrigin(parentBounds, menuBounds)
+        }
+
         Popup(
-            alignment = alignment,
-            offset = intOffset,
+            popupPositionProvider = popupPositionProvider,
             onDismissRequest = onDismissRequest,
             focusable = properties.focusable,
         ) {
             Column(
                 Modifier
                     .shadow(8.dp)
-                    .sizeIn(maxWidth = DropdownMaxWidth)
+                    //.sizeIn(maxWidth = DropdownMaxWidth)
                     .background(Color.White)
             ) {
                 content()
