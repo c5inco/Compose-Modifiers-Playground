@@ -21,19 +21,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun <T> CompactDropdownItem(entry: T, onClick: (T) -> Unit) {
+fun <T> CompactDropdownItem(
+    modifier: Modifier = Modifier,
+    entry: T,
+    onClick: (T) -> Unit,
+) {
     val interactionSource = remember { MutableInteractionSource() }
     val hovered by interactionSource.collectIsHoveredAsState()
 
     Row(
-        Modifier
+        modifier
             .clickable { onClick(entry) }
             .hoverable(interactionSource)
-            .background(if (hovered) LocalContentColor.current.copy(alpha = 0.1f) else Color.Transparent)
             .fillMaxWidth()
-            .padding(MenuDefaults.DropdownMenuItemContentPadding)
-            .height(32.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .height(32.dp)
+            .background(if (hovered) LocalContentColor.current.copy(alpha = 0.1f) else Color.Transparent)
+            .padding(MenuDefaults.DropdownMenuItemContentPadding),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text("$entry")
     }
