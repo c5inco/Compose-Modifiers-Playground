@@ -26,8 +26,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.input.pointer.PointerIcon
-import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import data.*
@@ -427,6 +425,7 @@ fun ContentAlignmentInput(
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun DpInput(
     value: Int,
@@ -474,6 +473,7 @@ fun FloatInput(
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun <T> TextInput(
     modifier: Modifier = Modifier,
@@ -587,14 +587,17 @@ fun <T> DropdownInput(
         }
 
         DropdownMenuMp(
-            expanded,
+            expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
             items.forEach {
-                CompactDropdownItem(it, onClick = { item ->
-                    onSelect(item)
-                    expanded = false
-                })
+                CompactDropdownItem(
+                    entry = it,
+                    onClick = { item ->
+                        onSelect(item)
+                        expanded = false
+                    }
+                )
             }
         }
     }

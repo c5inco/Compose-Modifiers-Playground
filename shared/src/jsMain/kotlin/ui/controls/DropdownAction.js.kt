@@ -1,7 +1,6 @@
 package ui.controls
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 
@@ -33,14 +32,9 @@ actual fun DropdownAction(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            Column {
-                // Text("size: $size")
-                // Text("bounds: ${boundsInWindow.toDp()}")
-                // Text("window: ${windowSize.toDp()}")
-                menuContent {
-                    onSelect(it)
-                    expanded = false
-                }
+            menuContent {
+                onSelect(it)
+                expanded = false
             }
         }
     }
