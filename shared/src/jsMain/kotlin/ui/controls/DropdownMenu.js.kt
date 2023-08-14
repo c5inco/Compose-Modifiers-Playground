@@ -26,7 +26,6 @@ internal actual fun DropdownMenuEx(
     properties: PopupProperties,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    // TODO: Implement JS version
     if (expanded) {
         val popupPositionProvider = DesktopDropdownMenuPositionProvider(
             contentOffset = offset,
