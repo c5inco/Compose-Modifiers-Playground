@@ -10,6 +10,7 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
 import data.Templates
 import ui.Playground
+import ui.theme.PlaygroundTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() =
@@ -20,10 +21,12 @@ fun main() =
         val defaultTemplate = Templates.Sun
         var activeTemplate by remember { mutableStateOf(defaultTemplate) }
 
-        Playground(
-            activeTemplate = activeTemplate,
-            onTemplateChange = {
-                activeTemplate = it.copy()
-            }
-        )
+        PlaygroundTheme {
+            Playground(
+                activeTemplate = activeTemplate,
+                onTemplateChange = {
+                    activeTemplate = it.copy()
+                }
+            )
+        }
     }

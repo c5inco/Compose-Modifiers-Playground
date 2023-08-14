@@ -9,12 +9,16 @@ import org.jetbrains.skia.Data
 import org.jetbrains.skia.Typeface
 import org.jetbrains.skiko.loadBytesFromPath
 
-actual suspend fun editorTypography(): Typography = Typography(
-    defaultFontFamily = loadCustomFonts()
+actual suspend fun appTypography(): Typography = Typography(
+    defaultFontFamily = loadCustomFonts("inter_regular")
 )
 
-suspend fun loadCustomFonts(): FontFamily {
-    val fontBytes = loadBytesFromPath("jetbrainsmono_regular.ttf")
+actual suspend fun editorTypography(): Typography = Typography(
+    defaultFontFamily = loadCustomFonts("jetbrainsmono_regular")
+)
+
+suspend fun loadCustomFonts(fontName: String): FontFamily {
+    val fontBytes = loadBytesFromPath("$fontName.ttf")
     val skTypeface: Typeface = Typeface.makeFromData(Data.makeFromBytes(fontBytes))
     return FontFamily(Typeface(skTypeface))
 }

@@ -7,6 +7,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.platform.Font as PlatformFont
 
+actual suspend fun appTypography(): Typography = Typography()
 actual suspend fun editorTypography(): Typography = Typography(
     defaultFontFamily = jetbrainsMono()
 )

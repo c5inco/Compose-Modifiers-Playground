@@ -7,11 +7,18 @@ import androidx.compose.runtime.*
 
 @Composable
 fun PlaygroundTheme(
-    colors: Colors,
+    colors: Colors = appLightColors,
     content: @Composable () -> Unit
 ) {
+    var typography by remember { mutableStateOf(Typography()) }
+
+    LaunchedEffect(Unit) {
+        typography = appTypography()
+    }
+
     MaterialTheme(
-        colors = colors
+        colors = colors,
+        typography = typography
     ) {
         content()
     }

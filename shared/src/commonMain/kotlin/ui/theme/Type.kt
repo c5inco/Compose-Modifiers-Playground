@@ -15,6 +15,8 @@ import ui.theme.EditorColors.punctuationColor
 import ui.theme.EditorColors.stringColor
 import ui.theme.EditorColors.valueColor
 
+expect suspend fun appTypography(): Typography
+
 expect suspend fun editorTypography(): Typography
 
 object EditorStyles {
