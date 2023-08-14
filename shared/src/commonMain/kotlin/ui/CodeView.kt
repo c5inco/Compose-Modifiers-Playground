@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import data.*
 import ui.controls.ScrollableColumn
 import ui.theme.EditorColors
+import ui.theme.EditorTheme
 import utils.formatCode
 
 @Composable
@@ -92,13 +93,14 @@ fun CodeView(
             Modifier.fillMaxSize()
         ) {
             SelectionContainer {
-                // TODO: commonMain issue with custom fonts
-                Text(
-                    formatCode(code),
-                    fontSize = 14.sp,
-                    //fontFamily = Fonts.jetbrainsMono(),
-                    modifier = Modifier.padding(16.dp)
-                )
+                EditorTheme {
+                    Text(
+                        formatCode(code),
+                        fontSize = 14.sp,
+                        //fontFamily = Fonts.jetbrainsMono(),
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
             }
         }
 
