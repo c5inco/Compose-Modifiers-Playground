@@ -6,6 +6,15 @@ html, body {
     overflow: hidden;
 }
 
+body {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: #F0D8E0;
+}
+
 #root {
     width: 100%;
     height: 100vh;
@@ -13,4 +22,25 @@ html, body {
 
 #root > .compose-web-column > div {
     position: relative;
+}
+
+@keyframes pulseScale {
+  from {
+    transform: scale(1, 1);
+  }
+
+  to {
+    transform: scale(0.8, 0.8);
+  }
+}
+
+img {
+  animation-duration: 0.7s;
+  animation-name: pulseScale;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+canvas {
+  position: absolute;
 }
