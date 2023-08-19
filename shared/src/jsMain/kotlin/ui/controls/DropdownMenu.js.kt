@@ -1,14 +1,11 @@
 package ui.controls
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
@@ -39,13 +36,19 @@ internal actual fun DropdownMenuEx(
             onDismissRequest = onDismissRequest,
             focusable = properties.focusable,
         ) {
-            Column(
-                Modifier
-                    .shadow(8.dp)
-                    .background(Color.White)
-                    .width(IntrinsicSize.Min)
+            Surface(
+                color = Color.White,
+                elevation = 8.dp,
+                shape = RoundedCornerShape(4.dp)
             ) {
-                content()
+                Column(
+                    Modifier
+                        .width(IntrinsicSize.Max)
+                        .padding(vertical = 8.dp)
+                        .then(modifier)
+                ) {
+                    content()
+                }
             }
         }
     }
