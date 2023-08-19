@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class)
+@file:OptIn(ExperimentalComposeUiApi::class)
 
 package ui.controls
 
@@ -29,6 +29,7 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import data.*
+import ui.icons.*
 import utils.chunk
 import kotlin.math.absoluteValue
 import ui.controls.DropdownMenu as DropdownMenuMp
@@ -130,10 +131,10 @@ fun ShapeInput(
     onValueChange: (shape: AvailableShapes, corner: Int) -> Unit,
 ) {
     val shapesList = listOf(
-        Pair("rectangle", AvailableShapes.Rectangle),
-        Pair("circle", AvailableShapes.Circle),
-        Pair("rounded-corner", AvailableShapes.RoundedCorner),
-        Pair("cut-corner", AvailableShapes.CutCorner),
+        Triple("Rectangle", AvailableShapes.Rectangle, AppIcons.Rectangle),
+        Triple("Circle", AvailableShapes.Circle, AppIcons.Circle),
+        Triple("RoundedCorner", AvailableShapes.RoundedCorner, AppIcons.RoundedCorner),
+        Triple("CutCorner", AvailableShapes.CutCorner, AppIcons.CutCorner),
     )
     val interactionSource = remember { MutableInteractionSource() }
     val hovered by interactionSource.collectIsHoveredAsState()
@@ -156,13 +157,12 @@ fun ShapeInput(
                 modifier = mod,
                 onClick = { onValueChange(pair.second, cornerValue) }
             ) {
-                // TODO: commonMain issue with painterResource
-                // Icon(
-                //     painter = painterResource("icons/${pair.first}.svg"),
-                //     contentDescription = "${pair.first} shape button",
-                //     modifier = Modifier.size(18.dp),
-                //     tint = if (active) contentColorFor(MaterialTheme.colors.secondary) else LocalContentColor.current
-                // )
+                Icon(
+                    imageVector = pair.third,
+                    contentDescription = "${pair.first} shape button",
+                    modifier = Modifier.size(18.dp),
+                    tint = if (active) contentColorFor(MaterialTheme.colors.secondary) else LocalContentColor.current
+                )
             }
         }
     }
