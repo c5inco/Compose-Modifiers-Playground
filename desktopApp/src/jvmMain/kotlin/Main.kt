@@ -16,7 +16,7 @@ import ui.theme.PlaygroundTheme
 fun main() =
     singleWindowApplication(
         title = "Compose Modifiers Playground",
-        state = WindowState(size = DpSize(800.dp, 800.dp))
+        state = WindowState(size = DpSize(width = 1024.dp, height = 768.dp))
     ) {
         val defaultTemplate = Templates.Sun
         var activeTemplate by remember { mutableStateOf(defaultTemplate) }
