@@ -92,6 +92,7 @@ fun CodeView(
         ScrollableColumn(
             Modifier.fillMaxSize()
         ) {
+            // TODO: SelectionContainer not supported web
             SelectionContainer {
                 EditorTheme {
                     Text(
