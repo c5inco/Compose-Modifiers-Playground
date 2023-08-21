@@ -1,0 +1,3 @@
+config.optimization = {
+    minimize: false
+}

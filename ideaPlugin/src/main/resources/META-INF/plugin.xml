@@ -1,0 +1,58 @@
+<idea-plugin>
+    <id>com.c5inco.modifiers.plugin</id>
+    <name>Compose Modifiers Playground</name>
+    <vendor email="csinco.design@gmail.com" url="https://csinco.com">Chris Sinco</vendor>
+    <description><![CDATA[
+        Learn how to use Jetpack Compose modifiers through this interactive playground!
+        <ul>
+            <li>Quickly reorder, hide/show, and experiment with modifiers</li>
+            <li>Code is generated as you go, allowing you to copy/paste directly to Android Studio.</li>
+        </ul>
+        <br><br>
+        The playground comes with several templates to start experimenting from. The tool can be found under the <b>Tools menu</b>.
+        <br><br>
+        Available modifiers to use:
+        <ul>
+            <li>align</li>
+            <li>alpha</li>
+            <li>aspectRatio</li>
+            <li>background</li>
+            <li>border</li>
+            <li>clickable</li>
+            <li>clip</li>
+            <li>fillMaxHeight</li>
+            <li>fillMaxSize</li>
+            <li>fillMaxWidth</li>
+            <li>height</li>
+            <li>offset</li>
+            <li>padding</li>
+            <li>rotate</li>
+            <li>scale</li>
+            <li>shadow</li>
+            <li>size</li>
+            <li>weight</li>
+            <li>width</li>
+            <li>wrapContentHeight</li>
+            <li>wrapContentSize</li>
+            <li>wrapContentWidth</li>
+        </ul>
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="com.c5inco.modifiers.plugin.PluginAction"
+                class="com.c5inco.modifiers.plugin.PluginAction"
+                icon="com.c5inco.modifiers.plugin.PluginIcons.PlaygroundAction"
+                text="Compose Modifiers Playground">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
