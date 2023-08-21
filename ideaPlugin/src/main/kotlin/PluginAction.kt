@@ -35,31 +35,20 @@ class PluginAction : DumbAwareAction() {
             return ComposePanel().apply {
                 preferredSize = Dimension(1100, 800)
                 setContent {
-                    ComposeSizeAdjustmentWrapper(
-                        window = dialog,
-                        panel = this,
-                        preferredSize = IntSize(1100, 800)
-                    ) {
-                        PluginTheme {
-                            Thread.currentThread().contextClassLoader = PluginAction::class.java.classLoader
-                            Surface(modifier = Modifier.fillMaxSize()) {
-                                val defaultTemplate = Templates.Sun
+                    PluginTheme {
+                        Thread.currentThread().contextClassLoader = PluginAction::class.java.classLoader
+                        Surface(modifier = Modifier.fillMaxSize()) {
+                            val defaultTemplate = Templates.Sun
 
-                                var activeTemplate by remember { mutableStateOf(defaultTemplate) }
+                            var activeTemplate by remember { mutableStateOf(defaultTemplate) }
 
-                                Playground(activeTemplate = activeTemplate, onTemplateChange = {
-                                    activeTemplate = it.copy()
-                                })
-                            }
+                            Playground(activeTemplate = activeTemplate, onTemplateChange = {
+                                activeTemplate = it.copy()
+                            })
                         }
                     }
                 }
             }
         }
     }
-}
-
-object PluginIcons {
-    @JvmField
-    val PlaygroundAction = IconLoader.getIcon("/icons/menu-icon.svg", javaClass)
 }

@@ -1,9 +1,11 @@
+fun properties(key: String) = providers.gradleProperty(key)
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
 }
 
-version = "1.0-SNAPSHOT"
+version = properties("pluginVersion").get()
 
 kotlin {
     jvm("desktop")

@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.c5inco.modifiers</id>
+    <id>com.c5inco.modifiers.plugin</id>
     <name>Compose Modifiers Playground</name>
     <vendor email="csinco.design@gmail.com" url="https://csinco.com">Chris Sinco</vendor>
     <description><![CDATA[
@@ -50,7 +50,7 @@
         <!-- Add your actions here -->
         <action id="com.c5inco.modifiers.plugin.PluginAction"
                 class="com.c5inco.modifiers.plugin.PluginAction"
-                icon="PluginIcons.PlaygroundAction"
+                icon="com.c5inco.modifiers.plugin.PluginIcons.PlaygroundAction"
                 text="Compose Modifiers Playground">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>

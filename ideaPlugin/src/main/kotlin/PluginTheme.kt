@@ -1,11 +1,11 @@
 package com.c5inco.modifiers.plugin
 
 import androidx.compose.runtime.Composable
-import com.c5inco.modifiers.intellij.SwingColors
-import com.c5inco.modifiers.ui.PlaygroundTheme
-import com.c5inco.modifiers.ui.theme.appDarkColors
-import com.c5inco.modifiers.ui.theme.appLightColors
+import com.c5inco.modifiers.plugin.intellij.SwingColors
 import com.intellij.util.ui.UIUtil
+import ui.theme.PlaygroundTheme
+import ui.theme.appDarkColors
+import ui.theme.appLightColors
 
 @Composable
 fun PluginTheme(
