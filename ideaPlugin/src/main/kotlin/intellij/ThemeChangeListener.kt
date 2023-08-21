@@ -1,4 +1,4 @@
-package com.c5inco.modifiers.intellij
+package com.c5inco.modifiers.plugin.intellij
 
 import com.intellij.ide.ui.LafManager
 import com.intellij.ide.ui.LafManagerListener

@@ -48,8 +48,8 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="com.c5inco.modifiers.PluginAction"
-                class="com.c5inco.modifiers.PluginAction"
+        <action id="com.c5inco.modifiers.plugin.PluginAction"
+                class="com.c5inco.modifiers.plugin.PluginAction"
                 icon="PluginIcons.PlaygroundAction"
                 text="Compose Modifiers Playground">
             <add-to-group group-id="ToolsMenu" anchor="last"/>

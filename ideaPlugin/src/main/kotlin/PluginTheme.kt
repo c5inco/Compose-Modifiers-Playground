@@ -1,3 +1,5 @@
+package com.c5inco.modifiers.plugin
+
 import androidx.compose.runtime.Composable
 import com.c5inco.modifiers.intellij.SwingColors
 import com.c5inco.modifiers.ui.PlaygroundTheme

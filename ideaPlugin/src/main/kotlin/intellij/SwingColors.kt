@@ -1,4 +1,4 @@
-package com.c5inco.modifiers.intellij
+package com.c5inco.modifiers.plugin.intellij
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color

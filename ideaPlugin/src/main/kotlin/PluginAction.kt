@@ -1,3 +1,5 @@
+package com.c5inco.modifiers.plugin
+
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.getValue
@@ -45,7 +47,7 @@ class PluginAction : DumbAwareAction() {
 
                                 var activeTemplate by remember { mutableStateOf(defaultTemplate) }
 
-                                Playground(activeTemplate, onTemplateChange = {
+                                Playground(activeTemplate = activeTemplate, onTemplateChange = {
                                     activeTemplate = it.copy()
                                 })
                             }
