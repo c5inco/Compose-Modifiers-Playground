@@ -93,7 +93,7 @@ fun CodeView(
             Modifier.fillMaxSize()
         ) {
             // TODO: SelectionContainer not supported web
-            SelectionContainer {
+            // SelectionContainer {
                 EditorTheme {
                     Text(
                         formatCode(code),
@@ -102,7 +102,7 @@ fun CodeView(
                         modifier = Modifier.padding(16.dp)
                     )
                 }
-            }
+            // }
         }
 
         IconButton(
