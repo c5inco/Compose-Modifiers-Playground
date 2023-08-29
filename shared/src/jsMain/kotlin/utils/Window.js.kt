@@ -8,6 +8,7 @@ import kotlinx.browser.window
 import org.w3c.dom.Window
 import org.w3c.dom.events.Event
 
+@Composable
 actual fun calculateWindowSize(): DpSize {
     val density = LocalDensity.current
 
