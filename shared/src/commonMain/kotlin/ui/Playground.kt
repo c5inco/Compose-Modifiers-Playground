@@ -39,16 +39,16 @@ fun Playground(
     var showCode by remember { mutableStateOf(false) }
 
     Row(modifier = modifier) {
-        val initialCodeViewHeight by remember(windowSize) {
-            derivedStateOf {
-                with (density) {
-                    (windowSize.height / 3).roundToPx()
-                }
-            }
-        }
+        // val initialCodeViewHeight by remember(windowSize) {
+        //     derivedStateOf {
+        //         with (density) {
+        //             (windowSize.height / 3).roundToPx()
+        //         }
+        //     }
+        // }
 
-        var codeViewHeight by remember(initialCodeViewHeight) {
-            mutableStateOf(initialCodeViewHeight)
+        var codeViewHeight by remember {
+            mutableStateOf(with (density) { 350.dp.roundToPx() })
         }
 
         val dividerInteractionSource = remember { MutableInteractionSource() }
