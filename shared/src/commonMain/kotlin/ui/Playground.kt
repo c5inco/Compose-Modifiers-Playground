@@ -1,11 +1,20 @@
 package ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import data.*
 import ui.panel.PropertiesPanel
 
@@ -24,33 +33,61 @@ fun Playground(
     var showCode by remember { mutableStateOf(false) }
 
     Row(modifier = modifier) {
+        var codeViewHeight by remember { mutableStateOf(300) }
+        val dividerInteractionSource = remember { MutableInteractionSource() }
+        val dividerHovered by dividerInteractionSource.collectIsHoveredAsState()
+
         Surface(
             modifier = Modifier.weight(1f),
             color = MaterialTheme.colors.background
         ) {
-            Column(
-                Modifier.fillMaxSize()
-            ) {
-                PreviewCanvas(
-                    modifier = Modifier.weight(2f),
-                    parentElement = parentElement,
-                    childElements = childElements,
-                    childScopeModifiersList = childScopeModifiersList,
-                    childModifiersList = childModifiersList,
-                    elementModifiersList = elementModifiersList,
-                    showCode = showCode,
-                    onShowCode = { showCode = it }
-                )
-
-                if (showCode) {
-                    Divider(color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
-                    CodeView(
-                        modifier = Modifier.weight(1f),
-                        elementModel = parentElement,
-                        elementModifiers = elementModifiersList,
+            Box {
+                Column(
+                    Modifier.fillMaxSize()
+                ) {
+                    PreviewCanvas(
+                        modifier = Modifier.weight(2f),
+                        parentElement = parentElement,
                         childElements = childElements,
+                        childScopeModifiersList = childScopeModifiersList,
                         childModifiersList = childModifiersList,
-                        childScopeModifiersList = childScopeModifiersList
+                        elementModifiersList = elementModifiersList,
+                        showCode = showCode,
+                        onShowCode = { showCode = it }
+                    )
+
+                    if (showCode) {
+                        Divider(
+                            color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                        )
+                        CodeView(
+                            modifier = Modifier.height(with (LocalDensity.current) { codeViewHeight.toDp() }),
+                            elementModel = parentElement,
+                            elementModifiers = elementModifiersList,
+                            childElements = childElements,
+                            childModifiersList = childModifiersList,
+                            childScopeModifiersList = childScopeModifiersList
+                        )
+                    }
+                }
+                if (showCode) {
+                    val dividerDragHeight = 7
+
+                    Divider(
+                        modifier = Modifier
+                            .height(dividerDragHeight.dp)
+                            .align(Alignment.BottomCenter)
+                            .offset { IntOffset(x = 0, y = -codeViewHeight + (dividerDragHeight / 2).dp.roundToPx()) }
+                            .draggable(
+                                interactionSource = dividerInteractionSource,
+                                orientation = Orientation.Vertical,
+                                state = rememberDraggableState { delta ->
+                                    codeViewHeight -= delta.toInt()
+                                }
+                            )
+                            .hoverable(dividerInteractionSource),
+
+                        color = if (dividerHovered) MaterialTheme.colors.primary else Color.Transparent
                     )
                 }
             }
