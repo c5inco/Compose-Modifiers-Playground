@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import data.*
 import ui.panel.PropertiesPanel
+import utils.calculateWindowSize
 
 @Composable
 fun Playground(
@@ -26,6 +27,9 @@ fun Playground(
     activeTemplate: Template,
     onTemplateChange: (Template) -> Unit
 ) {
+    val density = LocalDensity.current
+    val windowSize = calculateWindowSize()
+
     var parentElement by remember(activeTemplate) { mutableStateOf(activeTemplate.parentElement) }
     var elementModifiersList by remember(activeTemplate) { mutableStateOf(activeTemplate.parentModifiers) }
     val childElements = activeTemplate.childElements
@@ -35,7 +39,18 @@ fun Playground(
     var showCode by remember { mutableStateOf(false) }
 
     Row(modifier = modifier) {
-        var codeViewHeight by remember { mutableStateOf(300) }
+        val initialCodeViewHeight by remember(windowSize) {
+            derivedStateOf {
+                with (density) {
+                    (windowSize.height / 3).roundToPx()
+                }
+            }
+        }
+
+        var codeViewHeight by remember(initialCodeViewHeight) {
+            mutableStateOf(initialCodeViewHeight)
+        }
+
         val dividerInteractionSource = remember { MutableInteractionSource() }
         val dividerHovered by dividerInteractionSource.collectIsHoveredAsState()
 
@@ -63,7 +78,7 @@ fun Playground(
                             color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                         )
                         CodeView(
-                            modifier = Modifier.height(with (LocalDensity.current) { codeViewHeight.toDp() }),
+                            modifier = Modifier.height(with (density) { codeViewHeight.toDp() }),
                             elementModel = parentElement,
                             elementModifiers = elementModifiersList,
                             childElements = childElements,
