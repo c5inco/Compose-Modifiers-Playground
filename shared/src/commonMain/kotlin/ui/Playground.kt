@@ -32,25 +32,25 @@ fun Playground(
                 Modifier.fillMaxSize()
             ) {
                 PreviewCanvas(
-                    Modifier.weight(2f),
-                    parentElement,
-                    childElements,
-                    childScopeModifiersList,
-                    childModifiersList,
-                    elementModifiersList,
-                    showCode,
+                    modifier = Modifier.weight(2f),
+                    parentElement = parentElement,
+                    childElements = childElements,
+                    childScopeModifiersList = childScopeModifiersList,
+                    childModifiersList = childModifiersList,
+                    elementModifiersList = elementModifiersList,
+                    showCode = showCode,
                     onShowCode = { showCode = it }
                 )
 
                 if (showCode) {
                     Divider(color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled))
                     CodeView(
-                        Modifier.weight(1f),
-                        parentElement,
-                        elementModifiersList,
-                        childElements,
-                        childModifiersList,
-                        childScopeModifiersList
+                        modifier = Modifier.weight(1f),
+                        elementModel = parentElement,
+                        elementModifiers = elementModifiersList,
+                        childElements = childElements,
+                        childModifiersList = childModifiersList,
+                        childScopeModifiersList = childScopeModifiersList
                     )
                 }
             }
