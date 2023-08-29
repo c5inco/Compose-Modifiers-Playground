@@ -12,6 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -85,6 +87,7 @@ fun Playground(
                                     codeViewHeight -= delta.toInt()
                                 }
                             )
+                            .pointerHoverIcon(PointerIcon.Hand)
                             .hoverable(dividerInteractionSource),
 
                         color = if (dividerHovered) MaterialTheme.colors.primary else Color.Transparent
