@@ -41,7 +41,6 @@ private fun jetbrainsMono() = FontFamily(
         FontWeight.Bold,
         FontStyle.Italic
     ),
-
     Font(
         "jetbrainsmono_extrabold",
         FontWeight.ExtraBold,
