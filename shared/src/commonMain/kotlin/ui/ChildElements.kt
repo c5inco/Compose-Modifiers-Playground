@@ -10,6 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import data.AvailableContentAlphas
+import ui.icons.AppIcons
+import ui.icons.Placeholder
 
 @Composable
 fun EmojiChildElement(
@@ -46,10 +48,9 @@ fun ImageChildElement(
     imageName: String,
     modifier: Modifier
 ) {
-    // TODO: commonMain issue with painterResource
-    // Image(
-    //     painter = painterResource("images/$imageName"),
-    //     contentDescription = "$imageName image",
-    //     modifier = modifier
-    // )
+    Image(
+        imageVector = AppIcons.Placeholder,
+        contentDescription = "$imageName image",
+        modifier = modifier
+    )
 }

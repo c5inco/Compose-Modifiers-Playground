@@ -12,6 +12,6 @@ val AppIcons.AllAssets: ____KtList<ImageVector>
         if (__AllAssets != null) {
             return __AllAssets!!
         }
-        __AllAssets = listOf(Circle, Rectangle, RoundedCorner, CutCorner)
+        __AllAssets = listOf(Circle, Rectangle, RoundedCorner, CutCorner, Placeholder)
         return __AllAssets!!
     }
