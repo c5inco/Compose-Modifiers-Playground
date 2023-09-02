@@ -148,20 +148,26 @@ private fun emitChildren(
         is TextChildData -> {
             val (text, style, alpha) = data
             TextChildElement(
-                text,
-                style,
-                if (!parentElement.themeAware) Color.Black else LocalContentColor.current,
-                alpha,
-                scopeModifier.then(buildModifiers(modifiers))
+                text = text,
+                style = style,
+                color = if (!parentElement.themeAware) Color.Black else LocalContentColor.current,
+                alpha = alpha,
+                modifier = scopeModifier.then(buildModifiers(modifiers))
             )
         }
         is ImageChildData -> {
             val (imagePath) = data
-            ImageChildElement(imagePath, scopeModifier.then(buildModifiers(modifiers)))
+            ImageChildElement(
+                imageName = imagePath,
+                modifier = scopeModifier.then(buildModifiers(modifiers))
+            )
         }
         else -> {
             val (emoji) = data as ImageEmojiChildData
-            ImageEmojiChildElement(emoji, scopeModifier.then(buildModifiers(modifiers)))
+            ImageEmojiChildElement(
+                emoji = emoji,
+                modifier = scopeModifier.then(buildModifiers(modifiers))
+            )
         }
     }
 }

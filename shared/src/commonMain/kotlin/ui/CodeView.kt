@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.Typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.runtime.Composable
@@ -17,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.*
@@ -294,20 +292,20 @@ private fun generateShapeString(shape: AvailableShapes, corner: Int): String = (
     }
 )
 
-private fun generateTextStyleString(style: TextStyle): String {
+private fun generateTextStyleString(style: TextChildStyle): String {
     var str = "MaterialTheme.typography."
 
     when (style) {
-        Typography().h6 -> {
+        TextChildStyle.H6 -> {
             str += "h6"
         }
-        Typography().subtitle1 -> {
+        TextChildStyle.SUBTITLE1 -> {
             str += "subtitle1"
         }
-        Typography().subtitle2 -> {
+        TextChildStyle.SUBTITLE2 -> {
             str += "subtitle2"
         }
-        Typography().body2 -> {
+        TextChildStyle.BODY2 -> {
             str += "body2"
         }
         else -> {

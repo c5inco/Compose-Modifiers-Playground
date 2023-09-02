@@ -1,6 +1,5 @@
 package data
 
-import androidx.compose.material.Typography
 import androidx.compose.ui.graphics.Color
 import ui.ImageEmoji
 
@@ -116,11 +115,11 @@ object Templates {
         ),
         childElements = listOf(
             ImageChildData("ic_placeholder.xml"),
-            TextChildData("Card title", style = Typography().h6),
-            TextChildData("Secondary text", style = Typography().body2, alpha = AvailableContentAlphas.Medium),
+            TextChildData("Card title", style = TextChildStyle.H6),
+            TextChildData("Secondary text", style = TextChildStyle.BODY2, alpha = AvailableContentAlphas.Medium),
             TextChildData(
                 "Greyhound divisively hello coldly wonderfully marginally far upon excluding.",
-                style = Typography().body2,
+                style = TextChildStyle.BODY2,
                 alpha = AvailableContentAlphas.Medium
             ),
         ),

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.AvailableContentAlphas
+import data.TextChildStyle
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.icons.AppIcons
@@ -58,7 +60,7 @@ fun convertImageEmojiToEmoji(image: ImageEmoji): String {
 @Composable
 fun TextChildElement(
     text: String,
-    style: TextStyle,
+    style: TextChildStyle,
     color: Color = LocalContentColor.current,
     alpha: AvailableContentAlphas,
     modifier: Modifier
@@ -70,11 +72,23 @@ fun TextChildElement(
     }
 
     Text(
-        text,
-        style = style,
+        text = text,
+        style = convertTextChildStyleToMaterialStyle(style),
         color = color.copy(alpha = ca),
         modifier = modifier
     )
+}
+
+@Composable
+fun convertTextChildStyleToMaterialStyle(style: TextChildStyle): TextStyle {
+    when (style) {
+        TextChildStyle.BODY2 ->
+            return MaterialTheme.typography.body2
+        TextChildStyle.H6 ->
+            return MaterialTheme.typography.h6
+        else ->
+            return MaterialTheme.typography.body1
+    }
 }
 
 @Composable

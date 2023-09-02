@@ -1,6 +1,5 @@
 package data
 
-import androidx.compose.ui.text.TextStyle
 import ui.ImageEmoji
 
 enum class AvailableElements {
@@ -41,9 +40,17 @@ data class ImageEmojiChildData(
 
 data class TextChildData(
     val text: String,
-    val style: TextStyle,
+    val style: TextChildStyle,
     val alpha: AvailableContentAlphas = AvailableContentAlphas.High
 )
+
+enum class TextChildStyle {
+    BODY1,
+    BODY2,
+    H6,
+    SUBTITLE1,
+    SUBTITLE2
+}
 
 data class ImageChildData(
     val imagePath: String
