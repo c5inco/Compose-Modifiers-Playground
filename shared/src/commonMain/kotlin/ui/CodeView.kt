@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -337,9 +336,9 @@ private fun generateChildElementString(element: Any): String {
             code += "\t\tcontentDescription = \"$imagePath image\",\n"
         }
         else -> {
-            val (emoji) = element as EmojiChildData
+            val (emoji) = element as ImageEmojiChildData
             code += "\tText(\n"
-            code += "\t\t\"$emoji\",\n"
+            code += "\t\t\"${convertImageEmojiToEmoji(emoji)}\",\n"
             code += "\t\tfontSize = 48.sp,\n"
         }
     }

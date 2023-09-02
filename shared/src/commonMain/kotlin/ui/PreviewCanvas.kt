@@ -160,8 +160,8 @@ private fun emitChildren(
             ImageChildElement(imagePath, scopeModifier.then(buildModifiers(modifiers)))
         }
         else -> {
-            val (emoji) = data as EmojiChildData
-            EmojiChildElement(emoji, scopeModifier.then(buildModifiers(modifiers)))
+            val (emoji) = data as ImageEmojiChildData
+            ImageEmojiChildElement(emoji, scopeModifier.then(buildModifiers(modifiers)))
         }
     }
 }

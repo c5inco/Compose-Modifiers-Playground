@@ -17,6 +17,7 @@ kotlin {
             dependencies {
                 implementation(project(":shared"))
             }
+            resources.srcDir("../shared/src/commonMain/resources")
         }
     }
 }

@@ -243,7 +243,7 @@ private fun getChildElementHeader(data: Any): String = (
             "Image(\"$imagePath\")"
         }
         else -> {
-            val (emoji) = data as EmojiChildData
+            val (emoji) = data as ImageEmojiChildData
             "$emoji emoji"
         }
     }

@@ -2,6 +2,7 @@ package data
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.graphics.Color
+import ui.ImageEmoji
 
 object Templates {
     val PinkSquare = Template(
@@ -153,9 +154,9 @@ data class Template(
     var parentElement: ElementModel,
     val parentModifiers: List<Pair<Any, Boolean>>,
     val childElements: List<Any> = listOf(
-        EmojiChildData("🥑"),
-        EmojiChildData("☕"),
-        EmojiChildData("🤖"),
+        ImageEmojiChildData(ImageEmoji.Avocado),
+        ImageEmojiChildData(ImageEmoji.HotBeverage),
+        ImageEmojiChildData(ImageEmoji.Robot),
     ),
     val
     childModifiers: List<List<Pair<Any, Boolean>>> = listOf(

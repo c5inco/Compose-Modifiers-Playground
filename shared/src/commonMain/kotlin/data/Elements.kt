@@ -1,6 +1,7 @@
 package data
 
 import androidx.compose.ui.text.TextStyle
+import ui.ImageEmoji
 
 enum class AvailableElements {
     Box,
@@ -32,6 +33,10 @@ data class ElementModel(
 
 data class EmojiChildData(
     val emoji: String
+)
+
+data class ImageEmojiChildData(
+    val emoji: ImageEmoji
 )
 
 data class TextChildData(
