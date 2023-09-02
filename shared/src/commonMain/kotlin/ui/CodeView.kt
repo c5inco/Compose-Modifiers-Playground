@@ -25,6 +25,7 @@ import data.*
 import ui.controls.ScrollableColumn
 import ui.theme.EditorColors
 import ui.theme.EditorTheme
+import utils.copyString
 import utils.formatCode
 
 @Composable
@@ -111,7 +112,7 @@ fun CodeView(
                 .padding(end = 8.dp, top = 8.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .size(32.dp),
-            onClick = { copyCode(code) }
+            onClick = { copyString(code) }
         ) {
             Icon(
                 imageVector = Icons.Outlined.ContentCopy,
@@ -120,13 +121,6 @@ fun CodeView(
             )
         }
     }
-}
-
-
-private fun copyCode(code: String) {
-    // TODO: commonMain issue with clipboard
-    // val clipboard = Toolkit.getDefaultToolkit().systemClipboard
-    // clipboard.setContents(StringSelection(code), null)
 }
 
 private fun generateArrangementString(arrangement: Any, spacing: Int): String {
