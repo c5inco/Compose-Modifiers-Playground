@@ -325,7 +325,7 @@ private fun generateChildElementString(element: Any): String {
             code += "\tText(\n"
             code += "\t\t\"$text\",\n"
             code += "\t\tstyle = ${generateTextStyleString(style)},\n"
-            code += "\t\tcolor = LocalContentColor.current.copy(alpha = ContentAlpha.${alpha.toString().toLowerCase()}),\n"
+            code += "\t\tcolor = LocalContentColor.current.copy(alpha = ContentAlpha.${alpha.toString().lowercase()}),\n"
         }
         is ImageChildData -> {
             val (imagePath) = element
