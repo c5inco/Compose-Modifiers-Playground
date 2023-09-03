@@ -11,6 +11,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -22,6 +23,11 @@ import androidx.compose.ui.unit.IntSize
 import ui.theme.EditorStyles
 import kotlin.math.roundToInt
 
+fun ViewConfiguration.withTouchSlop(
+    touchSlop: Float,
+): ViewConfiguration = object : ViewConfiguration by this {
+    override val touchSlop: Float = touchSlop
+}
 data class DpRect(
     val top: Dp,
     val left: Dp,
