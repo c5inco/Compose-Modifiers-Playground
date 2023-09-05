@@ -18,8 +18,7 @@ fun main() {
         console.log("wasm loaded")
         document.getElementById("loadingIndicator")?.setAttribute("style", "display: none")
         BrowserViewportWindow("Compose Modifiers Playground") {
-            val defaultTemplate = Templates.Sun
-            var activeTemplate by remember { mutableStateOf(defaultTemplate) }
+            var activeTemplate by remember { mutableStateOf(Templates.Rainbow) }
 
             // Decrease the touch slop. The default value of too high for desktop
             val vc = LocalViewConfiguration.current.withTouchSlop(
