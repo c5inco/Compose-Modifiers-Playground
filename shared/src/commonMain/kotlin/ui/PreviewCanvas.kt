@@ -6,6 +6,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.CodeOff
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +27,10 @@ fun PreviewCanvas(
     childModifiersList: List<List<Pair<Any, Boolean>>>,
     elementModifiersList: List<Pair<Any, Boolean>>,
     showCode: Boolean,
-    onShowCode: (Boolean) -> Unit
+    onShowCode: (Boolean) -> Unit,
+    darkModeSupported: Boolean,
+    darkMode: Boolean,
+    onDarkModeChange: (Boolean) -> Unit
 ) {
     Box(
         modifier = modifier,
@@ -114,26 +119,54 @@ fun PreviewCanvas(
             }
         }
 
-        Surface(
+        Column(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 8.dp, bottom = 8.dp)
-                .shadow(4.dp, shape = RoundedCornerShape(8.dp))
-                .clip(RoundedCornerShape(8.dp))
-                .size(32.dp),
-            elevation = 2.dp
+                .padding(end = 8.dp, bottom = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // TODO: Figure out the design and placement for the dark mode toggle.
+            if (darkModeSupported) {
+                Surface(
+                    modifier = Modifier
+                        .shadow(4.dp, shape = RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(8.dp))
+                        .size(32.dp),
+                    elevation = 2.dp
+                ) {
 
-            IconButton(
-                onClick = { onShowCode(!showCode) }
+                    IconButton(
+                        onClick = { onDarkModeChange(!darkMode) }
+                    ) {
+                        Icon(
+                            imageVector = if (darkMode) Icons.Outlined.LightMode else Icons.Outlined.DarkMode,
+                            contentDescription = "Toggle dark mode on or off",
+                            tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                        )
+                    }
+                }
+            }
+
+            Surface(
+                modifier = Modifier
+                    .shadow(4.dp, shape = RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(8.dp))
+                    .size(32.dp),
+                elevation = 2.dp
             ) {
-                Icon(
-                    imageVector = if (showCode) Icons.Outlined.CodeOff else Icons.Outlined.Code,
-                    contentDescription = "Toggle code on or off",
-                    tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-                )
+
+                IconButton(
+                    onClick = { onShowCode(!showCode) }
+                ) {
+                    Icon(
+                        imageVector = if (showCode) Icons.Outlined.CodeOff else Icons.Outlined.Code,
+                        contentDescription = "Toggle code on or off",
+                        tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                    )
+                }
             }
         }
+
     }
 }
 
