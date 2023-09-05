@@ -2,6 +2,7 @@ package ui.controls
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +38,7 @@ internal actual fun DropdownMenuEx(
             focusable = properties.focusable,
         ) {
             Surface(
-                color = Color.White,
+                color = MaterialTheme.colors.surface,
                 elevation = 8.dp,
                 shape = RoundedCornerShape(4.dp)
             ) {
