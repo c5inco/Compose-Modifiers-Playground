@@ -25,7 +25,10 @@ import utils.calculateWindowSize
 fun Playground(
     modifier: Modifier = Modifier,
     activeTemplate: Template,
-    onTemplateChange: (Template) -> Unit
+    onTemplateChange: (Template) -> Unit,
+    darkModeSupported: Boolean = false,
+    darkMode: Boolean = false,
+    onDarkModeChange: (Boolean) -> Unit = { }
 ) {
     val density = LocalDensity.current
     val windowSize = calculateWindowSize()
@@ -70,7 +73,10 @@ fun Playground(
                         childModifiersList = childModifiersList,
                         elementModifiersList = elementModifiersList,
                         showCode = showCode,
-                        onShowCode = { showCode = it }
+                        onShowCode = { showCode = it },
+                        darkModeSupported = darkModeSupported,
+                        darkMode = darkMode,
+                        onDarkModeChange = onDarkModeChange
                     )
 
                     if (showCode) {
