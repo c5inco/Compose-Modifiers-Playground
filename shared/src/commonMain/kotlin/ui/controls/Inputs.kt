@@ -10,8 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -172,7 +170,7 @@ fun ShapeInput(
             cornerValue,
             label = {
                 Icon(
-                    imageVector = Icons.Outlined.RoundedCorner,
+                    imageVector = AppIcons.RoundedCorner,
                     contentDescription = "Corner icon",
                     tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                     modifier = Modifier.size(18.dp)
@@ -192,9 +190,9 @@ fun RowScope.PaddingInput(
     onValueChange: (type: AvailablePadding, corners: CornerValues) -> Unit,
 ) {
     val shapesList = listOf(
-        Pair(Icons.Outlined.CropSquare, AvailablePadding.All),
-        Pair(Icons.Outlined.GridGoldenratio, AvailablePadding.Sides),
-        Pair(Icons.Outlined.Fullscreen, AvailablePadding.Individual),
+        Pair(AppIcons.CropSquare, AvailablePadding.All),
+        Pair(AppIcons.GridGoldenratio, AvailablePadding.Sides),
+        Pair(AppIcons.Fullscreen, AvailablePadding.Individual),
     )
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -580,7 +578,7 @@ fun <T> DropdownInput(
         ) {
             Text("$activeItem", style = MaterialTheme.typography.body2)
             Icon(
-                imageVector = Icons.Outlined.KeyboardArrowDown,
+                imageVector = AppIcons.KeyboardArrowDown,
                 contentDescription = "Dropdown icon",
                 modifier = Modifier.size(18.dp)
             )

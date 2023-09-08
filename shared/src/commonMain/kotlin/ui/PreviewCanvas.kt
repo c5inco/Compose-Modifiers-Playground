@@ -3,9 +3,6 @@ package ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Code
-import androidx.compose.material.icons.outlined.CodeOff
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,6 +11,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import data.*
+import ui.icons.AppIcons
+import ui.icons.Code
+import ui.icons.CodeOff
 import utils.DotsBackground
 
 @Composable
@@ -128,7 +128,7 @@ fun PreviewCanvas(
                 onClick = { onShowCode(!showCode) }
             ) {
                 Icon(
-                    imageVector = if (showCode) Icons.Outlined.CodeOff else Icons.Outlined.Code,
+                    imageVector = if (showCode) AppIcons.CodeOff else AppIcons.Code,
                     contentDescription = "Toggle code on or off",
                     tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
                 )

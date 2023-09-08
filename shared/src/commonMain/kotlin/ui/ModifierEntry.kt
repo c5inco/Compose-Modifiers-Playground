@@ -13,9 +13,6 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,10 +24,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import data.*
-import ui.controls.SmallIconButton
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import ui.controls.SmallIconButton
+import ui.icons.AppIcons
+import ui.icons.Remove
+import ui.icons.Visibility
+import ui.icons.VisibilityOff
 
 private data class OrderEvent(
     val current: Int,
@@ -365,7 +365,7 @@ fun ModifierEntry(
                     }
                 ) {
                     Icon(
-                        imageVector = if (visible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                        imageVector = if (visible) AppIcons.Visibility else AppIcons.VisibilityOff,
                         contentDescription = "Toggle visibility",
                         modifier = Modifier.size(18.dp)
                     )
@@ -376,7 +376,7 @@ fun ModifierEntry(
                     onClick = { onRemove(order) }
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Remove,
+                        imageVector = AppIcons.Remove,
                         contentDescription = "Remove modifier",
                         modifier = Modifier.size(18.dp)
                     )

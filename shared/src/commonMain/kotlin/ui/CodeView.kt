@@ -9,8 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.*
 import ui.controls.ScrollableColumn
+import ui.icons.AppIcons
+import ui.icons.ContentCopy
 import ui.theme.EditorColors
 import ui.theme.EditorTheme
 import utils.copyString
@@ -112,7 +112,7 @@ fun CodeView(
             onClick = { copyString(code) }
         ) {
             Icon(
-                imageVector = Icons.Outlined.ContentCopy,
+                imageVector = AppIcons.ContentCopy,
                 contentDescription = "Copy code",
                 tint = Color.White
             )

@@ -8,10 +8,6 @@ import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +24,10 @@ import data.*
 import ui.ElementRow
 import ui.ModifierEntry
 import ui.controls.*
+import ui.icons.Add
+import ui.icons.AppIcons
+import ui.icons.KeyboardArrowDown
+import ui.icons.RestartAlt
 import utils.DottedLine
 
 @Composable
@@ -403,7 +403,7 @@ private fun ComponentHeader(name: String, expanded: Boolean, onExpand: () -> Uni
         )
         SmallIconButton(onClick = { onExpand() }) {
             Icon(
-                imageVector = Icons.Outlined.KeyboardArrowDown,
+                imageVector = AppIcons.KeyboardArrowDown,
                 contentDescription = "Expand/collapse component group",
                 modifier = Modifier.rotate(expandAnim)
             )
@@ -418,7 +418,7 @@ private fun ResetDefaultModifiersAction(onClick: () -> Unit) {
         onClick = { onClick() }
     ) {
         Icon(
-            imageVector = Icons.Outlined.RestartAlt,
+            imageVector = AppIcons.RestartAlt,
             contentDescription = "Reset default modifiers",
             modifier = Modifier.size(18.dp),
             tint = LocalContentColor.current.copy(alpha = ContentAlpha.high)
@@ -443,7 +443,7 @@ private fun AddModifierAction(onSelect: (Any) -> Unit) {
     ) {
         SmallIconButton(onClick = it) {
             Icon(
-                imageVector = Icons.Outlined.Add,
+                imageVector = AppIcons.Add,
                 contentDescription = "Add modifier",
                 modifier = Modifier.size(18.dp)
             )
@@ -482,7 +482,7 @@ private fun AddChildModifierAction(parentType: AvailableElements, onSelect: (Any
     ) {
         SmallIconButton(onClick = it) {
             Icon(
-                imageVector = Icons.Outlined.Add,
+                imageVector = AppIcons.Add,
                 contentDescription = "Add child modifier",
                 modifier = Modifier.size(18.dp)
             )

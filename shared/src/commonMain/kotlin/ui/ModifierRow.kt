@@ -4,10 +4,6 @@ package ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LineWeight
-import androidx.compose.material.icons.outlined.RotateLeft
-import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -17,6 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.*
 import ui.controls.*
+import ui.icons.AppIcons
+import ui.icons.LineWeight
+import ui.icons.RotateLeft
+import ui.icons.SquareFoot
 
 @Composable
 fun AlphaModifier(
@@ -267,7 +267,7 @@ fun RotateModifier(
             degreesValue,
             label = {
                 Icon(
-                    imageVector = Icons.Outlined.RotateLeft,
+                    imageVector = AppIcons.RotateLeft,
                     contentDescription = "Rotate icon",
                     tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                     modifier = Modifier.size(18.dp)
@@ -291,7 +291,7 @@ fun ScaleModifier(
             scaleValue,
             label = {
                 Icon(
-                    imageVector = Icons.Outlined.SquareFoot,
+                    imageVector = AppIcons.SquareFoot,
                     contentDescription = "Scale icon",
                     tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                     modifier = Modifier.size(18.dp)
@@ -413,7 +413,7 @@ fun WeightModifier(
             weightValue,
             label = {
                 Icon(
-                    imageVector = Icons.Outlined.LineWeight,
+                    imageVector = AppIcons.LineWeight,
                     contentDescription = "Weight icon",
                     tint = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                     modifier = Modifier.size(18.dp)
