@@ -10,6 +10,6 @@ set -e
 rm -rf dist && mkdir dist
 
 # Copy the contents of 'build/distributions/' to the 'dist' directory
-cp -r jsApp/build/distributions/* dist/
+cp -r jsApp/build/dist/js/productionExecutable/* dist/
 
 echo "Distribution script for jsApp executed successfully!"
