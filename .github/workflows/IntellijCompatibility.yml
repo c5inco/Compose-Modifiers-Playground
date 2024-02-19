@@ -27,6 +27,7 @@ jobs:
             ideaIC:2023.3.4
             ideaIU:2023.3.4
             ideaIC:LATEST-EAP-SNAPSHOT
+          plugin-location: ideaPlugin/build/distributions/*.zip
 
       - name: Get log file path and print contents
         run: |
