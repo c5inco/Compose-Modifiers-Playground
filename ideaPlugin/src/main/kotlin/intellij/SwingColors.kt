@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 import com.intellij.ide.ui.LafManagerListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.colors.EditorColorsManager
-import com.intellij.util.ui.UIUtil
+import com.intellij.ui.JBColor
 import javax.swing.UIManager
 import java.awt.Color as AWTColor
 
@@ -61,7 +61,7 @@ private class SwingColorsImpl : SwingColors {
     }
 
     fun updateCurrentColors() {
-        if (UIUtil.isUnderDarcula()) {
+        if (!JBColor.isBright()) {
             _backgroundState.value = getBackgroundColor
             _surfaceState.value = getBackgroundColor
         } else {
