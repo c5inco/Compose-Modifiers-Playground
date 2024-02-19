@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.c5inco.modifiers.plugin</id>
+    <id>com.c5inco.modifiers</id>
     <name>Compose Modifiers Playground</name>
     <vendor email="csinco.design@gmail.com" url="https://csinco.com">Chris Sinco</vendor>
     <description><![CDATA[
