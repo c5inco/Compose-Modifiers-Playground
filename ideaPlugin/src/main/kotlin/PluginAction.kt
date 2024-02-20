@@ -24,7 +24,7 @@ class PluginAction : DumbAwareAction() {
     }
 
     class DemoDialog(
-        private val project: Project
+        project: Project?
     ) : FrameWrapper(project) {
         init {
             title = "Modifiers Playground"
