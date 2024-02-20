@@ -20,10 +20,12 @@ import javax.swing.JComponent
 
 class PluginAction : DumbAwareAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        DemoDialog(e.project).show()
+        e.project?.let { DemoDialog(it).show() }
     }
 
-    class DemoDialog(project: Project?) : FrameWrapper(project) {
+    class DemoDialog(
+        private val project: Project
+    ) : FrameWrapper(project) {
         init {
             title = "Modifiers Playground"
             component = createCenterPanel()
