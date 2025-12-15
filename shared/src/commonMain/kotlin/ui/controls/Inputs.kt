@@ -2,15 +2,41 @@
 
 package ui.controls
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Checkbox
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -26,8 +52,23 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import data.*
-import ui.icons.*
+import data.AvailableContentAlignments
+import data.AvailableHorizontalAlignments
+import data.AvailableHorizontalArrangements
+import data.AvailablePadding
+import data.AvailableShapes
+import data.AvailableVerticalAlignments
+import data.AvailableVerticalArrangements
+import data.CornerValues
+import ui.icons.AppIcons
+import ui.icons.Circle
+import ui.icons.CropSquare
+import ui.icons.CutCorner
+import ui.icons.Fullscreen
+import ui.icons.GridGoldenratio
+import ui.icons.KeyboardArrowDown
+import ui.icons.Rectangle
+import ui.icons.RoundedCorner
 import utils.chunk
 import kotlin.math.absoluteValue
 import ui.controls.DropdownMenu as DropdownMenuMp
@@ -510,7 +551,7 @@ fun <T> TextInput(
             Row(
                 modifier = Modifier
                     .border(width = 1.dp, color = getBorderColor())
-                    .padding(4.dp),
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -572,7 +613,7 @@ fun <T> DropdownInput(
                 .then(if (hovered) Modifier.background(hoverBackgroundColor) else Modifier)
                 .height(24.dp)
                 .border(width = 1.dp, color = if (hovered) hoverBorderColor else Color.Transparent)
-                .padding(start = 8.dp, top = 4.dp, end = 4.dp, bottom = 4.dp),
+                .padding(start = 8.dp, top = 2.dp, end = 4.dp, bottom = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = if (hovered) Arrangement.SpaceBetween else Arrangement.Start
         ) {
