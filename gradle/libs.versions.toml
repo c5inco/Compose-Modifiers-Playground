@@ -4,7 +4,7 @@ compose = "1.6.11"
 agp = "8.2.0"
 intellij-plugin = "1.17.4"
 changelog = "2.1.0"
-intellij-platform = "2024.1"
+intellij-platform = "2025.1"
 
 [plugins]
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
