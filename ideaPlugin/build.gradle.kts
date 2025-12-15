@@ -45,7 +45,7 @@ tasks {
 
     changeNotes.set("""
         <ul>
-            <li>Bumped IntelliJ plugin versions (min: 241, max: 263.*)</li>
+            <li>Bumped IntelliJ plugin versions (min: 243.*, max: 263.*)</li>
             <li>Compose Desktop dependencies to 1.6.11</li>
             <li>Exclude coroutines for IJ plugin to avoid class loader conflicts with Compose</li>
         </ul>
