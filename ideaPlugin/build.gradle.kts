@@ -44,9 +44,11 @@ tasks {
         untilBuild = properties("pluginUntilBuild").get()
 
     changeNotes.set("""
-        - Bumped IntelliJ plugin versions (min: 241, max: 263.*)
-        - Compose Desktop dependencies to 1.6.11
-        - Exclude coroutines for IJ plugin to avoid class loader conflicts with Compose
+        <ul>
+            <li>Bumped IntelliJ plugin versions (min: 241, max: 263.*)</li>
+            <li>Compose Desktop dependencies to 1.6.11</li>
+            <li>Exclude coroutines for IJ plugin to avoid class loader conflicts with Compose</li>
+        </ul>
     """)
     }
 }
