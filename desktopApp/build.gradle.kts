@@ -3,8 +3,9 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 fun properties(key: String) = providers.gradleProperty(key)
 
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.composeCompiler)
 }
 
 kotlin {

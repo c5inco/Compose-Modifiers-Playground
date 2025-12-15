@@ -1,8 +1,22 @@
 package ui.theme
 
 import androidx.compose.material.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import modifiersplayground.shared.generated.resources.Res
+import modifiersplayground.shared.generated.resources.inter_regular
+import modifiersplayground.shared.generated.resources.jetbrainsmono_bold
+import modifiersplayground.shared.generated.resources.jetbrainsmono_bold_italic
+import modifiersplayground.shared.generated.resources.jetbrainsmono_extrabold
+import modifiersplayground.shared.generated.resources.jetbrainsmono_extrabold_italic
+import modifiersplayground.shared.generated.resources.jetbrainsmono_italic
+import modifiersplayground.shared.generated.resources.jetbrainsmono_medium
+import modifiersplayground.shared.generated.resources.jetbrainsmono_medium_italic
+import modifiersplayground.shared.generated.resources.jetbrainsmono_regular
+import org.jetbrains.compose.resources.Font
 import ui.theme.EditorColors.annotationColor
 import ui.theme.EditorColors.baseColor
 import ui.theme.EditorColors.commentColor
@@ -15,9 +29,28 @@ import ui.theme.EditorColors.punctuationColor
 import ui.theme.EditorColors.stringColor
 import ui.theme.EditorColors.valueColor
 
-expect suspend fun appTypography(): Typography
+@Composable
+fun appTypography(): Typography {
+    val inter = FontFamily(
+        Font(Res.font.inter_regular, FontWeight.Normal, FontStyle.Normal)
+    )
+    return Typography(defaultFontFamily = inter)
+}
 
-expect suspend fun editorTypography(): Typography
+@Composable
+fun editorTypography(): Typography {
+    val jetbrainsMono = FontFamily(
+        Font(Res.font.jetbrainsmono_regular, FontWeight.Normal, FontStyle.Normal),
+        Font(Res.font.jetbrainsmono_italic, FontWeight.Normal, FontStyle.Italic),
+        Font(Res.font.jetbrainsmono_bold, FontWeight.Bold, FontStyle.Normal),
+        Font(Res.font.jetbrainsmono_bold_italic, FontWeight.Bold, FontStyle.Italic),
+        Font(Res.font.jetbrainsmono_extrabold, FontWeight.ExtraBold, FontStyle.Normal),
+        Font(Res.font.jetbrainsmono_extrabold_italic, FontWeight.ExtraBold, FontStyle.Italic),
+        Font(Res.font.jetbrainsmono_medium, FontWeight.Medium, FontStyle.Normal),
+        Font(Res.font.jetbrainsmono_medium_italic, FontWeight.Medium, FontStyle.Italic)
+    )
+    return Typography(defaultFontFamily = jetbrainsMono)
+}
 
 object EditorStyles {
     val simple: SpanStyle = SpanStyle(baseColor)

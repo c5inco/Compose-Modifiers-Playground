@@ -2,23 +2,16 @@ package ui.theme
 
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Typography
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 
 @Composable
 fun PlaygroundTheme(
     colors: Colors = appLightColors,
     content: @Composable () -> Unit
 ) {
-    var typography by remember { mutableStateOf(Typography()) }
-
-    LaunchedEffect(Unit) {
-        typography = appTypography()
-    }
-
     MaterialTheme(
         colors = colors,
-        typography = typography
+        typography = appTypography()
     ) {
         content()
     }
@@ -28,11 +21,9 @@ fun PlaygroundTheme(
 fun EditorTheme(
     content: @Composable () -> Unit
 ) {
-    var typography by remember { mutableStateOf(Typography()) }
-
-    LaunchedEffect(Unit) {
+    MaterialTheme(
         typography = editorTypography()
+    ) {
+        content()
     }
-
-    MaterialTheme(typography = typography, content = content)
 }

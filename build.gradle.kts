@@ -3,9 +3,10 @@ fun properties(key: String) = providers.gradleProperty(key)
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
-    kotlin("jvm") apply false
-    kotlin("multiplatform") apply false
-    id("org.jetbrains.compose") apply false
+    alias(libs.plugins.kotlinJvm) apply false
+    alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.jetbrainsCompose) apply false
+    alias(libs.plugins.composeCompiler) apply false
 }
 
 allprojects {

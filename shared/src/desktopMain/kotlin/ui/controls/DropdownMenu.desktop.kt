@@ -19,7 +19,7 @@ internal actual fun DropdownMenuEx(
 ) = androidx.compose.material.DropdownMenu(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
-    focusable = properties.focusable,
+    properties = androidx.compose.ui.window.PopupProperties(focusable = properties.focusable),
     modifier = modifier,
     offset = offset,
     content = content

@@ -14,6 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.AvailableContentAlphas
 import data.TextChildStyle
+import modifiersplayground.shared.generated.resources.Avocado
+import modifiersplayground.shared.generated.resources.HotBeverage
+import modifiersplayground.shared.generated.resources.Res
+import modifiersplayground.shared.generated.resources.Robot
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.icons.AppIcons
@@ -33,8 +37,13 @@ fun ImageEmojiChildElement(
     emoji: ImageEmoji,
     modifier: Modifier
 ) {
+    val resource = when (emoji) {
+        ImageEmoji.Avocado -> Res.drawable.Avocado
+        ImageEmoji.HotBeverage -> Res.drawable.HotBeverage
+        ImageEmoji.Robot -> Res.drawable.Robot
+    }
     Image(
-        painter = painterResource("images/$emoji.png"),
+        painter = painterResource(resource),
         contentDescription = null,
         modifier = modifier.size(48.dp)
     )

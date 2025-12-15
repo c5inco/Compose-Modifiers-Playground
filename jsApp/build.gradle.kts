@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
@@ -17,7 +18,7 @@ kotlin {
             dependencies {
                 implementation(project(":shared"))
             }
-            resources.srcDir("../shared/src/commonMain/resources")
+            resources.srcDir("../shared/src/commonMain/composeResources")
         }
     }
 }

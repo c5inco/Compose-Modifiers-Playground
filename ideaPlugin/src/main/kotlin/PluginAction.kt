@@ -2,7 +2,11 @@ package com.c5inco.modifiers.plugin
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.platform.LocalDensity
@@ -32,6 +36,9 @@ class PluginAction : DumbAwareAction() {
         }
 
         private fun createCenterPanel(): JComponent {
+            // Set the classloader BEFORE creating Compose content to ensure resources load correctly
+            Thread.currentThread().contextClassLoader = PluginAction::class.java.classLoader
+            
             return ComposePanel().apply {
                 preferredSize = Dimension(1100, 800)
                 setContent {
@@ -42,7 +49,6 @@ class PluginAction : DumbAwareAction() {
 
                     CompositionLocalProvider(LocalViewConfiguration provides vc) {
                         PluginTheme {
-                            Thread.currentThread().contextClassLoader = PluginAction::class.java.classLoader
                             Surface(modifier = Modifier.fillMaxSize()) {
                                 val defaultTemplate = Templates.Sun
 
