@@ -7,15 +7,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import modifiersplayground.shared.generated.resources.Res
-import modifiersplayground.shared.generated.resources.inter_regular
-import modifiersplayground.shared.generated.resources.jetbrainsmono_bold
-import modifiersplayground.shared.generated.resources.jetbrainsmono_bold_italic
-import modifiersplayground.shared.generated.resources.jetbrainsmono_extrabold
-import modifiersplayground.shared.generated.resources.jetbrainsmono_extrabold_italic
-import modifiersplayground.shared.generated.resources.jetbrainsmono_italic
-import modifiersplayground.shared.generated.resources.jetbrainsmono_medium
-import modifiersplayground.shared.generated.resources.jetbrainsmono_medium_italic
-import modifiersplayground.shared.generated.resources.jetbrainsmono_regular
+import modifiersplayground.shared.generated.resources.googleSansCode_Bold
+import modifiersplayground.shared.generated.resources.googleSansCode_BoldItalic
+import modifiersplayground.shared.generated.resources.googleSansCode_Italic
+import modifiersplayground.shared.generated.resources.googleSansCode_Medium
+import modifiersplayground.shared.generated.resources.googleSansCode_MediumItalic
+import modifiersplayground.shared.generated.resources.googleSansCode_Regular
+import modifiersplayground.shared.generated.resources.googleSans_Bold
+import modifiersplayground.shared.generated.resources.googleSans_BoldItalic
+import modifiersplayground.shared.generated.resources.googleSans_Italic
+import modifiersplayground.shared.generated.resources.googleSans_Medium
+import modifiersplayground.shared.generated.resources.googleSans_MediumItalic
+import modifiersplayground.shared.generated.resources.googleSans_Regular
 import org.jetbrains.compose.resources.Font
 import ui.theme.EditorColors.annotationColor
 import ui.theme.EditorColors.baseColor
@@ -31,25 +34,28 @@ import ui.theme.EditorColors.valueColor
 
 @Composable
 fun appTypography(): Typography {
-    val inter = FontFamily(
-        Font(Res.font.inter_regular, FontWeight.Normal, FontStyle.Normal)
+    val googleSans = FontFamily(
+        Font(Res.font.googleSans_Regular, FontWeight.Normal, FontStyle.Normal),
+        Font(Res.font.googleSans_Italic, FontWeight.Normal, FontStyle.Italic),
+        Font(Res.font.googleSans_Bold, FontWeight.Bold, FontStyle.Normal),
+        Font(Res.font.googleSans_BoldItalic, FontWeight.Bold, FontStyle.Italic),
+        Font(Res.font.googleSans_Medium, FontWeight.Medium, FontStyle.Normal),
+        Font(Res.font.googleSans_MediumItalic, FontWeight.Medium, FontStyle.Italic)
     )
-    return Typography(defaultFontFamily = inter)
+    return Typography(defaultFontFamily = googleSans)
 }
 
 @Composable
 fun editorTypography(): Typography {
-    val jetbrainsMono = FontFamily(
-        Font(Res.font.jetbrainsmono_regular, FontWeight.Normal, FontStyle.Normal),
-        Font(Res.font.jetbrainsmono_italic, FontWeight.Normal, FontStyle.Italic),
-        Font(Res.font.jetbrainsmono_bold, FontWeight.Bold, FontStyle.Normal),
-        Font(Res.font.jetbrainsmono_bold_italic, FontWeight.Bold, FontStyle.Italic),
-        Font(Res.font.jetbrainsmono_extrabold, FontWeight.ExtraBold, FontStyle.Normal),
-        Font(Res.font.jetbrainsmono_extrabold_italic, FontWeight.ExtraBold, FontStyle.Italic),
-        Font(Res.font.jetbrainsmono_medium, FontWeight.Medium, FontStyle.Normal),
-        Font(Res.font.jetbrainsmono_medium_italic, FontWeight.Medium, FontStyle.Italic)
+    val googleSansCode = FontFamily(
+        Font(Res.font.googleSansCode_Regular, FontWeight.Normal, FontStyle.Normal),
+        Font(Res.font.googleSansCode_Italic, FontWeight.Normal, FontStyle.Italic),
+        Font(Res.font.googleSansCode_Bold, FontWeight.Bold, FontStyle.Normal),
+        Font(Res.font.googleSansCode_BoldItalic, FontWeight.Bold, FontStyle.Italic),
+        Font(Res.font.googleSansCode_Medium, FontWeight.Medium, FontStyle.Normal),
+        Font(Res.font.googleSansCode_MediumItalic, FontWeight.Medium, FontStyle.Italic)
     )
-    return Typography(defaultFontFamily = jetbrainsMono)
+    return Typography(defaultFontFamily = googleSansCode)
 }
 
 object EditorStyles {
