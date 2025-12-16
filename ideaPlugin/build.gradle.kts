@@ -4,11 +4,19 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.jetbrainsIntellij)
+    alias(libs.plugins.intellijPlatform)
     alias(libs.plugins.jetbrainsChangelog)
 }
 
 version = properties("pluginVersion").get()
+
+repositories {
+    mavenCentral()
+    
+    intellijPlatform {
+        defaultRepositories()
+    }
+}
 
 dependencies {
     implementation(compose.desktop.linux_x64) {
@@ -26,37 +34,49 @@ dependencies {
     implementation(project(":shared")) {
         exclude(group = "org.jetbrains.kotlinx")
     }
-}
 
-intellij {
-    pluginName = properties("pluginName").get()
-    version = libs.versions.intellij.platform.get()
-    type = properties("platformType").get()
-}
-
-tasks {
-    buildSearchableOptions {
-        enabled = false
+    intellijPlatform {
+        intellijIdea("2025.1")
     }
-    patchPluginXml {
+}
+
+intellijPlatform {
+    pluginConfiguration {
+        name = properties("pluginName").get()
         version = properties("pluginVersion").get()
-        sinceBuild = properties("pluginSinceBuild").get()
-        untilBuild = properties("pluginUntilBuild").get()
-
-    changeNotes.set("""
-        <ul>
-            <li>Bumped IntelliJ plugin versions (min: 243.*, max: 263.*)</li>
-            <li>Compose Desktop dependencies to 1.6.11</li>
-            <li>Exclude coroutines for IJ plugin to avoid class loader conflicts with Compose</li>
-        </ul>
-    """)
+        
+        ideaVersion {
+            sinceBuild = properties("pluginSinceBuild").get()
+            untilBuild = properties("pluginUntilBuild").get()
+        }
+        
+        changeNotes = """
+            <ul>
+                <li>Bumped IntelliJ plugin versions (min: 243, max: 263.*)</li>
+                <li>Compose Desktop dependencies to 1.6.11</li>
+                <li>Exclude coroutines for IJ plugin to avoid class loader conflicts with Compose</li>
+            </ul>
+        """
     }
+    
+    buildSearchableOptions = false
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+// Skip tasks that require JBR download
+tasks.named("buildSearchableOptions") {
+    enabled = false
+}
+
+tasks.named("jarSearchableOptions") {
+    enabled = false
 }

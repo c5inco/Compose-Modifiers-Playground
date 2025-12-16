@@ -5,6 +5,7 @@ pluginManagement {
         google()
     }
 }
+
 rootProject.name = "ModifiersPlayground"
 
 include(":shared")

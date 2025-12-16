@@ -21,3 +21,6 @@ dist/
 local.properties
 
 .kotlin
+
+# IntelliJ Platform Gradle Plugin cache
+.intellijPlatform
