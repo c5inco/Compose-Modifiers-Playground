@@ -1,3 +1,0 @@
-config.optimization = {
-    minimize: true
-}

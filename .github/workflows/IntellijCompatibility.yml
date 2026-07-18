@@ -3,33 +3,17 @@ on:
   push:
 jobs:
   compatibility:
-    name: Ensure plugin compatibility against 2023.3.4 for IDEA Community and IDEA Ultimate, and the latest EAP snapshot of IDEA Community.
+    name: Verify against IntelliJ IDEA 2025.1–2026.2
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
 
-      - name: Setup Java 17
-        uses: actions/setup-java@v1
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          distribution: temurin
+          java-version: '21'
 
-      - name: Build the plugin using Gradle
-        run: ./gradlew :ideaPlugin:buildPlugin
-
-      - name: Verify Plugin on IntelliJ Platforms
-        id: verify
-        uses: ChrisCarini/intellij-platform-plugin-verifier-action@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          ide-versions: |
-            ideaIC:2023.3.4
-            ideaIU:2023.3.4
-            ideaIC:LATEST-EAP-SNAPSHOT
-          plugin-location: ideaPlugin/build/distributions/*.zip
-
-      - name: Get log file path and print contents
-        run: |
-          echo "The verifier log file [${{steps.verify.outputs.verification-output-log-filename}}] contents : " ;
-          cat ${{steps.verify.outputs.verification-output-log-filename}}
+      - name: Build and verify the plugin
+        run: ./gradlew :ideaPlugin:buildPlugin :ideaPlugin:verifyPlugin

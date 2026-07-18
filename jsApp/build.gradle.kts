@@ -6,11 +6,7 @@ plugins {
 
 kotlin {
     js(IR) {
-        browser() {
-            commonWebpackConfig {
-                configDirectory = file(".")
-            }
-        }
+        browser()
         binaries.executable()
     }
     sourceSets {

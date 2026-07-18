@@ -36,7 +36,7 @@ dependencies {
     }
 
     intellijPlatform {
-        intellijIdea("2025.1")
+        intellijIdeaCommunity(libs.versions.intellij.ide)
     }
 }
 
@@ -52,14 +52,21 @@ intellijPlatform {
         
         changeNotes = """
             <ul>
-                <li>Bumped IntelliJ plugin versions (min: 243, max: 263.*)</li>
-                <li>Compose Desktop dependencies to 1.6.11</li>
+                <li>Build against IntelliJ IDEA Community 2025.1 and verify through IntelliJ IDEA 2026.2</li>
+                <li>Upgrade Compose Desktop dependencies to 1.8.2</li>
                 <li>Exclude coroutines for IJ plugin to avoid class loader conflicts with Compose</li>
             </ul>
         """
     }
     
     buildSearchableOptions = false
+
+    pluginVerification {
+        ides {
+            current()
+            create("IU", "2026.2")
+        }
+    }
 }
 
 kotlin {
