@@ -4,15 +4,16 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+@OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
 kotlin {
-    js(IR) {
+    wasmJs {
         browser()
         binaries.executable()
     }
     sourceSets {
-        val jsMain by getting  {
-            kotlin.srcDir("src/webMain/kotlin")
-            resources.srcDir("src/webMain/resources")
+        val wasmJsMain by getting {
+            kotlin.srcDir("../jsApp/src/webMain/kotlin")
+            resources.srcDir("../jsApp/src/webMain/resources")
             dependencies {
                 implementation(project(":shared"))
             }

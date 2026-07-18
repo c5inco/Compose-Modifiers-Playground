@@ -8,10 +8,15 @@ plugins {
 
 version = properties("pluginVersion").get()
 
+@OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
 kotlin {
     jvm("desktop")
 
     js(IR) {
+        browser()
+    }
+
+    wasmJs {
         browser()
     }
 
@@ -31,6 +36,12 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.common)
             }
+        }
+        val jsMain by getting {
+            kotlin.srcDir("src/webMain/kotlin")
+        }
+        val wasmJsMain by getting {
+            kotlin.srcDir("src/webMain/kotlin")
         }
     }
 }

@@ -1,0 +1,12 @@
+{
+  "name": "compose-modifiers-web-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "benchmark": "node benchmark.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.0"
+  }
+}

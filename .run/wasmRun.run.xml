@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="webRun" type="GradleRunConfiguration" factoryName="Gradle" activateToolWindowBeforeRun="false">
+  <configuration default="false" name="wasmRun" type="GradleRunConfiguration" factoryName="Gradle" activateToolWindowBeforeRun="false">
     <ExternalSystemSettings>
       <option name="executionName" />
-      <option name="externalProjectPath" value="$PROJECT_DIR$/jsApp" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/wasmApp" />
       <option name="externalSystemIdString" value="GRADLE" />
       <option name="scriptParameters" value="--continuous" />
       <option name="taskDescriptions">
@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="jsBrowserDevelopmentRun" />
+          <option value="wasmJsBrowserDevelopmentRun" />
         </list>
       </option>
       <option name="vmOptions" />

@@ -24,3 +24,8 @@ local.properties
 
 # IntelliJ Platform Gradle Plugin cache
 .intellijPlatform
+
+# Browser smoke tests and benchmarks
+web-tests/node_modules/
+web-tests/test-results/
+web-tests/playwright-report/
